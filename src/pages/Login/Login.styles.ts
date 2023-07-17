@@ -19,7 +19,7 @@ const GraphicContainer = styled.div`
 const Graphic = styled.div`
   width: 100%;
   height: 100%;
-  background-color: lightgrey;
+  background-color: ${({ theme }) => theme.palette.background.white1};
   margin: 0 16px;
 `;
 
