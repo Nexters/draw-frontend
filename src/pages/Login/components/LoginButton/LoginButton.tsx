@@ -21,7 +21,7 @@ const LoginButton = ({ serviceName, onClick }: LoginButtonProps) => {
   };
 
   return (
-    <Styled.LoginButton serviceName={serviceName} onClick={onClick}>
+    <Styled.LoginButton type="button" serviceName={serviceName} onClick={onClick}>
       <Styled.ServiceLogoContainer>{loginButtonLogo[serviceName]}</Styled.ServiceLogoContainer>
       <span>{loginButtonLabel[serviceName]}</span>
     </Styled.LoginButton>
