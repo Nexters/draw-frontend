@@ -1,6 +1,6 @@
 import Styled from './LoginButton.styles';
-import { ReactComponent as KakaoLogo } from '../../../../assets/kakao.svg';
-import { ReactComponent as AppleLogo } from '../../../../assets/apple.svg';
+import { ReactComponent as KakaoLogo } from '@/assets/kakao.svg';
+import { ReactComponent as AppleLogo } from '@/assets/apple.svg';
 
 export type LoginService = 'kakao' | 'apple';
 
