@@ -1,7 +1,22 @@
 import { css } from '@emotion/react';
 
 const generateTypo = (size: number, weight: number) => css`
-  font-family: 'Pretendard';
+  font-family:
+    'Pretendard Variable',
+    Pretendard,
+    -apple-system,
+    BlinkMacSystemFont,
+    system-ui,
+    Roboto,
+    'Helvetica Neue',
+    'Segoe UI',
+    'Apple SD Gothic Neo',
+    'Noto Sans KR',
+    'Malgun Gothic',
+    'Apple Color Emoji',
+    'Segoe UI Emoji',
+    'Segoe UI Symbol',
+    sans-serif;
   font-style: normal;
   line-height: 140%;
   font-display: auto;
