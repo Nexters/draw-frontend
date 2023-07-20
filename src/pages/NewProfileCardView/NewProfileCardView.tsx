@@ -1,5 +1,19 @@
+import { useNavigate } from 'react-router-dom';
+import Styled from './NewProfileCardView.styles';
+
 const NewProfileCardView = () => {
-  return <>1-3. 프로필 카드 확인</>;
+  const navigate = useNavigate();
+
+  const handleClickStartButton = () => {
+    navigate('/feed');
+  };
+
+  return (
+    <Styled.NewProfile>
+      <Styled.GraphicContainer />
+      <Styled.StartButton onClick={handleClickStartButton}>가보자고-!</Styled.StartButton>
+    </Styled.NewProfile>
+  );
 };
 
 export default NewProfileCardView;
