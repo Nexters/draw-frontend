@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 const QuestionDetailContainer = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: 100svh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

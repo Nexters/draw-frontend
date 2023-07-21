@@ -70,6 +70,7 @@ const NewProfile = () => {
                 minLength={BIRTHDAY_LENGTH}
                 maxLength={BIRTHDAY_LENGTH}
                 pattern={BIRTHDAY_REGEXP_STRING}
+                inputMode="numeric"
                 onChange={handleChangeBirthday}
               />
             </Styled.ProfileFormItem>

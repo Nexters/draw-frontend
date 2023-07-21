@@ -13,6 +13,7 @@
     "@emotion/babel-plugin": "^11.11.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@react-spring/web": "^9.7.3",
     "@tanstack/react-query": "^4.29.19",
     "axios": "^1.4.0",
     "nanoid": "^4.0.2",
@@ -20,7 +21,11 @@
     "react-dom": "^18.2.0",
     "react-flippy": "^1.1.0",
     "react-router-dom": "^6.14.1",
+<<<<<<< HEAD
     "react-spring-bottom-sheet": "^3.4.1",
+=======
+    "swiper": "^10.0.4",
+>>>>>>> 06c3b86f95deb17bf9bc7c2380795ef4f8d76cc9
     "the-new-css-reset": "^1.9.0",
     "vite-plugin-svgr": "^3.2.0"
   },
