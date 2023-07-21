@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import Styled from './AnswerCard.styles';
 import CardButton from './CardButton';
 import { FrontSide, BackSide } from 'react-flippy';
+import { palette } from '@/styles/palette';
 
 interface AnswerCard {
   contents: string;
@@ -21,12 +22,23 @@ const AnswerCard = ({ contents, flippable }: AnswerCard) => {
             <Styled.Contents>{contents}</Styled.Contents>
             <Styled.CardButtons>
               <CardButton variants="threeDots" />
-              <CardButton
-                variants="flipCard"
-                onClick={() => {
-                  ref.current && ref.current.toggle();
-                }}
-              />
+              {flippable ? (
+                <CardButton
+                  variants="flipCard"
+                  onClick={() => {
+                    ref.current && ref.current.toggle();
+                  }}
+                  css={{ color: `${palette.btn.green}` }}
+                />
+              ) : (
+                <CardButton
+                  variants="flipCard"
+                  css={{ color: `${palette.text.grey2}` }}
+                  onClick={() => {
+                    ref.current && ref.current.toggle();
+                  }}
+                />
+              )}
             </Styled.CardButtons>
           </Styled.AnswerCardContainer>
         </FrontSide>
