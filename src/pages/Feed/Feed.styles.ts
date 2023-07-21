@@ -113,7 +113,7 @@ const AnswerTextArea = styled.textarea`
   flex: 1;
   height: 100%;
   resize: none;
-  ${({ theme }) => theme.typo['sub.2']};
+  ${({ theme }) => theme.typo['sub.2']}
   padding: 12px 0 12px 20px;
   outline: none;
   color: ${({ theme }) => theme.palette.text.white};
@@ -123,6 +123,7 @@ const AnswerTextArea = styled.textarea`
 
   &::placeholder {
     color: ${({ theme }) => theme.palette.text.white};
+    ${({ theme }) => theme.typo['sub.2']}
   }
 `;
 

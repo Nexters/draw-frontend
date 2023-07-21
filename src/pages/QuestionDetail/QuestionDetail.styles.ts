@@ -19,4 +19,13 @@ const AnswersContainer = styled.div`
   }
 `;
 
-export default { AnswersContainer, QuestionDetailContainer };
+const QuestionDetailTitle = styled.div`
+  padding: 28px 24px 0 24px;
+`;
+const QuestionDetailFooterContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 0 24px;
+`;
+
+export default { AnswersContainer, QuestionDetailContainer, QuestionDetailTitle, QuestionDetailFooterContainer };
