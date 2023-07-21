@@ -101,6 +101,9 @@ const Feed = () => {
                   <Styled.FeedCardFooter>
                     <Styled.FeedCardBadge>맞춤질문</Styled.FeedCardBadge>
                     <Styled.FeedCardOptionButtonList>
+                      <Styled.FeedCardOptionButton type="button">
+                        <HeartIcon />
+                      </Styled.FeedCardOptionButton>
                       <Styled.FeedCardOptionButton type="button" isActive>
                         <HeartActiveIcon />
                       </Styled.FeedCardOptionButton>
