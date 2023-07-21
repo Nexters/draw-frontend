@@ -73,7 +73,7 @@ const QuestionDetail = () => {
               {MOCK_DATA.isMatchedQuestion && <FeedStyled.FeedCardBadge>맞춤질문</FeedStyled.FeedCardBadge>}
               <FeedStyled.FeedCardOptionButtonList>
                 <FeedStyled.FeedCardOptionButton type="button" isActive={MOCK_DATA.isLiked}>
-                  <HeartActiveIcon />
+                  {MOCK_DATA.isLiked ? <HeartActiveIcon /> : <HeartIcon />}
                 </FeedStyled.FeedCardOptionButton>
                 <FeedStyled.FeedCardOptionButton type="button">
                   <ShareIcon />
