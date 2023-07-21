@@ -1,6 +1,6 @@
 import Button from '@/components/Button/Button';
 import Styled from './FlipBottomSheet.styles';
-import { BottomSheet } from 'react-spring-bottom-sheet';
+import BottomSheet from '@/components/BottomSheet/BottomSheet';
 
 interface FlipBottomSheetProps {
   isOpen: boolean;
@@ -10,7 +10,7 @@ interface FlipBottomSheetProps {
 
 const FlipBottomSheet = ({ isOpen, onClose, onClickYes }: FlipBottomSheetProps) => {
   return (
-    <BottomSheet open={isOpen} onDismiss={onClose}>
+    <BottomSheet open={isOpen} onClose={onClose}>
       <Styled.SheetContentContainer>
         <Styled.ButtonSetContainer>
           <Button variant="secondary" onClick={onClose}>
