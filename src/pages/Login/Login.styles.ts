@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 const Login = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: 100svh;
   padding: 48px 0;
   display: flex;
   flex-direction: column;

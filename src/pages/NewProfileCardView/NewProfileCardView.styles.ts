@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 const NewProfile = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: 100svh;
   padding: 40px 24px 48px;
   display: flex;
   flex-direction: column;
