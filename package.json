@@ -21,11 +21,8 @@
     "react-dom": "^18.2.0",
     "react-flippy": "^1.1.0",
     "react-router-dom": "^6.14.1",
-<<<<<<< HEAD
     "react-spring-bottom-sheet": "^3.4.1",
-=======
     "swiper": "^10.0.4",
->>>>>>> 06c3b86f95deb17bf9bc7c2380795ef4f8d76cc9
     "the-new-css-reset": "^1.9.0",
     "vite-plugin-svgr": "^3.2.0"
   },

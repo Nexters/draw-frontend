@@ -562,7 +562,6 @@
     picocolors "^1.0.0"
     tslib "^2.6.0"
 
-<<<<<<< HEAD
 "@reach/portal@^0.13.0":
   version "0.13.2"
   resolved "https://registry.yarnpkg.com/@reach/portal/-/portal-0.13.2.tgz#6f2a6f4afc14894bde9c6435667bb9b660887ed9"
@@ -579,7 +578,7 @@
     "@types/warning" "^3.0.0"
     tslib "^2.1.0"
     warning "^4.0.3"
-=======
+
 "@react-spring/animated@~9.7.3":
   version "9.7.3"
   resolved "https://registry.yarnpkg.com/@react-spring/animated/-/animated-9.7.3.tgz#4211b1a6d48da0ff474a125e93c0f460ff816e0f"
@@ -618,7 +617,6 @@
     "@react-spring/core" "~9.7.3"
     "@react-spring/shared" "~9.7.3"
     "@react-spring/types" "~9.7.3"
->>>>>>> 06c3b86f95deb17bf9bc7c2380795ef4f8d76cc9
 
 "@remix-run/router@1.7.1":
   version "1.7.1"
