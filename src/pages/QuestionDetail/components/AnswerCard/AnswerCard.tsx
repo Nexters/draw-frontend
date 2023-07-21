@@ -33,7 +33,13 @@ const AnswerCard = ({ contents, flippable }: AnswerCard) => {
                     }}
                     css={{ color: `${palette.btn.green}` }}
                   />
-                  <FlipBottomSheet isOpen={isSheetOpen} onClose={() => setIsSheetOpen(false)} />
+                  <FlipBottomSheet
+                    isOpen={isSheetOpen}
+                    onClose={() => setIsSheetOpen(false)}
+                    onClickYes={() => {
+                      ref.current && ref.current.toggle();
+                    }}
+                  />
                 </>
               ) : (
                 <CardButton
