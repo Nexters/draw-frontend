@@ -9,7 +9,7 @@ const FlipCard = styled(Flippy)`
   margin-right: 12px;
 
   &:first-of-type {
-    margin-left: 20px;
+    margin-left: 24px;
   }
 `;
 

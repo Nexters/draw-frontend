@@ -5,6 +5,7 @@ import Styled from './AnswerCard.styles';
 import CardButton from './CardButton';
 import { FrontSide, BackSide } from 'react-flippy';
 import { palette } from '@/styles/palette';
+import FlipBottomSheet from '../FlipBottomSheet/FlipBottomSheet';
 
 interface AnswerCard {
   contents: string;
@@ -13,6 +14,7 @@ interface AnswerCard {
 
 const AnswerCard = ({ contents, flippable }: AnswerCard) => {
   const ref = useRef<any>();
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   return (
     <>
@@ -23,13 +25,16 @@ const AnswerCard = ({ contents, flippable }: AnswerCard) => {
             <Styled.CardButtons>
               <CardButton variants="threeDots" />
               {flippable ? (
-                <CardButton
-                  variants="flipCard"
-                  onClick={() => {
-                    ref.current && ref.current.toggle();
-                  }}
-                  css={{ color: `${palette.btn.green}` }}
-                />
+                <>
+                  <CardButton
+                    variants="flipCard"
+                    onClick={() => {
+                      setIsSheetOpen(true);
+                    }}
+                    css={{ color: `${palette.btn.green}` }}
+                  />
+                  <FlipBottomSheet isOpen={isSheetOpen} onClose={() => setIsSheetOpen(false)} />
+                </>
               ) : (
                 <CardButton
                   variants="flipCard"
