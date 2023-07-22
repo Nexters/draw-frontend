@@ -7,6 +7,7 @@ import MyPage from './pages/MyPage/MyPage';
 import NewQuestion from './pages/NewQuestion/NewQuestion';
 import QuestionDetail from './pages/QuestionDetail/QuestionDetail';
 import { ThemeProvider } from './styles/theme';
+import Toast from './components/Toast/Toast';
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,7 @@ const App = () => {
   return (
     <ThemeProvider>
       <RouterProvider router={router} />
+      <Toast />
     </ThemeProvider>
   );
 };
