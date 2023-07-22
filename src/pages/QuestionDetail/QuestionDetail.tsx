@@ -60,13 +60,13 @@ const QuestionDetail = () => {
   return (
     <>
       <Styled.QuestionDetailContainer>
-        <div>
+        <Styled.QuestionDetailHeader>
           <Back />
           <Styled.QuestionDetailTitle>
             <FeedStyled.FeedCardTitle>{MOCK_DATA.contents}</FeedStyled.FeedCardTitle>
           </Styled.QuestionDetailTitle>
-        </div>
-        <div>
+        </Styled.QuestionDetailHeader>
+        <Styled.QuestionDetailBody>
           <Styled.QuestionDetailFooterContainer>
             <FeedStyled.FeedCardLike>좋아요 0 명</FeedStyled.FeedCardLike>
             <FeedStyled.FeedCardFooter>
@@ -122,7 +122,7 @@ const QuestionDetail = () => {
             ))}
           </Styled.AnswersContainer>
           <Spacing size={42} />
-        </div>
+        </Styled.QuestionDetailBody>
       </Styled.QuestionDetailContainer>
     </>
   );

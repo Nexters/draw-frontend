@@ -8,6 +8,9 @@ const QuestionDetailContainer = styled.div`
   justify-content: space-between;
 `;
 
+const QuestionDetailHeader = styled.div``;
+const QuestionDetailBody = styled.div``;
+
 const AnswersContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -28,4 +31,11 @@ const QuestionDetailFooterContainer = styled.div`
   padding: 0 24px;
 `;
 
-export default { AnswersContainer, QuestionDetailContainer, QuestionDetailTitle, QuestionDetailFooterContainer };
+export default {
+  AnswersContainer,
+  QuestionDetailHeader,
+  QuestionDetailBody,
+  QuestionDetailContainer,
+  QuestionDetailTitle,
+  QuestionDetailFooterContainer,
+};
