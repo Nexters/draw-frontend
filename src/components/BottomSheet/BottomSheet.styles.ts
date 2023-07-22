@@ -17,6 +17,7 @@ const Dimmed = styled(animated.div)`
   top: 0;
   left: 0;
   width: 100vw;
+  height: 100vh;
   height: 100svh;
   background-color: ${({ theme }) => theme.palette.text.black};
   opacity: 0.5;
