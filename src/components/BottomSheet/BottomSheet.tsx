@@ -1,5 +1,6 @@
 import { useTransition, config } from '@react-spring/web';
 import Styled from './BottomSheet.styles';
+import { createPortal } from 'react-dom';
 
 type BottomSheetProps = {
   open: boolean;
@@ -40,11 +41,12 @@ const BottomSheet = ({ open, children, onClose }: BottomSheetProps) => {
     <>{flag && <Styled.BottomSheet style={style}>{children}</Styled.BottomSheet>}</>
   ));
 
-  return (
+  return createPortal(
     <>
       {dimmer}
       {bottomSheet}
-    </>
+    </>,
+    document.body
   );
 };
 
