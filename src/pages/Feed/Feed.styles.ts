@@ -90,7 +90,7 @@ const FeedCardOptionButton = styled.button<FeedCardOptionButtonProps>`
 
 const AnswerForm = styled.form`
   position: fixed;
-  bottom: 55px;
+  bottom: 20px;
   left: 0;
   width: 100%;
   min-height: 48px;
