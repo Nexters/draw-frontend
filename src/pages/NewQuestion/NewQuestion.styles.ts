@@ -12,6 +12,7 @@ const PageWrapper = styled.div`
 const PageBody = styled.div`
   flex-grow: 1;
 `;
+const PageFooter = styled.div``;
 
 const TextArea = styled.textarea`
   ${({ theme }) => theme.typo['body.1']}
@@ -27,10 +28,13 @@ const TextArea = styled.textarea`
 `;
 
 const AskOption = styled.div`
+  background-color: ${({ theme }) => theme.palette.background.white1};
+`;
+
+const AskOptionBody = styled.div`
   display: flex;
   justify-content: space-between;
   height: 50px;
-  background-color: ${({ theme }) => theme.palette.background.white1};
   align-items: center;
   padding: 0 24px;
 `;
@@ -46,4 +50,13 @@ const BottomSpace = styled.div`
   background-color: ${({ theme }) => theme.palette.background.white1};
 `;
 
-export default { TextArea, AskOption, AskOptionDescription, BottomSpace, PageWrapper, PageBody };
+export default {
+  TextArea,
+  AskOption,
+  AskOptionBody,
+  AskOptionDescription,
+  BottomSpace,
+  PageWrapper,
+  PageBody,
+  PageFooter,
+};

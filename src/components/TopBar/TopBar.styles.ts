@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-const BackContainer = styled.div`
+const TopBarContainer = styled.div`
   width: 100%;
   height: 32px;
   display: flex;
@@ -15,13 +15,13 @@ const BackButton = styled.button`
   justify-content: center;
 `;
 
-const Length = styled.div`
+const Center = styled.div`
   ${({ theme }) => theme.typo['sub.3']}
   color : ${({ theme }) => theme.palette.text.grey2};
 `;
-const SubmitButton = styled.button`
+const RightSubmit = styled.button`
   ${({ theme }) => theme.typo['sub.1']}
   color : ${({ theme }) => theme.palette.tag.text};
 `;
 
-export default { BackButton, BackContainer, Length, SubmitButton };
+export default { BackButton, TopBarContainer, Center, RightSubmit };
