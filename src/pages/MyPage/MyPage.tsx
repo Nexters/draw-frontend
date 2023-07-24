@@ -72,6 +72,24 @@ const MyPage = () => {
     setSelectedTab(event.currentTarget.name);
   };
 
+  const handleClickQuestionItem = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+
+    navigate('/question-detail/1');
+  };
+
+  const handleClickAnswerItem = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+
+    navigate('/question-detail/1');
+  };
+
+  const handleClickFavoriteItem = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+
+    navigate('/question-detail/1');
+  };
+
   return (
     <>
       <Global
@@ -128,7 +146,7 @@ const MyPage = () => {
         <Styled.TabPane>
           <Styled.QuestionList>
             {questionList.map((item) => (
-              <Styled.QuestionItem key={item.id}>
+              <Styled.QuestionItem key={item.id} onClick={handleClickQuestionItem}>
                 <Styled.QuestionItemTitle>{item.title}</Styled.QuestionItemTitle>
                 <Styled.QuestionItemLike>좋아요 {item.likes} 명</Styled.QuestionItemLike>
                 <Styled.QuestionItemFooter>
@@ -165,7 +183,7 @@ const MyPage = () => {
         <Styled.TabPane>
           <Styled.AnswerList>
             {answerList.map((item) => (
-              <Styled.AnswerItem key={item.id}>
+              <Styled.AnswerItem key={item.id} onClick={handleClickAnswerItem}>
                 <Styled.AnswerItemAnswer>{item.answer}</Styled.AnswerItemAnswer>
                 <Styled.AnswerItemQuestion>{item.question}</Styled.AnswerItemQuestion>
               </Styled.AnswerItem>
@@ -184,7 +202,7 @@ const MyPage = () => {
         <Styled.TabPane>
           <Styled.QuestionList>
             {questionList.map((item) => (
-              <Styled.QuestionItem key={item.id}>
+              <Styled.QuestionItem key={item.id} onClick={handleClickFavoriteItem}>
                 <Styled.QuestionItemTitle>{item.title}</Styled.QuestionItemTitle>
                 <Styled.QuestionItemLike>좋아요 {item.likes} 명</Styled.QuestionItemLike>
                 <Styled.QuestionItemFooter>
