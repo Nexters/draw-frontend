@@ -4,9 +4,11 @@ import NewProfile from './pages/NewProfile/NewProfile';
 import NewProfileCardView from './pages/NewProfileCardView/NewProfileCardView';
 import Feed from './pages/Feed/Feed';
 import MyPage from './pages/MyPage/MyPage';
+import Setting from './pages/Setting/Setting';
 import NewQuestion from './pages/NewQuestion/NewQuestion';
 import QuestionDetail from './pages/QuestionDetail/QuestionDetail';
 import { ThemeProvider } from './styles/theme';
+import Toast from './components/Toast/Toast';
 
 const router = createBrowserRouter([
   {
@@ -30,6 +32,10 @@ const router = createBrowserRouter([
     element: <MyPage />,
   },
   {
+    path: '/my-page/setting',
+    element: <Setting />,
+  },
+  {
     path: '/new-question',
     element: <NewQuestion />,
   },
@@ -43,6 +49,7 @@ const App = () => {
   return (
     <ThemeProvider>
       <RouterProvider router={router} />
+      <Toast />
     </ThemeProvider>
   );
 };

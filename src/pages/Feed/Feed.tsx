@@ -3,16 +3,18 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow } from 'swiper/modules';
 import Styled from './Feed.styles';
 import useInput from '@/hooks/useInput';
+import useToast from '@/hooks/useToast';
 import { ANSWER_MAX_LENGTH } from '@/constants/feed';
+import BottomSheet from '@/components/BottomSheet/BottomSheet';
 import { ReactComponent as DrawLogoTemp } from '@/assets/draw_logo_temp.svg';
 import { ReactComponent as HeartIcon } from '@/assets/heart.svg';
 import { ReactComponent as HeartActiveIcon } from '@/assets/heart_active.svg';
 import { ReactComponent as ShareIcon } from '@/assets/share.svg';
 import { ReactComponent as MoreIcon } from '@/assets/more.svg';
+import { ReactComponent as FireIcon } from '@/assets/fire.svg';
 
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
-import BottomSheet from '@/components/BottomSheet/BottomSheet';
 
 const sampleItems = [
   {
@@ -38,13 +40,15 @@ const sampleItems = [
 ];
 
 const Feed = () => {
+  const toast = useToast();
+
   const answerFormRef = useRef<HTMLFormElement>(null);
   const answerTextAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const [isAnswerFormOpen, setIsAnswerFormOpen] = useState(false);
   const [isCardOptionBottomSheetOpen, setIsCardOptionBottomSheetOpen] = useState(false);
 
-  const [answer, onChangeAnswer] = useInput('');
+  const [answer, onChangeAnswer, setAnswer] = useInput('');
 
   const calculateAnswerFormHeight = useCallback(() => {
     if (!answerFormRef.current) return;
@@ -57,6 +61,15 @@ const Feed = () => {
 
   const handleSubmitAnswerForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    setIsAnswerFormOpen(false);
+    setAnswer('');
+
+    toast.success(
+      <>
+        답변 작성 완료 <FireIcon />
+      </>
+    );
   };
 
   const handleChangeAnswer = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -67,10 +80,6 @@ const Feed = () => {
   useEffect(() => {
     calculateAnswerFormHeight();
   }, [calculateAnswerFormHeight, isAnswerFormOpen]);
-
-  // 질문: 답변하다가 중간에 Dimmed 영역을 눌렀을 때, 답변하기 입력 창은 입력하던 텍스트가 나타나야 하는가?
-  // 질문: 안드와 ios가 각각 키보드가 올라왔을 때의 동작 방식이 다른데, 화면 확인해봐줄 것.
-  // 질문: FeedCard의 높이가 유동적이도록 구현해놨는데, 크기가 고정되어야 하는지, 유동적이어야 하는지 확인해야 함.
 
   return (
     <>
