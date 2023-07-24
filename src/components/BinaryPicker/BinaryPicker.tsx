@@ -10,7 +10,7 @@ type BinaryPickerOption = {
 type BinaryPickerProps = {
   options: [BinaryPickerOption, BinaryPickerOption];
   onChange?: (value: string) => void;
-  defaultChecked?: string;
+  defaultChecked?: string | null;
 };
 
 const BinaryPicker = ({ options, onChange, defaultChecked }: BinaryPickerProps) => {
