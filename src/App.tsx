@@ -4,6 +4,7 @@ import NewProfile from './pages/NewProfile/NewProfile';
 import NewProfileCardView from './pages/NewProfileCardView/NewProfileCardView';
 import Feed from './pages/Feed/Feed';
 import MyPage from './pages/MyPage/MyPage';
+import Setting from './pages/Setting/Setting';
 import NewQuestion from './pages/NewQuestion/NewQuestion';
 import QuestionDetail from './pages/QuestionDetail/QuestionDetail';
 import { ThemeProvider } from './styles/theme';
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
   {
     path: '/my-page',
     element: <MyPage />,
+  },
+  {
+    path: '/my-page/setting',
+    element: <Setting />,
   },
   {
     path: '/new-question',

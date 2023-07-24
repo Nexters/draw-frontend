@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Styled from './MyPage.styles';
 import BottomSheet from '@/components/BottomSheet/BottomSheet';
 import { ReactComponent as SettingIcon } from '@/assets/setting.svg';
@@ -62,6 +63,8 @@ const answerList = [
 ];
 
 const MyPage = () => {
+  const navigate = useNavigate();
+
   const [selectedTab, setSelectedTab] = useState<string>('question');
   const [isQuestionOptionBottomSheetOpen, setIsQuestionOptionBottomSheetOpen] = useState(false);
 
@@ -80,7 +83,12 @@ const MyPage = () => {
         `}
       />
       <Styled.Header>
-        <Styled.SettingButton type="button">
+        <Styled.SettingButton
+          type="button"
+          onClick={() => {
+            navigate('/my-page/setting');
+          }}
+        >
           <SettingIcon />
         </Styled.SettingButton>
       </Styled.Header>
