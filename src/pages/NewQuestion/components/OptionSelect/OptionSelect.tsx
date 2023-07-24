@@ -4,32 +4,17 @@ import { animated } from '@react-spring/web';
 import Spacing from '@/components/Spacing/Spacing';
 import BinaryPicker from '@/components/BinaryPicker/BinaryPicker';
 import MBTIPicker from '@/components/MBTIPicker/MBTIPicker';
-import { Dispatch, SetStateAction } from 'react';
 import { MultiMBTI } from '@/components/MBTIPicker/MultiMBTIPicker';
 
 interface OptionSelectProps {
   closeOptionSelect: () => void;
-  genderState: [string | null, Dispatch<SetStateAction<string | null>>];
-  peerState: [string | null, Dispatch<SetStateAction<string | null>>];
-  mbtiState: [MultiMBTI, Dispatch<SetStateAction<MultiMBTI>>];
+  onChangeGender: (value: string) => void;
+  onChangeIsPeer: (value: string) => void;
+  onChangeMBTI: (value: MultiMBTI) => void;
 }
 
 const OptionSelect = animated(
-  ({ closeOptionSelect, genderState, peerState, mbtiState, ...rest }: OptionSelectProps) => {
-    const [gender, setGender] = genderState;
-    const [isPeer, setIsPeer] = peerState;
-    const [mbti, setMBTI] = mbtiState;
-
-    const handleChangeGender = (value: string) => {
-      setGender(value);
-    };
-    const handleChangeIsPeer = (value: string) => {
-      setIsPeer(value);
-    };
-    const handleChangeMBTI = (value: MultiMBTI) => {
-      setMBTI(value);
-    };
-
+  ({ closeOptionSelect, onChangeGender, onChangeIsPeer, onChangeMBTI, ...rest }: OptionSelectProps) => {
     return (
       <>
         <Styled.OptionSelectWrapper {...rest}>
@@ -56,8 +41,7 @@ const OptionSelect = animated(
                     label: '여자',
                   },
                 ]}
-                onChange={handleChangeGender}
-                defaultChecked={gender}
+                onChange={onChangeGender}
               />
             </Styled.OptionFormContainer>
             <Spacing size={32} />
@@ -76,8 +60,8 @@ const OptionSelect = animated(
                     label: '또래',
                   },
                 ]}
-                onChange={handleChangeIsPeer}
-                defaultChecked={isPeer}
+                onChange={onChangeIsPeer}
+                defaultChecked={'all'}
               />
             </Styled.OptionFormContainer>
             <Spacing size={41} />
@@ -85,7 +69,7 @@ const OptionSelect = animated(
               <Styled.OptionFormHeading>MBTI</Styled.OptionFormHeading>
               <Styled.OptionFormDescription>최대 4개까지 선택할 수 있어요.</Styled.OptionFormDescription>
               <Spacing size={14} />
-              <MBTIPicker onChange={handleChangeMBTI} multiSelect defaultValue={mbti} />
+              <MBTIPicker onChange={onChangeMBTI} multiSelect />
             </Styled.OptionFormContainer>
           </Styled.PaddingContainer>
         </Styled.OptionSelectWrapper>

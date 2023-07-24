@@ -1,51 +1,38 @@
 import useInput from '@/hooks/useInput';
-
 import Spacing from '@/components/Spacing/Spacing';
 import Styled from './NewQuestion.styles';
-import { ReactComponent as AddOption } from '@/assets/add-tag.svg';
+import { ReactComponent as AddOptionIcon } from '@/assets/add-tag.svg';
 import { useRef, useState } from 'react';
 import OptionList from './components/OptionPreview/OptionPreview';
 import OptionSelect from './components/OptionSelect/OptionSelect';
 import TopBar from '@/components/TopBar/TopBar';
-import { config, useTransition } from '@react-spring/web';
+import { useSpring } from '@react-spring/web';
 import { MultiMBTI } from '@/components/MBTIPicker/MultiMBTIPicker';
 
 const NewQuestion = () => {
   const [value, onChange] = useInput('');
   const [isTextAreaFocused, setIsTextAreaFocused] = useState(false);
-  const [isOptionSelectOpen, setISOptionSelectOpen] = useState(false);
+  const [isOptionSelectOpen, setIsOptionSelectOpen] = useState(false);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const [gender, setGender] = useState<string | null>(null);
   const [isPeer, setIsPeer] = useState<string | null>('all');
   const [mbti, setMBTI] = useState<MultiMBTI>([]);
 
-  const toggleOptionSelectOpen = () => setISOptionSelectOpen(!isOptionSelectOpen);
-  const bottomSheetTransition = useTransition(isOptionSelectOpen, {
-    from: {
-      transform: 'translate(0%, 100%)',
-    },
-    enter: {
-      transform: 'translate(0%, 0%)',
-    },
-    leave: {
-      transform: 'translate(0%, 100%)',
-    },
-    config: config.default,
+  const handleChangeGender = (value: string) => {
+    setGender(value);
+  };
+  const handleChangeIsPeer = (value: string) => {
+    setIsPeer(value);
+  };
+  const handleChangeMBTI = (value: MultiMBTI) => {
+    setMBTI(value);
+  };
+
+  const toggleOptionSelectOpen = () => setIsOptionSelectOpen(!isOptionSelectOpen);
+  const bottomSheetTransition = useSpring({
+    transform: isOptionSelectOpen ? 'translate(0%, 0%)' : 'translate(0%, 100%)',
   });
-  const optionSelect = bottomSheetTransition((style, flag) => (
-    <>
-      {flag && (
-        <OptionSelect
-          closeOptionSelect={toggleOptionSelectOpen}
-          style={style}
-          genderState={[gender, setGender]}
-          peerState={[isPeer, setIsPeer]}
-          mbtiState={[mbti, setMBTI]}
-        />
-      )}
-    </>
-  ));
 
   return (
     <>
@@ -67,13 +54,19 @@ const NewQuestion = () => {
           <Styled.AskOption onClick={toggleOptionSelectOpen}>
             <Styled.AskOptionBody>
               <Styled.AskOptionDescription>이런 사람에게 질문하고 싶어요!</Styled.AskOptionDescription>
-              <AddOption />
+              <AddOptionIcon />
             </Styled.AskOptionBody>
             {!isTextAreaFocused && <Styled.BottomSpace />}
           </Styled.AskOption>
         </Styled.PageFooter>
+        <OptionSelect
+          closeOptionSelect={toggleOptionSelectOpen}
+          style={bottomSheetTransition}
+          onChangeGender={handleChangeGender}
+          onChangeIsPeer={handleChangeIsPeer}
+          onChangeMBTI={handleChangeMBTI}
+        />
       </Styled.PageWrapper>
-      {optionSelect}
     </>
   );
 };

@@ -1,10 +1,10 @@
 import Styled from './OptionPreview.styles';
-import { ReactComponent as RemoveOption } from '@/assets/remove-tag.svg';
+import { ReactComponent as RemoveOptionIcon } from '@/assets/remove-tag.svg';
 
 const OptionPreview = () => {
   return (
     <Styled.OptionPreviewContainer>
-      <RemoveOption />
+      <RemoveOptionIcon />
     </Styled.OptionPreviewContainer>
   );
 };
