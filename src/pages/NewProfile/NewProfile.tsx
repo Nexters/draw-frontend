@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import Styled from './NewProfile.styles';
 import BinaryPicker from '@/components/BinaryPicker/BinaryPicker';
 import { BIRTHDAY_REGEXP_STRING } from '@/constants/regexp';
-import MBTIPicker, { MBTI } from '@/components/MBTIPicker/MBTIPicker';
+import MBTIPicker from '@/components/MBTIPicker/MBTIPicker';
+import { SingleMBTI } from '@/components/MBTIPicker/SingleMBTIPicker';
 
 const BIRTHDAY_LENGTH = 6;
 
@@ -12,7 +13,7 @@ const NewProfile = () => {
 
   const [gender, setGender] = useState<string | null>(null);
   const [birthday, setBirthday] = useState<string>('');
-  const [mbti, setMBTI] = useState<MBTI>([null, null, null, null]);
+  const [mbti, setMBTI] = useState<SingleMBTI>([null, null, null, null]);
 
   const handleChangeGender = (value: string) => {
     setGender(value);
@@ -22,7 +23,7 @@ const NewProfile = () => {
     setBirthday(event.target.value);
   };
 
-  const handleChangeMBTI = (value: MBTI) => {
+  const handleChangeMBTI = (value: SingleMBTI) => {
     setMBTI(value);
   };
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import Styled from './MBTIPickerItem.styles';
+import { MultiMBTI } from './MultiMBTIPicker';
 
 type MBTIPickerItemOption = {
   value: string;
@@ -11,9 +12,11 @@ type MBTIPickerItemProps = {
   options: [MBTIPickerItemOption, MBTIPickerItemOption];
   name: string;
   onChange?: (value: string) => void;
+  type?: 'radio' | 'checkbox';
+  defaultValue?: MultiMBTI;
 };
 
-const MBTIPickerItem = ({ options, name, onChange }: MBTIPickerItemProps) => {
+const MBTIPickerItem = ({ options, name, onChange, type = 'radio', defaultValue }: MBTIPickerItemProps) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange?.(event.target.value);
   };
@@ -26,11 +29,12 @@ const MBTIPickerItem = ({ options, name, onChange }: MBTIPickerItemProps) => {
         return (
           <Styled.MBTIPickerRadioButton key={option.value}>
             <Styled.MBTIPickerRadioInput
-              type="radio"
+              type={type}
               id={option.value}
               name={name}
               value={option.value}
               onChange={handleChange}
+              defaultChecked={defaultValue?.includes(option.value)}
             />
             <Styled.MBTIPickerRadioLabel htmlFor={option.value} position={position}>
               <Styled.MBTIPickerRadioLabelTitle>{option.title}</Styled.MBTIPickerRadioLabelTitle>

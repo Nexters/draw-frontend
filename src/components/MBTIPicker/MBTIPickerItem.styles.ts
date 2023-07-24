@@ -39,6 +39,10 @@ const MBTIPickerRadioLabel = styled.label<MBTIPickerRadioLabelProps>`
     color: ${({ theme }) => theme.palette.btn.green};
     box-shadow: 0 0 0 2px inset ${({ theme }) => theme.palette.btn.green};
   }
+  [type='checkbox']:checked + & {
+    color: ${({ theme }) => theme.palette.btn.green};
+    box-shadow: 0 0 0 2px inset ${({ theme }) => theme.palette.btn.green};
+  }
 
   ${({ position }) => {
     switch (position) {

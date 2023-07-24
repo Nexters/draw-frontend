@@ -8,12 +8,17 @@ import OptionList from './components/OptionPreview/OptionPreview';
 import OptionSelect from './components/OptionSelect/OptionSelect';
 import TopBar from '@/components/TopBar/TopBar';
 import { config, useTransition } from '@react-spring/web';
+import { MultiMBTI } from '@/components/MBTIPicker/MultiMBTIPicker';
 
 const NewQuestion = () => {
   const [value, onChange] = useInput('');
   const [isTextAreaFocused, setIsTextAreaFocused] = useState(false);
   const [isOptionSelectOpen, setISOptionSelectOpen] = useState(false);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+  const [gender, setGender] = useState<string | null>(null);
+  const [isPeer, setIsPeer] = useState<string | null>('all');
+  const [mbti, setMBTI] = useState<MultiMBTI>([]);
 
   const toggleOptionSelectOpen = () => setISOptionSelectOpen(!isOptionSelectOpen);
   const bottomSheetTransition = useTransition(isOptionSelectOpen, {
@@ -29,7 +34,17 @@ const NewQuestion = () => {
     config: config.default,
   });
   const optionSelect = bottomSheetTransition((style, flag) => (
-    <>{flag && <OptionSelect closeOptionSelect={toggleOptionSelectOpen} style={style} />}</>
+    <>
+      {flag && (
+        <OptionSelect
+          closeOptionSelect={toggleOptionSelectOpen}
+          style={style}
+          genderState={[gender, setGender]}
+          peerState={[isPeer, setIsPeer]}
+          mbtiState={[mbti, setMBTI]}
+        />
+      )}
+    </>
   ));
 
   return (
@@ -44,6 +59,8 @@ const NewQuestion = () => {
             ref={textAreaRef}
             onFocus={() => setIsTextAreaFocused(true)}
             onBlur={() => setIsTextAreaFocused(false)}
+            onChange={onChange}
+            value={mbti}
           />
         </Styled.PageBody>
         <Styled.PageFooter>
