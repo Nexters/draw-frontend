@@ -60,7 +60,6 @@ const NewQuestion = () => {
             onFocus={() => setIsTextAreaFocused(true)}
             onBlur={() => setIsTextAreaFocused(false)}
             onChange={onChange}
-            value={mbti}
           />
         </Styled.PageBody>
         <Styled.PageFooter>
