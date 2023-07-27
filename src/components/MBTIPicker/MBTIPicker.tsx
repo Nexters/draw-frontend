@@ -1,22 +1,18 @@
-import SingleMBTIPicker, { SingleMBTI } from './SingleMBTIPicker';
-import MultiMBTIPicker, { MultiMBTI } from './MultiMBTIPicker';
+import RadioMBTIPicker from './RadioMBTIPicker';
+import CheckboxMBTIPicker from './CheckboxMBTIPicker';
 
-type SingleMBTIPickerProps = {
-  onChange?: (value: SingleMBTI) => void;
-  multiSelect?: false;
-  defaultValue?: undefined;
+export type MBTIPickerProps = {
+  onChange?: (value: MBTI) => void;
+  checkbox?: boolean;
+  defaultValue?: MBTI;
 };
-type MultiMBTIPickerProps = {
-  onChange?: (value: MultiMBTI) => void;
-  multiSelect?: true;
-  defaultValue?: MultiMBTI;
-};
+export type MBTI = [string | null, string | null, string | null, string | null];
 
-const MBTIPicker = ({ onChange, multiSelect = false, defaultValue }: SingleMBTIPickerProps | MultiMBTIPickerProps) => {
-  return multiSelect ? (
-    <MultiMBTIPicker onChange={onChange as (value: MultiMBTI) => void} defaultValue={defaultValue} />
+const MBTIPicker = ({ onChange, checkbox = false, defaultValue }: MBTIPickerProps) => {
+  return checkbox ? (
+    <CheckboxMBTIPicker onChange={onChange as (value: MBTI) => void} defaultValue={defaultValue as MBTI} />
   ) : (
-    <SingleMBTIPicker onChange={onChange as (value: SingleMBTI) => void} />
+    <RadioMBTIPicker onChange={onChange as (value: MBTI) => void} defaultValue={defaultValue as MBTI} />
   );
 };
 

@@ -1,37 +1,36 @@
 import { useState } from 'react';
 import Styled from './MBTIPicker.styles';
 import MBTIPickerItem from './MBTIPickerItem';
+import { MBTIPickerProps } from './MBTIPicker';
 
-export type SingleMBTI = [string | null, string | null, string | null, string | null];
-
-type SingleMBTIPickerProps = {
-  onChange?: (value: SingleMBTI) => void;
-};
-
-const SingleMBTIPicker = ({ onChange }: SingleMBTIPickerProps) => {
-  const [eOrI, setEOrI] = useState<string | null>(null);
-  const [sOrN, setSOrN] = useState<string | null>(null);
-  const [tOrF, setTOrF] = useState<string | null>(null);
-  const [jOrP, setJOrP] = useState<string | null>(null);
+const CheckboxMBTIPicker = ({ onChange, defaultValue }: MBTIPickerProps) => {
+  const [eOrI, setEOrI] = useState<string | null>(defaultValue?.[0] || null);
+  const [sOrN, setSOrN] = useState<string | null>(defaultValue?.[1] || null);
+  const [tOrF, setTOrF] = useState<string | null>(defaultValue?.[2] || null);
+  const [jOrP, setJOrP] = useState<string | null>(defaultValue?.[3] || null);
 
   const handleChangeEOrI = (value: string) => {
-    setEOrI(value);
-    onChange?.([value, sOrN, tOrF, jOrP]);
+    const newValue = eOrI === value ? null : value;
+    setEOrI(newValue);
+    onChange?.([newValue, sOrN, tOrF, jOrP]);
   };
 
   const handleChangeSOrN = (value: string) => {
-    setSOrN(value);
-    onChange?.([eOrI, value, tOrF, jOrP]);
+    const newValue = sOrN === value ? null : value;
+    setSOrN(newValue);
+    onChange?.([eOrI, newValue, tOrF, jOrP]);
   };
 
   const handleChangeTOrF = (value: string) => {
-    setTOrF(value);
-    onChange?.([eOrI, sOrN, value, jOrP]);
+    const newValue = tOrF === value ? null : value;
+    setTOrF(newValue);
+    onChange?.([eOrI, sOrN, newValue, jOrP]);
   };
 
   const handleChangeJOrP = (value: string) => {
-    setJOrP(value);
-    onChange?.([eOrI, sOrN, tOrF, value]);
+    const newValue = jOrP === value ? null : value;
+    setJOrP(newValue);
+    onChange?.([eOrI, sOrN, tOrF, newValue]);
   };
 
   return (
@@ -50,7 +49,9 @@ const SingleMBTIPicker = ({ onChange }: SingleMBTIPickerProps) => {
           },
         ]}
         name="E-I"
-        onChange={handleChangeEOrI}
+        onClick={handleChangeEOrI}
+        type="checkbox"
+        checkedValue={eOrI}
       />
       <MBTIPickerItem
         options={[
@@ -66,7 +67,9 @@ const SingleMBTIPicker = ({ onChange }: SingleMBTIPickerProps) => {
           },
         ]}
         name="S-N"
-        onChange={handleChangeSOrN}
+        onClick={handleChangeSOrN}
+        type="checkbox"
+        checkedValue={sOrN}
       />
       <MBTIPickerItem
         options={[
@@ -82,7 +85,9 @@ const SingleMBTIPicker = ({ onChange }: SingleMBTIPickerProps) => {
           },
         ]}
         name="T-F"
-        onChange={handleChangeTOrF}
+        onClick={handleChangeTOrF}
+        type="checkbox"
+        checkedValue={tOrF}
       />
       <MBTIPickerItem
         options={[
@@ -98,10 +103,12 @@ const SingleMBTIPicker = ({ onChange }: SingleMBTIPickerProps) => {
           },
         ]}
         name="J-P"
-        onChange={handleChangeJOrP}
+        onClick={handleChangeJOrP}
+        type="checkbox"
+        checkedValue={jOrP}
       />
     </Styled.MBTIPicker>
   );
 };
 
-export default SingleMBTIPicker;
+export default CheckboxMBTIPicker;
