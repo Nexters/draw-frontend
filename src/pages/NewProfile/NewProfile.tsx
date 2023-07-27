@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Styled from './NewProfile.styles';
 import BinaryPicker from '@/components/BinaryPicker/BinaryPicker';
