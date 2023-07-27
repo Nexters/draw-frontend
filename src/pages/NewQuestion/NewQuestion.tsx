@@ -1,23 +1,22 @@
 import useInput from '@/hooks/useInput';
 import Spacing from '@/components/Spacing/Spacing';
 import Styled from './NewQuestion.styles';
-import { ReactComponent as AddOptionIcon } from '@/assets/add-tag.svg';
-import { useRef, useState } from 'react';
-import OptionList from './components/OptionPreview/OptionPreview';
+import { useEffect, useRef, useState } from 'react';
 import OptionSelect from './components/OptionSelect/OptionSelect';
 import TopBar from '@/components/TopBar/TopBar';
-import { useSpring } from '@react-spring/web';
-import { MultiMBTI } from '@/components/MBTIPicker/MultiMBTIPicker';
+import BottomSheet from '@/components/BottomSheet/BottomSheet';
+import { MBTI } from '@/components/MBTIPicker/MBTIPicker';
 
 const NewQuestion = () => {
   const [value, onChange] = useInput('');
   const [isTextAreaFocused, setIsTextAreaFocused] = useState(false);
   const [isOptionSelectOpen, setIsOptionSelectOpen] = useState(false);
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const [gender, setGender] = useState<string | null>(null);
-  const [isPeer, setIsPeer] = useState<string | null>('all');
-  const [mbti, setMBTI] = useState<MultiMBTI>([]);
+  const [isPeer, setIsPeer] = useState<string | null>('peer');
+  const [mbti, setMBTI] = useState<MBTI>([null, null, null, null]);
+  const [selectedOptionText, setSelectedOptionText] = useState<string | null>(null);
 
   const handleChangeGender = (value: string) => {
     setGender(value);
@@ -25,14 +24,24 @@ const NewQuestion = () => {
   const handleChangeIsPeer = (value: string) => {
     setIsPeer(value);
   };
-  const handleChangeMBTI = (value: MultiMBTI) => {
+  const handleChangeMBTI = (value: MBTI) => {
     setMBTI(value);
   };
 
   const toggleOptionSelectOpen = () => setIsOptionSelectOpen(!isOptionSelectOpen);
-  const bottomSheetTransition = useSpring({
-    transform: isOptionSelectOpen ? 'translate(0%, 0%)' : 'translate(0%, 100%)',
-  });
+
+  useEffect(() => {
+    setSelectedOptionText(() => getSelectedOptionText(gender, isPeer, mbti));
+  }, [gender, isPeer, mbti]);
+
+  const getSelectedOptionText = (gender: string | null, peer: string | null, mbti: MBTI) => {
+    const genderTag = gender ? `# ${gender === 'male' ? '남자' : '여자'}` : null;
+    const peerTag = peer === 'all' ? `# 모두` : null;
+    const mbtiTag = !mbti.every((v) => v === null) ? `# ${mbti.filter((v) => v !== null).join(',')}` : null;
+
+    if (!genderTag && !peerTag && !mbtiTag) return null;
+    return `${genderTag || ''}\u00A0\u00A0${peerTag || ''}\u00A0\u00A0${mbtiTag || ''}`;
+  };
 
   return (
     <>
@@ -50,22 +59,27 @@ const NewQuestion = () => {
           />
         </Styled.PageBody>
         <Styled.PageFooter>
-          <OptionList />
           <Styled.AskOption onClick={toggleOptionSelectOpen}>
             <Styled.AskOptionBody>
-              <Styled.AskOptionDescription>이런 사람에게 질문하고 싶어요!</Styled.AskOptionDescription>
-              <AddOptionIcon />
+              <Styled.AskOptionDescription selected={Boolean(selectedOptionText)}>
+                {selectedOptionText || '이런 사람에게 질문하고 싶어요!'}
+              </Styled.AskOptionDescription>
+              <Styled.AddOptionIcon selected={Boolean(selectedOptionText)} />
             </Styled.AskOptionBody>
             {!isTextAreaFocused && <Styled.BottomSpace />}
           </Styled.AskOption>
         </Styled.PageFooter>
-        <OptionSelect
-          closeOptionSelect={toggleOptionSelectOpen}
-          style={bottomSheetTransition}
-          onChangeGender={handleChangeGender}
-          onChangeIsPeer={handleChangeIsPeer}
-          onChangeMBTI={handleChangeMBTI}
-        />
+        <BottomSheet open={isOptionSelectOpen} onClose={toggleOptionSelectOpen}>
+          <OptionSelect
+            closeOptionSelect={toggleOptionSelectOpen}
+            onChangeGender={handleChangeGender}
+            onChangeIsPeer={handleChangeIsPeer}
+            onChangeMBTI={handleChangeMBTI}
+            gender={gender}
+            isPeer={isPeer}
+            mbti={mbti}
+          />
+        </BottomSheet>
       </Styled.PageWrapper>
     </>
   );

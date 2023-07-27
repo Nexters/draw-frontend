@@ -1,15 +1,13 @@
 import styled from '@emotion/styled';
 
 const OptionSelectWrapper = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  height: 100svh;
+  max-height: calc(100vh - 20px);
+  max-height: calc(100svh - 20px);
   background-color: ${({ theme }) => theme.palette.background.white1};
   overflow-y: auto;
   z-index: 2;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
 `;
 
 const PaddingContainer = styled.div`
@@ -17,7 +15,7 @@ const PaddingContainer = styled.div`
 `;
 
 const Heading = styled.div`
-  margin-top: 28px;
+  margin-top: 12px;
   ${({ theme }) => theme.typo['heading.1']};
 `;
 const Description = styled.div`
@@ -37,6 +35,22 @@ const OptionFormDescription = styled.div`
   margin-top: 2px;
 `;
 
+const SubmitButton = styled.button`
+  position: fixed;
+  text-align: right;
+  padding-top: 20px;
+  padding-right: 24px;
+  box-sizing: border-box;
+  height: 52px;
+  display: block;
+  background-color: ${({ theme }) => theme.palette.background.white1};
+  width: 100%;
+  ${({ theme }) => theme.typo['sub.1']}
+  color :${({ theme }) => theme.palette.tag.text};
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+`;
+
 export default {
   OptionSelectWrapper,
   Heading,
@@ -45,4 +59,5 @@ export default {
   OptionFormContainer,
   OptionFormHeading,
   OptionFormDescription,
+  SubmitButton,
 };
