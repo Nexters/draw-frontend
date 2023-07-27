@@ -10,9 +10,10 @@ type BinaryPickerOption = {
 type BinaryPickerProps = {
   options: [BinaryPickerOption, BinaryPickerOption];
   onChange?: (value: string) => void;
+  defaultChecked?: string | null;
 };
 
-const BinaryPicker = ({ options, onChange }: BinaryPickerProps) => {
+const BinaryPicker = ({ options, onChange, defaultChecked }: BinaryPickerProps) => {
   const name = useMemo(() => nanoid(10), []);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,7 +27,14 @@ const BinaryPicker = ({ options, onChange }: BinaryPickerProps) => {
 
         return (
           <Styled.BinaryPickerOption key={key}>
-            <Styled.BinaryPickerInput name={name} id={key} type="radio" value={option.value} onChange={handleChange} />
+            <Styled.BinaryPickerInput
+              name={name}
+              id={key}
+              type="radio"
+              value={option.value}
+              onChange={handleChange}
+              defaultChecked={defaultChecked === option.value}
+            />
             <Styled.BinaryPickerLabel htmlFor={key}>{option.label}</Styled.BinaryPickerLabel>
           </Styled.BinaryPickerOption>
         );

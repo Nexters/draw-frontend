@@ -2,7 +2,6 @@ import Spacing from '@/components/Spacing/Spacing';
 import Styled from './QuestionDetail.styles';
 import FeedStyled from '@/pages/Feed/Feed.styles';
 import AnswerCard from './components/AnswerCard/AnswerCard';
-import Back from './components/Back/Back';
 import { ReactComponent as HeartIcon } from '@/assets/heart.svg';
 import { ReactComponent as HeartActiveIcon } from '@/assets/heart_active.svg';
 import { ReactComponent as ShareIcon } from '@/assets/share.svg';
@@ -10,6 +9,7 @@ import { ReactComponent as MoreIcon } from '@/assets/more.svg';
 import { ANSWER_MAX_LENGTH } from '@/constants/feed';
 import useInput from '@/hooks/useInput';
 import { useRef, useState, useCallback, useEffect } from 'react';
+import TopBar from '@/components/TopBar/TopBar';
 
 const MOCK_DATA = {
   contents: 'T도 박은빈 시상식 보고 우나요?',
@@ -61,7 +61,7 @@ const QuestionDetail = () => {
     <>
       <Styled.QuestionDetailContainer>
         <Styled.QuestionDetailHeader>
-          <Back />
+          <TopBar />
           <Styled.QuestionDetailTitle>
             <FeedStyled.FeedCardTitle>{MOCK_DATA.contents}</FeedStyled.FeedCardTitle>
           </Styled.QuestionDetailTitle>
