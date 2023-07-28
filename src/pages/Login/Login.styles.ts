@@ -1,10 +1,8 @@
 import styled from '@emotion/styled';
 
 const Login = styled.div`
-  width: 100vw;
-  height: 100vh;
-  height: 100svh;
-  padding: 48px 0;
+  height: 100%;
+  padding: 22px 0 48px;
   display: flex;
   flex-direction: column;
   gap: 58px;

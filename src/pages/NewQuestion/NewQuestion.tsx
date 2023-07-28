@@ -6,6 +6,8 @@ import OptionSelect from './components/OptionSelect/OptionSelect';
 import TopBar from '@/components/TopBar/TopBar';
 import BottomSheet from '@/components/BottomSheet/BottomSheet';
 import { MBTI } from '@/components/MBTIPicker/MBTIPicker';
+import Layout from '@/components/Layout/Layout';
+import { palette } from '@/styles/palette';
 
 const NewQuestion = () => {
   const [value, onChange] = useInput('');
@@ -44,7 +46,7 @@ const NewQuestion = () => {
   };
 
   return (
-    <>
+    <Layout backgroundColor={palette.background.white2}>
       <Styled.PageWrapper>
         <Styled.PageBody>
           <TopBar centerElement={`${value.length}/150`} rightElement={'등록'} />
@@ -81,7 +83,7 @@ const NewQuestion = () => {
           />
         </BottomSheet>
       </Styled.PageWrapper>
-    </>
+    </Layout>
   );
 };
 

@@ -84,7 +84,8 @@ const PointValue = styled.span`
 
 const StickyTop = styled.div`
   position: sticky;
-  top: 0;
+  padding-top: 48px;
+  top: -48px;
   background-color: ${({ theme }) => theme.palette.background.white1};
   z-index: 1;
 `;

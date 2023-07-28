@@ -9,12 +9,9 @@ type FakeAnswerTextAreaButtonContainerProps = {
 };
 
 const Feed = styled.div`
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  height: 100svh;
+  height: 100%;
   background-color: ${({ theme }) => theme.palette.background.white1};
-  padding: 12px 0 55px;
+  padding: 8px 0 30px;
   display: flex;
   flex-direction: column;
 `;
