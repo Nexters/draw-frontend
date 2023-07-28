@@ -7,8 +7,8 @@ import { ReactComponent as HeartIcon } from '@/assets/heart.svg';
 import { ReactComponent as HeartActiveIcon } from '@/assets/heart_active.svg';
 import { ReactComponent as ShareIcon } from '@/assets/share.svg';
 import { ReactComponent as MoreIcon } from '@/assets/more.svg';
-import { Global, css } from '@emotion/react';
 import { palette } from '@/styles/palette';
+import Layout from '@/components/Layout/Layout';
 
 const tabList = [
   {
@@ -91,15 +91,7 @@ const MyPage = () => {
   };
 
   return (
-    <>
-      <Global
-        styles={css`
-          body {
-            background-color: ${palette.background.white1};
-            margin-bottom: 124px;
-          }
-        `}
-      />
+    <Layout backgroundColor={palette.background.white1} hasTabBar>
       <Styled.Header>
         <Styled.SettingButton
           type="button"
@@ -247,7 +239,7 @@ const MyPage = () => {
           <Styled.QuestionOption>신고하기</Styled.QuestionOption>
         </Styled.QuestionOptionBottomSheet>
       </BottomSheet>
-    </>
+    </Layout>
   );
 };
 

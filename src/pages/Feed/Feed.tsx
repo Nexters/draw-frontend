@@ -15,6 +15,8 @@ import { ReactComponent as FireIcon } from '@/assets/fire.svg';
 
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
+import Layout from '@/components/Layout/Layout';
+import { palette } from '@/styles/palette';
 
 const sampleItems = [
   {
@@ -47,6 +49,7 @@ const Feed = () => {
 
   const [isAnswerFormOpen, setIsAnswerFormOpen] = useState(false);
   const [isCardOptionBottomSheetOpen, setIsCardOptionBottomSheetOpen] = useState(false);
+  const [isTabBarVisible, setIsTabBarVisible] = useState(true);
 
   const [answer, onChangeAnswer, setAnswer] = useInput('');
 
@@ -82,7 +85,7 @@ const Feed = () => {
   }, [calculateAnswerFormHeight, isAnswerFormOpen]);
 
   return (
-    <>
+    <Layout backgroundColor={palette.background.white1} hasTabBar={isTabBarVisible}>
       <Styled.Feed>
         <Styled.Header>
           <DrawLogoTemp />
@@ -143,8 +146,15 @@ const Feed = () => {
                 placeholder="답변하기"
                 autoFocus
                 rows={1}
-                onChange={handleChangeAnswer}
                 maxLength={ANSWER_MAX_LENGTH}
+                onChange={handleChangeAnswer}
+                onFocus={() => {
+                  setIsTabBarVisible(false);
+                }}
+                onBlur={() => {
+                  setIsAnswerFormOpen(false);
+                  setIsTabBarVisible(true);
+                }}
               />
               {answer.length > 0 && <Styled.AnswerSubmit>완료</Styled.AnswerSubmit>}
             </Styled.AnswerTextAreaContainer>
@@ -177,7 +187,7 @@ const Feed = () => {
           <Styled.FeedOption>신고하기</Styled.FeedOption>
         </Styled.FeedOptionBottomSheet>
       </BottomSheet>
-    </>
+    </Layout>
   );
 };
 

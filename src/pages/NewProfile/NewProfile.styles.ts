@@ -1,11 +1,8 @@
 import styled from '@emotion/styled';
 
 const NewProfile = styled.div`
-  width: 100vw;
-  height: 100vh;
-  height: 100svh;
-  background-color: ${({ theme }) => theme.palette.background.white1};
-  padding: 40px 24px 48px;
+  height: 100%;
+  padding: 40px 24px 100px;
   overflow-y: auto;
 `;
 

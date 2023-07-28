@@ -10,6 +10,8 @@ import { ANSWER_MAX_LENGTH } from '@/constants/feed';
 import useInput from '@/hooks/useInput';
 import { useRef, useState, useCallback, useEffect } from 'react';
 import TopBar from '@/components/TopBar/TopBar';
+import { palette } from '@/styles/palette';
+import Layout from '@/components/Layout/Layout';
 
 const MOCK_DATA = {
   contents: 'T도 박은빈 시상식 보고 우나요?',
@@ -58,7 +60,7 @@ const QuestionDetail = () => {
   }, [calculateAnswerFormHeight, isAnswerFormOpen]);
 
   return (
-    <>
+    <Layout backgroundColor={palette.background.white2}>
       <Styled.QuestionDetailContainer>
         <Styled.QuestionDetailHeader>
           <TopBar />
@@ -124,7 +126,7 @@ const QuestionDetail = () => {
           <Spacing size={42} />
         </Styled.QuestionDetailBody>
       </Styled.QuestionDetailContainer>
-    </>
+    </Layout>
   );
 };
 

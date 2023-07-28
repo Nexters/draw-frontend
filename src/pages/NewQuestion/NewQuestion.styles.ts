@@ -2,10 +2,7 @@ import styled from '@emotion/styled';
 import { ReactComponent as BaseAddOptionIcon } from '@/assets/add-tag.svg';
 
 const PageWrapper = styled.div`
-  width: 100%;
-  height: 100vh;
-  height: 100svh;
-
+  height: 100%;
   display: flex;
   flex-direction: column;
 `;
@@ -16,8 +13,9 @@ const PageBody = styled.div`
   flex-direction: column;
   margin-bottom: 85px;
 `;
+
 const PageFooter = styled.div`
-  position: fixed;
+  position: sticky;
   bottom: 0;
   left: 0;
   right: 0;

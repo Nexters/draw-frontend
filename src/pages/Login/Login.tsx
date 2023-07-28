@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import Styled from './Login.styles';
 import LoginButton from './components/LoginButton/LoginButton';
+import Layout from '@/components/Layout/Layout';
+import { palette } from '@/styles/palette';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -16,15 +18,17 @@ const Login = () => {
   };
 
   return (
-    <Styled.Login>
-      <Styled.GraphicContainer>
-        <Styled.Graphic />
-      </Styled.GraphicContainer>
-      <Styled.LoginButtonContainer>
-        <LoginButton serviceName="kakao" onClick={handleClickKakaoLogin} />
-        <LoginButton serviceName="apple" onClick={handleClickAppleLogin} />
-      </Styled.LoginButtonContainer>
-    </Styled.Login>
+    <Layout backgroundColor={palette.background.white2}>
+      <Styled.Login>
+        <Styled.GraphicContainer>
+          <Styled.Graphic />
+        </Styled.GraphicContainer>
+        <Styled.LoginButtonContainer>
+          <LoginButton serviceName="kakao" onClick={handleClickKakaoLogin} />
+          <LoginButton serviceName="apple" onClick={handleClickAppleLogin} />
+        </Styled.LoginButtonContainer>
+      </Styled.Login>
+    </Layout>
   );
 };
 
