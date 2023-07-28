@@ -140,7 +140,7 @@ const Dimmed = styled.div`
   height: 100vh;
   height: 100svh;
   background-color: ${({ theme }) => theme.palette.text.black};
-  opacity: 0.5;
+  opacity: 0.7;
   z-index: 99;
 `;
 
