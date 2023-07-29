@@ -13,12 +13,52 @@ const NewQuestion = () => {
   const [value, onChange] = useInput('');
   const [isTextAreaFocused, setIsTextAreaFocused] = useState(false);
   const [isOptionSelectOpen, setIsOptionSelectOpen] = useState(false);
-
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const [gender, setGender] = useState<string | null>(null);
   const [isPeer, setIsPeer] = useState<string | null>('peer');
   const [mbti, setMBTI] = useState<MBTI>([null, null, null, null]);
   const [selectedOptionText, setSelectedOptionText] = useState<string | null>(null);
+  const [prevVisualViewport, setPrevVisualViewport] = useState(0);
+
+  const handleVisualViewportResize = () => {
+    if (typeof window === 'undefined' || !window.visualViewport) {
+      return; // 비주얼 뷰포트 API가 지원되지 않거나 window 객체를 사용할 수 없는 경우
+    }
+    const currentVisualViewport = window.visualViewport.height;
+
+    if (prevVisualViewport - 30 > currentVisualViewport && prevVisualViewport - 100 < currentVisualViewport) {
+      const scrollHeight = document.body.scrollHeight;
+      const scrollTop = scrollHeight - window.visualViewport.height;
+
+      window.scrollTo(0, scrollTop); // 입력창이 키보드에 가려지지 않도록 조절
+    }
+
+    setPrevVisualViewport(window.visualViewport.height);
+  };
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.visualViewport) {
+      return; // 비주얼 뷰포트 API가 지원되지 않거나 window 객체를 사용할 수 없는 경우
+    }
+    window.visualViewport.onresize = handleVisualViewportResize;
+
+    // Clean up the event listener on component unmount
+    return () => {
+      if (typeof window === 'undefined' || !window.visualViewport) {
+        return; // 비주얼 뷰포트 API가 지원되지 않거나 window 객체를 사용할 수 없는 경우
+      }
+      window.visualViewport.onresize = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.visualViewport) {
+      return;
+    }
+    if (prevVisualViewport === 0) {
+      setPrevVisualViewport(window.visualViewport.height);
+    }
+  }, [prevVisualViewport]);
 
   const handleChangeGender = (value: string) => {
     setGender(value);
@@ -58,9 +98,10 @@ const NewQuestion = () => {
             onFocus={() => setIsTextAreaFocused(true)}
             onBlur={() => setIsTextAreaFocused(false)}
             onChange={onChange}
+            value={value}
           />
         </Styled.PageBody>
-        <Styled.PageFooter>
+        <Styled.PageFooter height={prevVisualViewport} isTextAreaFocused={isTextAreaFocused}>
           <Styled.AskOption onClick={toggleOptionSelectOpen}>
             <Styled.AskOptionBody>
               <Styled.AskOptionDescription selected={Boolean(selectedOptionText)}>
