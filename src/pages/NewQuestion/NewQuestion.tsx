@@ -20,7 +20,7 @@ const NewQuestion = () => {
   const [selectedOptionText, setSelectedOptionText] = useState<string | null>(null);
   const [prevVisualViewport, setPrevVisualViewport] = useState(0);
 
-  function handleVisualViewportResize() {
+  const handleVisualViewportResize = () => {
     if (typeof window === 'undefined' || !window.visualViewport) {
       return; // 비주얼 뷰포트 API가 지원되지 않거나 window 객체를 사용할 수 없는 경우
     }
@@ -34,7 +34,7 @@ const NewQuestion = () => {
     }
 
     setPrevVisualViewport(window.visualViewport.height);
-  }
+  };
 
   useEffect(() => {
     if (typeof window === 'undefined' || !window.visualViewport) {
