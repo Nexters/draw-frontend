@@ -11,12 +11,15 @@ const PageBody = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  margin-bottom: 85px;
 `;
 
-const PageFooter = styled.div`
-  position: sticky;
-  bottom: 0;
+const PageFooter = styled.div<{ height: number; isTextAreaFocused: boolean }>`
+  position: absolute;
+  top: ${({ height, isTextAreaFocused }) => {
+    const footerHeight = isTextAreaFocused ? 50 : 84;
+    return `${height - footerHeight}`;
+  }}px;
+  transition: top 0.1s cubic-bezier(0.075, 0.82, 0.165, 1);
   left: 0;
   right: 0;
 `;
@@ -32,6 +35,9 @@ const TextArea = styled.textarea`
   ::placeholder {
     ${({ theme }) => theme.typo['body.1']}
     color: ${({ theme }) => theme.palette.text.grey2};
+  }
+  &:focus {
+    height: auto;
   }
 `;
 
