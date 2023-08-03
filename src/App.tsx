@@ -9,11 +9,22 @@ import NewQuestion from './pages/NewQuestion/NewQuestion';
 import QuestionDetail from './pages/QuestionDetail/QuestionDetail';
 import { ThemeProvider } from './styles/theme';
 import Toast from './components/Toast/Toast';
+import Kakao from './pages/Login/Kakao';
+import { QueryClientProvider } from './QueryClientProvider';
+import Apple from './pages/Login/Apple';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Login />,
+  },
+  {
+    path: '/callback/kakao',
+    element: <Kakao />,
+  },
+  {
+    path: '/callback/apple',
+    element: <Apple />,
   },
   {
     path: '/new-profile',
@@ -47,10 +58,12 @@ const router = createBrowserRouter([
 
 const App = () => {
   return (
-    <ThemeProvider>
-      <RouterProvider router={router} />
-      <Toast />
-    </ThemeProvider>
+    <QueryClientProvider>
+      <ThemeProvider>
+        <RouterProvider router={router} />
+        <Toast />
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 };
 
