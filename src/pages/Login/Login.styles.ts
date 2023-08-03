@@ -8,7 +8,29 @@ const Login = styled.div`
   flex: 1;
 `;
 
-const Logo = styled.div`
+const Landscape = styled.div`
+  flex: 1;
+  display: none;
+  justify-content: center;
+  align-items: center;
+
+  @media (orientation: landscape) or (max-height: 730px) {
+    display: flex;
+  }
+`;
+
+const Portrait = styled.div`
+  flex: 1;
+  height: 100%;
+  display: none;
+  flex-direction: column;
+
+  @media (orientation: portrait) and (min-height: 731px) {
+    display: flex;
+  }
+`;
+
+const DrawYourCardLogo = styled.div`
   margin-left: 24px;
   margin-bottom: 30px;
 `;
@@ -39,7 +61,9 @@ const LoginButtonContainer = styled.div`
 
 export default {
   Login,
-  Logo,
+  Landscape,
+  Portrait,
+  DrawYourCardLogo,
   GraphicContainer,
   Graphic,
   LoginButtonContainer,
