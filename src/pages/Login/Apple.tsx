@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import { userApi } from '@/apis/handlers/user';
 import { LoginResult } from '@/apis/types/user';
 
-const Kakao = () => {
+const Apple = () => {
   const search = useLocation().search;
   const navigate = useNavigate();
   const code = new URLSearchParams(search).get('code');
@@ -42,4 +42,4 @@ const Kakao = () => {
     </>
   );
 };
-export default Kakao;
+export default Apple;

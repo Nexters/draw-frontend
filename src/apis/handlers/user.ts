@@ -4,7 +4,7 @@ import { LoginResult, OAuthReq } from '../types/user';
 
 export const userApi = {
   login: async (payload: OAuthReq) => {
-    const url = '/login';
+    const url = 'auth/v1/login';
     const response = await request.post<LoginResult>(url, payload);
     return response.data;
   },
