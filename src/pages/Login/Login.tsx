@@ -3,13 +3,13 @@ import Styled from './Login.styles';
 import LoginButton from './components/LoginButton/LoginButton';
 import Layout from '@/components/Layout/Layout';
 import { palette } from '@/styles/palette';
+import { KAKAO_AUTH_URL } from '@/constants/kakaoAuthUrl';
 
 const Login = () => {
   const navigate = useNavigate();
 
   const handleClickKakaoLogin = () => {
-    // TODO: 실제 로그인 로직 구현 필요
-    navigate('/new-profile');
+    window.location.href = KAKAO_AUTH_URL;
   };
 
   const handleClickAppleLogin = () => {

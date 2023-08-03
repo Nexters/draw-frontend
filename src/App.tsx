@@ -9,11 +9,16 @@ import NewQuestion from './pages/NewQuestion/NewQuestion';
 import QuestionDetail from './pages/QuestionDetail/QuestionDetail';
 import { ThemeProvider } from './styles/theme';
 import Toast from './components/Toast/Toast';
+import Kakao from './pages/Login/Kakao';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Login />,
+  },
+  {
+    path: '/callback/kakao',
+    element: <Kakao />,
   },
   {
     path: '/new-profile',
