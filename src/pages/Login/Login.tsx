@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import Styled from './Login.styles';
 import LoginButton from './components/LoginButton/LoginButton';
 import Layout from '@/components/Layout/Layout';
@@ -7,8 +6,6 @@ import { KAKAO_AUTH_URL } from '@/constants/kakaoAuthUrl';
 import { APPLE_AUTH_URL } from '@/constants/appleAuthUrl';
 
 const Login = () => {
-  const navigate = useNavigate();
-
   const handleClickKakaoLogin = () => {
     window.location.href = KAKAO_AUTH_URL;
   };
