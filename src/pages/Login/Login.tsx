@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import Styled from './Login.styles';
 import LoginButton from './components/LoginButton/LoginButton';
+import useAppleLogin from './useAppleLogin';
 import Layout from '@/components/Layout/Layout';
 import { palette } from '@/styles/palette';
 import { KAKAO_AUTH_URL } from '@/constants/kakaoAuthUrl';
-import useAppleLogin from './useAppleLogin';
+import { ReactComponent as DrawYourCardLogo } from '@/assets/draw_your_card.svg';
+import onboardingGraphicUrl from '@/assets/onboarding.svg';
 
 const Login = () => {
   const { handleClickAppleLogin } = useAppleLogin();
@@ -14,10 +16,13 @@ const Login = () => {
   };
 
   return (
-    <Layout backgroundColor={palette.background.white2}>
+    <Layout backgroundColor={palette.background.white1}>
       <Styled.Login>
+        <Styled.Logo>
+          <DrawYourCardLogo />
+        </Styled.Logo>
         <Styled.GraphicContainer>
-          <Styled.Graphic />
+          <Styled.Graphic style={{ backgroundImage: `url(${onboardingGraphicUrl})` }} />
         </Styled.GraphicContainer>
         <Styled.LoginButtonContainer>
           <LoginButton serviceName="kakao" onClick={handleClickKakaoLogin} />
