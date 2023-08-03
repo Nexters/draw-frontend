@@ -9,14 +9,14 @@ const QueryClientProvider = ({ children }: React.PropsWithChildren<unknown>) => 
   queryClient.setDefaultOptions({
     mutations: {
       retry: false,
-      onError: (e: any) => {
+      onError: () => {
         //TODO
       },
     },
     queries: {
       retry: false,
       refetchOnWindowFocus: false,
-      onError: (e: any) => {
+      onError: () => {
         //TODO
       },
     },
