@@ -31,7 +31,7 @@ const Login = () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const data = await window.AppleID.auth.signIn();
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return data;
+      console.log(data);
     } catch (error) {
       console.error(error);
     }
