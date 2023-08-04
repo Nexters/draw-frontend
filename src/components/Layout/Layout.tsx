@@ -3,6 +3,7 @@ import { Global, css } from '@emotion/react';
 import { palette } from '@/styles/palette';
 import Styled from './Layout.styles';
 import useNativeMessage from '@/hooks/useNativeMessage';
+import useNavigateEvent from '@/hooks/useNavigateEvent';
 
 type LayoutProps = {
   backgroundColor: (typeof palette.background)[keyof typeof palette.background];
@@ -12,6 +13,7 @@ type LayoutProps = {
 
 const Layout = ({ backgroundColor, hasTabBar, children }: LayoutProps) => {
   const { showBottomBar } = useNativeMessage();
+  useNavigateEvent();
 
   useLayoutEffect(() => {
     showBottomBar(hasTabBar ?? false);
