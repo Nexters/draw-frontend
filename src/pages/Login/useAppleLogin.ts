@@ -50,7 +50,7 @@ const useAppleLogin = () => {
   const handleClickAppleLogin = async () => {
     try {
       const data = await window.AppleID.auth.signIn();
-      loginMutate({ code: data.authorization.code, provider: 'APPLE' });
+      loginMutate({ code: data.authorization.id_token, provider: 'APPLE' });
     } catch (error) {
       console.error(error);
     }
