@@ -1,4 +1,4 @@
-import { useLayoutEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import { Global, css } from '@emotion/react';
 import { palette } from '@/styles/palette';
 import Styled from './Layout.styles';
@@ -11,11 +11,15 @@ type LayoutProps = {
 };
 
 const Layout = ({ backgroundColor, hasTabBar, children }: LayoutProps) => {
-  const { showBottomBar } = useNativeMessage();
+  const { showBottomBar, sendNavigate } = useNativeMessage();
 
   useLayoutEffect(() => {
     showBottomBar(hasTabBar ?? false);
   }, [hasTabBar, showBottomBar]);
+
+  useEffect(() => {
+    sendNavigate();
+  }, [sendNavigate]);
 
   return (
     <Styled.Layout hasTabBar={hasTabBar}>

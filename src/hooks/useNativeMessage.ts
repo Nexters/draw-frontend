@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
 
 declare global {
   interface Window {
@@ -10,16 +11,22 @@ declare global {
         showShareSheet: {
           postMessage: (url: string) => void;
         };
+        navigate: {
+          postMessage: (fn: NavigateFunction) => void;
+        };
       };
     };
     draw?: {
       showBottomBar: (value: string) => void;
       showShareSheet: (url: string) => void;
+      navigate: (fn: NavigateFunction) => void;
     };
   }
 }
 
 const useNativeMessage = () => {
+  const navigate = useNavigate();
+
   const showBottomBar = useCallback((value: boolean) => {
     // iOS
     window.webkit?.messageHandlers.showBottomBar.postMessage(value.toString());
@@ -36,7 +43,15 @@ const useNativeMessage = () => {
     window.draw?.showShareSheet(url);
   }, []);
 
-  return { showBottomBar, showShareSheet };
+  const sendNavigate = useCallback(() => {
+    // iOS
+    window.webkit?.messageHandlers.navigate.postMessage(navigate);
+
+    // Android
+    window.draw?.navigate(navigate);
+  }, [navigate]);
+
+  return { showBottomBar, showShareSheet, sendNavigate };
 };
 
 export default useNativeMessage;
