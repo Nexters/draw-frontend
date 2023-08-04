@@ -33,7 +33,7 @@ const Apple = () => {
   });
 
   useEffect(() => {
-    code && loginMutate({ code, provider: 'KAKAO' });
+    code && loginMutate({ code, provider: 'APPLE' });
   }, [code]);
 
   return (
