@@ -11,7 +11,6 @@ import { ThemeProvider } from './styles/theme';
 import Toast from './components/Toast/Toast';
 import Kakao from './pages/Login/Kakao';
 import { QueryClientProvider } from './QueryClientProvider';
-import Apple from './pages/Login/Apple';
 
 const router = createBrowserRouter([
   {
@@ -21,10 +20,6 @@ const router = createBrowserRouter([
   {
     path: '/callback/kakao',
     element: <Kakao />,
-  },
-  {
-    path: '/callback/apple',
-    element: <Apple />,
   },
   {
     path: '/new-profile',
