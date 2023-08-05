@@ -23,7 +23,7 @@ const Layout = ({ backgroundColor, hasTabBar, children }: LayoutProps) => {
   }, [hasTabBar, showBottomBar]);
 
   return (
-    <Styled.Layout hasNotchPadding={isWebview} hasTabBar={isWebview ? isWebview : hasTabBar}>
+    <Styled.Layout hasNotchPadding={isWebview} hasTabBar={isWebview ? hasTabBar : isWebview}>
       <Global
         styles={css`
           body {
