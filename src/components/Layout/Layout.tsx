@@ -1,5 +1,6 @@
 import { useLayoutEffect } from 'react';
 import { Global, css } from '@emotion/react';
+import isUserAgentWebview from 'is-ua-webview';
 import { palette } from '@/styles/palette';
 import Styled from './Layout.styles';
 import useNativeMessage from '@/hooks/useNativeMessage';
@@ -15,12 +16,14 @@ const Layout = ({ backgroundColor, hasTabBar, children }: LayoutProps) => {
   const { showBottomBar } = useNativeMessage();
   useNavigateEvent();
 
+  const isWebview = isUserAgentWebview(window.navigator.userAgent);
+
   useLayoutEffect(() => {
     showBottomBar(hasTabBar ?? false);
   }, [hasTabBar, showBottomBar]);
 
   return (
-    <Styled.Layout hasTabBar={hasTabBar}>
+    <Styled.Layout hasNotchPadding={isWebview} hasTabBar={isWebview ? hasTabBar : isWebview}>
       <Global
         styles={css`
           body {
