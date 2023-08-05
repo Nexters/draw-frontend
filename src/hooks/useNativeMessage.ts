@@ -4,17 +4,21 @@ declare global {
   interface Window {
     webkit?: {
       messageHandlers: {
-        showBottomBar: {
+        showBottomBar?: {
           postMessage: (value: string) => void;
         };
-        showShareSheet: {
+        showShareSheet?: {
           postMessage: (url: string) => void;
+        };
+        navigate?: {
+          postMessage: (fn: string) => void;
         };
       };
     };
     draw?: {
       showBottomBar: (value: string) => void;
       showShareSheet: (url: string) => void;
+      navigate: (fn: string) => void;
     };
   }
 }
@@ -22,7 +26,7 @@ declare global {
 const useNativeMessage = () => {
   const showBottomBar = useCallback((value: boolean) => {
     // iOS
-    window.webkit?.messageHandlers.showBottomBar.postMessage(value.toString());
+    window.webkit?.messageHandlers.showBottomBar?.postMessage(value.toString());
 
     // Android
     window.draw?.showBottomBar(value.toString());
@@ -30,7 +34,7 @@ const useNativeMessage = () => {
 
   const showShareSheet = useCallback((url: string) => {
     // iOS
-    window.webkit?.messageHandlers.showShareSheet.postMessage(url);
+    window.webkit?.messageHandlers.showShareSheet?.postMessage(url);
 
     // Android
     window.draw?.showShareSheet(url);
