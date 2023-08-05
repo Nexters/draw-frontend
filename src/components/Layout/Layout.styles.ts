@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 
 type LayoutProps = {
+  hasNotchPadding?: boolean;
   hasTabBar?: boolean;
 };
 
@@ -19,7 +20,7 @@ const Layout = styled.div<LayoutProps>`
   scrollbar-width: none;
 
   // Note: 아이폰 노치 영역 여백
-  padding-top: 48px;
+  ${({ hasNotchPadding }) => hasNotchPadding && `padding-top: 48px;`}
 
   // Note: 하단 탭바 영역 여백
   ${({ hasTabBar }) => hasTabBar && `padding-bottom: 109px;`}
