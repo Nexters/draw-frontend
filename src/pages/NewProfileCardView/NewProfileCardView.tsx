@@ -3,7 +3,7 @@ import Lottie from 'lottie-react';
 import Styled from './NewProfileCardView.styles';
 import Layout from '@/components/Layout/Layout';
 import { palette } from '@/styles/palette';
-import womanINFJLottie from '@/assets/lottie/wo_INFJ.json';
+import womanINFJLottie from '@/assets/lottie/wo_infj.json';
 
 const NewProfileCardView = () => {
   const navigate = useNavigate();
