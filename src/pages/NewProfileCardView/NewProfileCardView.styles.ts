@@ -12,8 +12,7 @@ const GraphicContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-basis: auto;
-  object-fit: contain;
+  padding-bottom: 90px;
 `;
 
 const StartButton = styled.button`
