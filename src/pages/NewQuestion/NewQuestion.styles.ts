@@ -1,8 +1,16 @@
 import styled from '@emotion/styled';
 import { ReactComponent as BaseAddOptionIcon } from '@/assets/add-tag.svg';
+import { css } from '@emotion/react';
 
-const PageWrapper = styled.div`
-  height: 100%;
+const PageWrapper = styled.div<{ height: number; isTextAreaFocused: boolean }>`
+  ${({ height, isTextAreaFocused }) => {
+    const footerHeight = isTextAreaFocused ? 106 : 140;
+    const realHeight = `${height - footerHeight}`;
+    return css`
+      height: ${realHeight}px;
+    `;
+  }}
+
   display: flex;
   flex-direction: column;
 `;
