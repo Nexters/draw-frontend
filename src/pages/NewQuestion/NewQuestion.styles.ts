@@ -16,7 +16,6 @@ const PageWrapper = styled.div<{ height: number; isTextAreaFocused: boolean }>`
 
   display: flex;
   flex-direction: column;
-  padding-bottom: 10px;
 `;
 
 const PageBody = styled.div`
