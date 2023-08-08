@@ -87,7 +87,7 @@ const NewQuestion = () => {
 
   return (
     <Layout backgroundColor={palette.background.white2}>
-      <Styled.PageWrapper>
+      <Styled.PageWrapper height={prevVisualViewport} isTextAreaFocused={isTextAreaFocused}>
         <Styled.PageBody>
           <TopBar centerElement={`${value.length}/150`} rightElement={'등록'} />
           <Spacing size={28} />

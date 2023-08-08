@@ -1,10 +1,22 @@
 import styled from '@emotion/styled';
 import { ReactComponent as BaseAddOptionIcon } from '@/assets/add-tag.svg';
+import { css } from '@emotion/react';
 
-const PageWrapper = styled.div`
-  height: 100%;
+const FOOTER_HEIGHT = { default: 85, focused: 50 };
+const LAYOUT_PADDING = 48;
+
+const PageWrapper = styled.div<{ height: number; isTextAreaFocused: boolean }>`
+  ${({ height, isTextAreaFocused }) => {
+    const footerHeight = isTextAreaFocused ? FOOTER_HEIGHT['focused'] : FOOTER_HEIGHT['default'];
+    const realHeight = `${height - footerHeight - LAYOUT_PADDING}`;
+    return css`
+      height: ${realHeight}px;
+    `;
+  }}
+
   display: flex;
   flex-direction: column;
+  padding-bottom: 2px;
 `;
 
 const PageBody = styled.div`
@@ -16,7 +28,7 @@ const PageBody = styled.div`
 const PageFooter = styled.div<{ height: number; isTextAreaFocused: boolean }>`
   position: absolute;
   top: ${({ height, isTextAreaFocused }) => {
-    const footerHeight = isTextAreaFocused ? 50 : 84;
+    const footerHeight = isTextAreaFocused ? FOOTER_HEIGHT['focused'] : FOOTER_HEIGHT['default'];
     return `${height - footerHeight}`;
   }}px;
   transition: top 0.1s cubic-bezier(0.075, 0.82, 0.165, 1);
