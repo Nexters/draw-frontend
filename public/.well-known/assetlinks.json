@@ -1,0 +1,9 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "org.nexters.draw",
+    "sha256_cert_fingerprints":
+      ["24:D7:82:AD:08:FB:AC:EC:09:EA:FF:68:6A:A0:0A:BF:9C:B8:AB:FC:0C:3D:57:8B:DD:E5:15:56:90:A1:3E:9A"]
+  }
+}]
