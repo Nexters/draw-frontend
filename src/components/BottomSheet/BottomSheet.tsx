@@ -1,6 +1,8 @@
+import { useLayoutEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useTransition, config } from '@react-spring/web';
 import Styled from './BottomSheet.styles';
-import { createPortal } from 'react-dom';
+import useNativeMessage from '@/hooks/useNativeMessage';
 
 type BottomSheetProps = {
   open: boolean;
@@ -9,6 +11,8 @@ type BottomSheetProps = {
 };
 
 const BottomSheet = ({ open, children, onClose }: BottomSheetProps) => {
+  const { showBottomBar } = useNativeMessage();
+
   const dimmedTransition = useTransition(open, {
     from: {
       opacity: 0,
@@ -40,6 +44,10 @@ const BottomSheet = ({ open, children, onClose }: BottomSheetProps) => {
   const bottomSheet = bottomSheetTransition((style, flag) => (
     <>{flag && <Styled.BottomSheet style={style}>{children}</Styled.BottomSheet>}</>
   ));
+
+  useLayoutEffect(() => {
+    showBottomBar(!open);
+  }, [open, showBottomBar]);
 
   return createPortal(
     <>
