@@ -1,11 +1,11 @@
 {
-  applinks: {
-    details: [
+  "applinks": {
+    "details": [
       {      	   
-        appIDs: [
-        	"X64MATB2CC.com.nexters.drawyourcard"
+        "appIDs": [
+          "X64MATB2CC.com.nexters.drawyourcard"
         ],
-        components: [
+        "components": [
             {
                 "/": "*"
             }
