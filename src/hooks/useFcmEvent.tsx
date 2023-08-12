@@ -2,6 +2,7 @@ import { useCallback, useEffect } from 'react';
 import { CustomEventMap } from './useNativeMessage';
 import { useMutation } from '@tanstack/react-query';
 import { userApi } from '@/apis/handlers/user';
+import useToast from './useToast';
 
 declare global {
   interface Window {
@@ -18,8 +19,11 @@ declare global {
 }
 
 const useFcmEvent = () => {
-  const { mutate: postFcmToken } = useMutation(userApi.postFcm);
+  const { success } = useToast();
+  const { mutate: postFcmToken } = useMutation(userApi.postFcm, { onSuccess: () => success(<>토큰 서버전송 성공</>) });
+
   const handleUpdateFcm = useCallback((event: CustomEvent<{ value: string }>) => {
+    success(<>token : {event.detail.value}</>);
     postFcmToken(event.detail.value);
   }, []);
 
