@@ -13,6 +13,8 @@ import Layout from '@/components/Layout/Layout';
 import useMyQuestions from '@/hooks/api/useMyQuestions';
 import useMyReplies from '@/hooks/api/useMyReplies';
 import useMyFavorites from '@/hooks/api/useMyFavorites';
+import { useMutation } from '@tanstack/react-query';
+import { userApi } from '@/apis/handlers/user';
 
 const tabList = [
   {
@@ -96,6 +98,13 @@ const MyPage = () => {
     fetchNextPage();
   }, [fetchNextPage]);
 
+  const { mutate: testLogin } = useMutation(userApi.testLogin, {
+    onSuccess: (data) => {
+      window.localStorage.setItem('aT', data.accessToken);
+      window.localStorage.setItem('rT', data.refreshToken);
+    },
+  });
+
   return (
     <Layout backgroundColor={palette.background.white1} hasTabBar>
       <Styled.Header>
@@ -108,6 +117,7 @@ const MyPage = () => {
           <SettingIcon />
         </Styled.SettingButton>
       </Styled.Header>
+      <button onClick={() => testLogin()}>토큰 발급</button>
       <Styled.MemberIdContainer>
         <Styled.MemberId>@ 12345</Styled.MemberId>
       </Styled.MemberIdContainer>

@@ -50,8 +50,9 @@ request.interceptors.response.use(
       if (aT && rT) {
         try {
           const data = await userApi.postRefresh({ refreshToken: rT, accessToken: aT });
-          console.log(data);
           data && (origin.headers as AxiosHeaders).set('Authorization', `Bearer ${data.accessToken}`);
+          window.localStorage.setItem('aT', data.accessToken);
+          window.localStorage.setItem('rT', data.refreshToken);
           return axios(origin);
         } catch (error) {
           window.localStorage.removeItem('aT');

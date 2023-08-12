@@ -108,13 +108,6 @@ const Feed = () => {
     setIsPromotionBottomSheetOpen(true);
   }, [consumePromotionMutation, promotions]);
 
-  const { mutate: testLogin } = useMutation(userApi.testLogin, {
-    onSuccess: (data) => {
-      window.localStorage.setItem('aT', data.accessToken);
-      window.localStorage.setItem('rT', data.refreshToken);
-    },
-  });
-
   return (
     <Layout backgroundColor={palette.background.white1} hasTabBar={isTabBarVisible}>
       <Styled.Feed>
@@ -202,7 +195,6 @@ const Feed = () => {
             />
           </Styled.AnswerForm>
         )}
-        <button onClick={() => testLogin()}>토큰 발급</button>
         <Styled.FakeAnswerTextAreaButtonContainer isTransparent={isAnswerFormOpen}>
           <Styled.FakeAnswerTextAreaButton
             type="button"
