@@ -3,11 +3,14 @@ import FlipBottomSheet from '../FlipBottomSheet/FlipBottomSheet';
 import Styled from './CardFace.styles';
 import CardButton from './CardButton';
 import { ComponentProps, useState } from 'react';
-import { ReplyWriterRes } from '@/apis/types/feed';
 import { getCardBackImage } from './getCardBackImage';
+import { ReplyWriterRes } from '@/apis/types/reply';
+import { useMutation } from '@tanstack/react-query';
+import { replyApi } from '@/apis/handlers/reply';
 
 interface FrontProps extends ComponentProps<'div'> {
   contents: string;
+  feedId: number;
   flippable: boolean;
   onFlipCard: () => void;
 }
@@ -16,8 +19,13 @@ interface BackProps extends ComponentProps<'div'> {
   writerInfo: ReplyWriterRes;
 }
 
-const Front = ({ contents, flippable, onFlipCard, ...rest }: FrontProps) => {
+const Front = ({ contents, feedId, flippable, onFlipCard, ...rest }: FrontProps) => {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const { mutate: postPeekMutate } = useMutation(replyApi.postPeek);
+  const handleClickBottomSheetConfirmButton = () => {
+    postPeekMutate(feedId);
+    onFlipCard();
+  };
 
   return (
     <Styled.AnswerCardContainer {...rest}>
@@ -31,7 +39,11 @@ const Front = ({ contents, flippable, onFlipCard, ...rest }: FrontProps) => {
               css={{ color: `${palette.btn.green}` }}
               onClick={() => setIsSheetOpen(true)}
             />
-            <FlipBottomSheet isOpen={isSheetOpen} onClose={() => setIsSheetOpen(false)} onClickYes={onFlipCard} />
+            <FlipBottomSheet
+              isOpen={isSheetOpen}
+              onClose={() => setIsSheetOpen(false)}
+              onClickYes={handleClickBottomSheetConfirmButton}
+            />
           </>
         ) : (
           <CardButton variants="flipCard" css={{ color: `${palette.text.grey2}` }} onClick={onFlipCard} />

@@ -1,4 +1,5 @@
 import { AgeOptionType, GenderType, MbtiCharType, MbtiType } from '.';
+import { ReplyWriterRes } from './reply';
 
 export type FeedResponse = {
   id: number;
@@ -41,10 +42,4 @@ export type ReplyResponse = {
   status: 'NORMAL' | 'MINE' | 'PEEKED';
   writerId: number;
   writer: ReplyWriterRes | null;
-};
-
-export type ReplyWriterRes = {
-  mbti: MbtiType;
-  gender: GenderType;
-  age: number;
 };

@@ -13,7 +13,7 @@ const AnswerCard = ({ replyData }: { replyData: ReplyResponse }) => {
   return (
     <>
       <Styled.FlipCard ref={ref} isFlipped={isFlipped}>
-        <CardFace.Front contents={content} flippable={status !== 'PEEKED'} onFlipCard={handleToggleFlip} />
+        <CardFace.Front contents={content} feedId={id} flippable={status !== 'PEEKED'} onFlipCard={handleToggleFlip} />
         {writer && <CardFace.Back className="back" onReflipCard={handleToggleFlip} writerInfo={writer} />}
       </Styled.FlipCard>
     </>
