@@ -15,12 +15,15 @@ import { ReactComponent as FireIcon } from '@/assets/fire.svg';
 import Layout from '@/components/Layout/Layout';
 import { palette } from '@/styles/palette';
 import useFeeds from '@/hooks/api/useFeeds';
+import useNativeMessage from '@/hooks/useNativeMessage';
 
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 
 const Feed = () => {
   const toast = useToast();
+
+  const { showShareSheet } = useNativeMessage();
 
   const answerFormRef = useRef<HTMLFormElement>(null);
   const answerTextAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -43,6 +46,10 @@ const Feed = () => {
     answerFormRef.current.style.height = 'auto';
     answerFormRef.current.style.height = `${answerTextAreaRef.current.scrollHeight}px`;
   }, []);
+
+  const handleClickShareButton = (id: number) => {
+    showShareSheet(`${window.location.origin}/question-detail/${id}`);
+  };
 
   const handleSubmitAnswerForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -117,7 +124,7 @@ const Feed = () => {
                           <HeartIcon />
                         </Styled.FeedCardOptionButton>
                       )}
-                      <Styled.FeedCardOptionButton type="button">
+                      <Styled.FeedCardOptionButton type="button" onClick={() => handleClickShareButton(feed.id)}>
                         <ShareIcon />
                       </Styled.FeedCardOptionButton>
                       <Styled.FeedCardOptionButton
