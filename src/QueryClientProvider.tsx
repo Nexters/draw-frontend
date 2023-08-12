@@ -1,11 +1,11 @@
 import { QueryClient, QueryClientProvider as BaseQueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import React, { useState } from 'react';
 
-import React from 'react';
+export const QueryClientProvider = (props: React.PropsWithChildren<unknown>) => {
+  const { children } = props;
+  const [queryClient] = useState(() => new QueryClient());
 
-const queryClient = new QueryClient();
-
-const QueryClientProvider = ({ children }: React.PropsWithChildren<unknown>) => {
   queryClient.setDefaultOptions({
     mutations: {
       retry: false,
@@ -16,6 +16,7 @@ const QueryClientProvider = ({ children }: React.PropsWithChildren<unknown>) => 
     queries: {
       retry: false,
       refetchOnWindowFocus: false,
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       onError: () => {
         //TODO
       },
@@ -29,5 +30,3 @@ const QueryClientProvider = ({ children }: React.PropsWithChildren<unknown>) => 
     </BaseQueryClientProvider>
   );
 };
-
-export { queryClient, QueryClientProvider };

@@ -14,8 +14,9 @@ import TopBar from '@/components/TopBar/TopBar';
 import { palette } from '@/styles/palette';
 import Layout from '@/components/Layout/Layout';
 import useNativeMessage from '@/hooks/useNativeMessage';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { feedApi } from '@/apis/handlers/feed';
+import { userApi } from '@/apis/handlers/user';
 
 /* const MOCK_DATA = {
   contents: 'T도 박은빈 시상식 보고 우나요?',
@@ -71,6 +72,14 @@ const QuestionDetail = () => {
     calculateAnswerFormHeight();
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  const { mutate: testLogin } = useMutation(userApi.testLogin, {
+    onSuccess: (data) => {
+      window.localStorage.setItem('aT', data.accessToken);
+      window.localStorage.setItem('rT', data.refreshToken);
+    },
+  });
+
   useEffect(() => {
     calculateAnswerFormHeight();
   }, [calculateAnswerFormHeight, isAnswerFormOpen]);
@@ -123,6 +132,7 @@ const QuestionDetail = () => {
               />
             </FeedStyled.AnswerForm>
           )}
+          <button onClick={() => testLogin()}>토큰 발급</button>
           <Spacing size={24} />
           <FeedStyled.FakeAnswerTextAreaButtonContainer isTransparent={isAnswerFormOpen} css={{ padding: '0 24px' }}>
             <FeedStyled.FakeAnswerTextAreaButton

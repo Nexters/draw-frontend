@@ -1,6 +1,5 @@
-import { setQueryString } from '@/utils/setQueryString';
 import { request } from '../axios';
-import { LoginResult, OAuthReq, RegisterReq } from '../types/user';
+import { LoginResult, OAuthReq, RefreshReq, RegisterReq } from '../types/user';
 
 const USERS_BASE_URL = `/api/v1/users`;
 
@@ -10,9 +9,15 @@ export const userApi = {
     const response = await request.post<LoginResult>(url, payload);
     return response.data;
   },
-  testKakaoLogin: async (code: string) => {
-    const url = setQueryString('/local/kakao/login', { code });
-    const response = await request.get<LoginResult>(url);
+  testLogin: async () => {
+    const response = await request.post<{ user: any; accessToken: string; refreshToken: string }>(
+      `auth/v1/backdoor/token`,
+      {
+        userId: 36,
+        accessTokenLifeTime: 100,
+        refreshTokenLifeTime: 300,
+      }
+    );
     return response.data;
   },
   /**
@@ -28,5 +33,14 @@ export const userApi = {
   postRegister: async (payload: RegisterReq) => {
     const url = `${USERS_BASE_URL}/register`;
     await request.post(url, payload);
+  },
+  /**
+   * 리프레쉬
+   */
+  postRefresh: async (payload: RefreshReq) => {
+    const url = `/auth/v1/token/refresh`;
+    const response = await request.post<RefreshReq>(url, payload);
+
+    return response.data;
   },
 };

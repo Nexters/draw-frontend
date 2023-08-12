@@ -11,7 +11,6 @@ import onboardingGraphicUrl from '@/assets/onboarding.svg';
 
 const Login = () => {
   const { handleClickAppleLogin } = useAppleLogin();
-
   const handleClickKakaoLogin = () => {
     window.location.href = KAKAO_AUTH_URL;
   };
