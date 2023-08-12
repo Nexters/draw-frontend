@@ -15,6 +15,10 @@ const GraphicContainer = styled.div`
   padding-bottom: 90px;
 `;
 
+const CardLoading = styled.div`
+  margin-top: 50px;
+`;
+
 const StartButton = styled.button`
   ${({ theme }) => theme.typo['body.4']};
   background-color: ${({ theme }) => theme.palette.btn.black};
@@ -43,6 +47,7 @@ const ShadowContainer = styled.div`
 export default {
   NewProfile,
   GraphicContainer,
+  CardLoading,
   StartButton,
   ShadowContainer,
 };
