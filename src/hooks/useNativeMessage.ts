@@ -13,14 +13,23 @@ declare global {
         navigate?: {
           postMessage: (fn: string) => void;
         };
+        updateFcmToken?: {
+          postMessage: (value: string) => void;
+        };
       };
     };
     draw?: {
       showBottomBar: (value: string) => void;
       showShareSheet: (url: string) => void;
       navigate: (fn: string) => void;
+      updateFcmToken: (value: string) => void;
     };
   }
+}
+
+export interface CustomEventMap {
+  navigate: CustomEvent<{ url: string }>;
+  updateFcm: CustomEvent<{ value: string }>;
 }
 
 const useNativeMessage = () => {

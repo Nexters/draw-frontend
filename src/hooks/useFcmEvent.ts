@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { CustomEventMap } from './useNativeMessage';
+import { useMutation } from '@tanstack/react-query';
+import { userApi } from '@/apis/handlers/user';
 
 declare global {
   interface Window {
@@ -16,23 +17,19 @@ declare global {
   }
 }
 
-const useNavigateEvent = () => {
-  const navigate = useNavigate();
-
-  const handleNavigate = useCallback(
-    (event: CustomEvent<{ url: string }>) => {
-      navigate(event.detail.url);
-    },
-    [navigate]
-  );
+const useFcmEvent = () => {
+  const { mutate: postFcmToken } = useMutation(userApi.postFcm);
+  const handleUpdateFcm = useCallback((event: CustomEvent<{ value: string }>) => {
+    postFcmToken(event.detail.value);
+  }, []);
 
   useEffect(() => {
-    window.addEventListener('navigate', handleNavigate);
+    window.addEventListener('updateFcm', handleUpdateFcm);
 
     return () => {
-      window.removeEventListener('navigate', handleNavigate);
+      window.removeEventListener('updateFcm', handleUpdateFcm);
     };
-  }, [handleNavigate]);
+  }, [handleUpdateFcm]);
 };
 
-export default useNavigateEvent;
+export default useFcmEvent;
