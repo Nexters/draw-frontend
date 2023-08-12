@@ -12,6 +12,8 @@ import { ReactComponent as HeartActiveIcon } from '@/assets/heart_active.svg';
 import { ReactComponent as ShareIcon } from '@/assets/share.svg';
 import { ReactComponent as MoreIcon } from '@/assets/more.svg';
 import { ReactComponent as FireIcon } from '@/assets/fire.svg';
+import { ReactComponent as CoinIcon } from '@/assets/coin.svg';
+import { ReactComponent as RightIcon } from '@/assets/right.svg';
 import Layout from '@/components/Layout/Layout';
 import { palette } from '@/styles/palette';
 import useFeeds from '@/hooks/api/useFeeds';
@@ -20,6 +22,10 @@ import useNativeMessage from '@/hooks/useNativeMessage';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import { useNavigate } from 'react-router-dom';
+import usePromotions from '@/hooks/api/usePromotions';
+import { PROMOTION_TITLE } from '@/constants/promotion';
+import { useMutation } from '@tanstack/react-query';
+import { promotionApi } from '@/apis/handlers/promotion';
 
 const Feed = () => {
   const toast = useToast();
@@ -32,13 +38,20 @@ const Feed = () => {
 
   const [isAnswerFormOpen, setIsAnswerFormOpen] = useState(false);
   const [isCardOptionBottomSheetOpen, setIsCardOptionBottomSheetOpen] = useState(false);
+  const [isPromotionBottomSheetOpen, setIsPromotionBottomSheetOpen] = useState(false);
   const [isTabBarVisible, setIsTabBarVisible] = useState(true);
   const [swiperIndex, setSwiperIndex] = useState(0);
+  const [promotionIndex, setPromotionIndex] = useState(0);
 
   const [answer, onChangeAnswer, setAnswer] = useInput('');
 
   const { data: feedsData, fetchNextPage } = useFeeds();
   const feeds = feedsData?.pages.flatMap((page) => page.feeds);
+
+  const { data: promotions } = usePromotions();
+  const currentPromotion = promotions?.[promotionIndex];
+
+  const consumePromotionMutation = useMutation(promotionApi.postConsumePromotion);
 
   const calculateAnswerFormHeight = useCallback(() => {
     if (!answerFormRef.current) return;
@@ -84,6 +97,14 @@ const Feed = () => {
   useEffect(() => {
     calculateAnswerFormHeight();
   }, [calculateAnswerFormHeight, isAnswerFormOpen]);
+
+  useEffect(() => {
+    if (!promotions || promotions.length === 0) return;
+    consumePromotionMutation.mutate(promotions.map((promotion) => promotion.id));
+
+    setIsPromotionBottomSheetOpen(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [promotions]);
 
   return (
     <Layout backgroundColor={palette.background.white1} hasTabBar={isTabBarVisible}>
@@ -198,6 +219,53 @@ const Feed = () => {
           <Styled.FeedOption>차단하기</Styled.FeedOption>
           <Styled.FeedOption>신고하기</Styled.FeedOption>
         </Styled.FeedOptionBottomSheet>
+      </BottomSheet>
+      <BottomSheet
+        open={isPromotionBottomSheetOpen}
+        onClose={() => {
+          setIsPromotionBottomSheetOpen(false);
+        }}
+      >
+        {currentPromotion && (
+          <Styled.PromotionBottomSheet>
+            <Styled.PromotionTitle>{PROMOTION_TITLE[currentPromotion?.promotionType]}</Styled.PromotionTitle>
+            <Styled.PromotionPoint>
+              <CoinIcon />
+              <Styled.PromotionPointText>{currentPromotion?.grantedPoint.value}D</Styled.PromotionPointText>
+            </Styled.PromotionPoint>
+            <Styled.PromotionPointStatus>
+              <Styled.PromotionPointBefore>
+                <Styled.PromotionPointBeforeLabel>현재</Styled.PromotionPointBeforeLabel>
+                <Styled.PromotionPointBeforeValue>
+                  {currentPromotion?.asIsPoint.value}D
+                </Styled.PromotionPointBeforeValue>
+              </Styled.PromotionPointBefore>
+              <Styled.PromotionPointArrow>
+                <RightIcon />
+              </Styled.PromotionPointArrow>
+              <Styled.PromotionPointAfter>
+                <Styled.PromotionPointAfterLabel>받은 후</Styled.PromotionPointAfterLabel>
+                <Styled.PromotionPointAfterValue>{currentPromotion?.toBePoint.value}D</Styled.PromotionPointAfterValue>
+              </Styled.PromotionPointAfter>
+            </Styled.PromotionPointStatus>
+            <Styled.PromotionButton
+              type="button"
+              onClick={() => {
+                if (!promotions) return;
+
+                if (promotionIndex + 1 >= promotions.length) {
+                  setIsPromotionBottomSheetOpen(false);
+
+                  return;
+                }
+
+                setPromotionIndex(promotionIndex + 1);
+              }}
+            >
+              좋아요
+            </Styled.PromotionButton>
+          </Styled.PromotionBottomSheet>
+        )}
       </BottomSheet>
     </Layout>
   );

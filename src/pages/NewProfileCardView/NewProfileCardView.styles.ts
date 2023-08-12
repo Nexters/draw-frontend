@@ -2,13 +2,21 @@ import styled from '@emotion/styled';
 
 const NewProfile = styled.div`
   height: 100%;
-  padding: 40px 24px 48px;
+  padding: 40px 0 48px;
   display: flex;
   flex-direction: column;
 `;
 
 const GraphicContainer = styled.div`
   flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 90px;
+`;
+
+const CardLoading = styled.div`
+  margin-top: 50px;
 `;
 
 const StartButton = styled.button`
@@ -16,15 +24,30 @@ const StartButton = styled.button`
   background-color: ${({ theme }) => theme.palette.btn.black};
   color: ${({ theme }) => theme.palette.text.white};
   border-radius: 12px;
-  width: 100%;
   height: 54px;
+  min-height: 54px;
+  margin: 0 24px;
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 2;
+`;
+
+const ShadowContainer = styled.div`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 `;
 
 export default {
   NewProfile,
   GraphicContainer,
+  CardLoading,
   StartButton,
+  ShadowContainer,
 };
