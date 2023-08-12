@@ -29,6 +29,15 @@ const QuestionDetailFooterContainer = styled.div`
   flex-direction: column;
   padding: 0 24px;
 `;
+const NoReply = styled.div`
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  ${({ theme }) => theme.typo['sub.2']}
+  color : ${({ theme }) => theme.palette.text.grey1};
+`;
 
 export default {
   AnswersContainer,
@@ -37,4 +46,5 @@ export default {
   QuestionDetailContainer,
   QuestionDetailTitle,
   QuestionDetailFooterContainer,
+  NoReply,
 };

@@ -14,8 +14,8 @@ export const userApi = {
       `auth/v1/backdoor/token`,
       {
         userId: 36,
-        accessTokenLifeTime: 100,
-        refreshTokenLifeTime: 300,
+        accessTokenLifeTime: 10000,
+        refreshTokenLifeTime: 10000000,
       }
     );
     return response.data;
