@@ -18,6 +18,8 @@ import useMyFavorites from '@/hooks/api/useMyFavorites';
 import useMyInfo from '@/hooks/api/useMyInfo';
 import { lottieDictionary } from '@/constants/lottie';
 import useNativeMessage from '@/hooks/useNativeMessage';
+import { useMutation } from '@tanstack/react-query';
+import { feedApi } from '@/apis/handlers/feed';
 
 const tabList = [
   {
@@ -56,14 +58,37 @@ const MyPage = () => {
 
   const { data: myInfo } = useMyInfo();
 
-  const { data: myQuestionsData, fetchNextPage: fetchMyQuestionsDataNextPage } = useMyQuestions();
+  const {
+    data: myQuestionsData,
+    fetchNextPage: fetchMyQuestionsDataNextPage,
+    refetch: refetchMyQuestions,
+  } = useMyQuestions();
   const myQuestions = myQuestionsData?.pages.flatMap((page) => page.feeds);
 
-  const { data: myRepliesData, fetchNextPage: fetchMyRepliesDataNextPage } = useMyReplies();
+  const { data: myRepliesData, fetchNextPage: fetchMyRepliesDataNextPage, refetch: refetchMyReplies } = useMyReplies();
   const myReplies = myRepliesData?.pages.flatMap((page) => page.myReplies);
 
-  const { data: myFavoritesData, fetchNextPage: fetchMyFavoritesDataNextPage } = useMyFavorites();
+  const {
+    data: myFavoritesData,
+    fetchNextPage: fetchMyFavoritesDataNextPage,
+    refetch: refetchMyFavorites,
+  } = useMyFavorites();
   const myFavorites = myFavoritesData?.pages.flatMap((page) => page.myFavoriteFeeds);
+
+  const feedFavoriteMutation = useMutation(feedApi.postFeedFavorite, {
+    onSuccess: () => {
+      void refetchMyFavorites();
+      void refetchMyQuestions();
+      void refetchMyReplies();
+    },
+  });
+  const feedFavoriteCancelMutation = useMutation(feedApi.deleteFeedFavorite, {
+    onSuccess: () => {
+      void refetchMyFavorites();
+      void refetchMyQuestions();
+      void refetchMyReplies();
+    },
+  });
 
   const handleClickTabItem = (event: React.MouseEvent<HTMLAnchorElement>) => {
     setSelectedTab(event.currentTarget.id);
@@ -190,16 +215,30 @@ const MyPage = () => {
                 <Styled.QuestionItemLike>좋아요 {question.favoriteCount} 명</Styled.QuestionItemLike>
                 <Styled.QuestionItemFooter>
                   <Styled.QuestionItemOptionButtonList>
-                    <Styled.QuestionItemOptionButton
-                      type="button"
-                      onClick={(event) => {
-                        event.stopPropagation();
+                    {question.isFavorite ? (
+                      <Styled.QuestionItemOptionButton
+                        type="button"
+                        isActive
+                        onClick={(event) => {
+                          event.stopPropagation();
 
-                        // TODO: 좋아요 API 연동
-                      }}
-                    >
-                      <HeartIcon />
-                    </Styled.QuestionItemOptionButton>
+                          feedFavoriteCancelMutation.mutate({ feedId: question.id });
+                        }}
+                      >
+                        <HeartActiveIcon />
+                      </Styled.QuestionItemOptionButton>
+                    ) : (
+                      <Styled.QuestionItemOptionButton
+                        type="button"
+                        onClick={(event) => {
+                          event.stopPropagation();
+
+                          feedFavoriteMutation.mutate({ feedId: question.id });
+                        }}
+                      >
+                        <HeartIcon />
+                      </Styled.QuestionItemOptionButton>
+                    )}
                     <Styled.QuestionItemOptionButton
                       type="button"
                       onClick={(event) => {
@@ -269,7 +308,7 @@ const MyPage = () => {
                       onClick={(event) => {
                         event.stopPropagation();
 
-                        // TODO: 좋아요 API 연동
+                        feedFavoriteCancelMutation.mutate({ feedId: favorite.id });
                       }}
                     >
                       <HeartActiveIcon />

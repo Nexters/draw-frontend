@@ -25,6 +25,7 @@ import usePromotions from '@/hooks/api/usePromotions';
 import { PROMOTION_TITLE } from '@/constants/promotion';
 import { useMutation } from '@tanstack/react-query';
 import { promotionApi } from '@/apis/handlers/promotion';
+import { feedApi } from '@/apis/handlers/feed';
 
 const Feed = () => {
   const toast = useToast();
@@ -43,11 +44,22 @@ const Feed = () => {
 
   const [answer, onChangeAnswer, setAnswer] = useInput('');
 
-  const { data: feedsData, fetchNextPage } = useFeeds();
+  const { data: feedsData, fetchNextPage, refetch: refetchFeeds } = useFeeds();
   const feeds = feedsData?.pages.flatMap((page) => page.feeds);
 
   const { data: promotions } = usePromotions();
   const currentPromotion = promotions?.[promotionIndex];
+
+  const feedFavoriteMutation = useMutation(feedApi.postFeedFavorite, {
+    onSuccess: async () => {
+      await refetchFeeds();
+    },
+  });
+  const feedFavoriteCancelMutation = useMutation(feedApi.deleteFeedFavorite, {
+    onSuccess: async () => {
+      await refetchFeeds();
+    },
+  });
 
   const consumePromotionMutation = useMutation(promotionApi.postConsumePromotion);
 
@@ -137,11 +149,26 @@ const Feed = () => {
                     {feed.isFit && <Styled.FeedCardBadge>맞춤질문</Styled.FeedCardBadge>}
                     <Styled.FeedCardOptionButtonList>
                       {feed.isFavorite ? (
-                        <Styled.FeedCardOptionButton type="button" isActive>
+                        <Styled.FeedCardOptionButton
+                          type="button"
+                          isActive
+                          onClick={(event) => {
+                            event.stopPropagation();
+
+                            feedFavoriteCancelMutation.mutate({ feedId: feed.id });
+                          }}
+                        >
                           <HeartActiveIcon />
                         </Styled.FeedCardOptionButton>
                       ) : (
-                        <Styled.FeedCardOptionButton type="button">
+                        <Styled.FeedCardOptionButton
+                          type="button"
+                          onClick={(event) => {
+                            event.stopPropagation();
+
+                            feedFavoriteMutation.mutate({ feedId: feed.id });
+                          }}
+                        >
                           <HeartIcon />
                         </Styled.FeedCardOptionButton>
                       )}
@@ -150,7 +177,9 @@ const Feed = () => {
                       </Styled.FeedCardOptionButton>
                       <Styled.FeedCardOptionButton
                         type="button"
-                        onClick={() => {
+                        onClick={(event) => {
+                          event.stopPropagation();
+
                           setIsCardOptionBottomSheetOpen(true);
                         }}
                       >
