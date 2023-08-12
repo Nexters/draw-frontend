@@ -48,13 +48,6 @@ const lottieDictionary: Record<string, Record<string, string>> = {
   },
 };
 
-const loadLottieJson = (key: string) =>
-  new Promise((resolve) => {
-    void import(`../../assets/lottie/${key}.json`).then((data: { default: unknown }) => {
-      resolve(data.default);
-    });
-  });
-
 const NewProfileCardView = () => {
   const navigate = useNavigate();
 
@@ -96,8 +89,9 @@ const NewProfileCardView = () => {
   const getLottieJSON = useCallback(async () => {
     if (!gender || !mbti) return;
 
-    const response = await loadLottieJson(lottieDictionary[gender][mbti]);
-    setLottie(response);
+    const response = await fetch(`/lottie/${lottieDictionary[gender][mbti]}.json`);
+    const lottieJSON: unknown = await response.json();
+    setLottie(lottieJSON);
   }, [gender, mbti]);
 
   useEffect(() => {
