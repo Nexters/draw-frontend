@@ -54,7 +54,7 @@ export const feedApi = {
    * 피드 신고
    */
   postFeedClaim: async ({ feedId }: PostFeedClaimRequest) => {
-    const url = `${FEED_BASE_URL}/${feedId}/favorites`;
+    const url = `${FEED_BASE_URL}/${feedId}/claims`;
     const response = await request.post<PostFeedClaimResponse>(url);
 
     return response.data;
@@ -63,7 +63,7 @@ export const feedApi = {
    * 피드 차단
    */
   postFeedBlock: async ({ feedId }: PostFeedBlockRequest) => {
-    const url = `${FEED_BASE_URL}/${feedId}/favorites`;
+    const url = `${FEED_BASE_URL}/${feedId}/blocks`;
     const response = await request.post<PostFeedBlockResponse>(url);
 
     return response.data;

@@ -52,6 +52,7 @@ const MyPage = () => {
 
   const [selectedTab, setSelectedTab] = useState<string>('question');
   const [isQuestionOptionBottomSheetOpen, setIsQuestionOptionBottomSheetOpen] = useState(false);
+  const [selectedFeedId, setSelectedFeedId] = useState<number | null>(null);
 
   const [lottie, setLottie] = useState<unknown | null>(null);
   const [isLottieLoading, setIsLottieLoading] = useState<boolean>(true);
@@ -87,6 +88,22 @@ const MyPage = () => {
       void refetchMyFavorites();
       void refetchMyQuestions();
       void refetchMyReplies();
+    },
+  });
+  const feedClaimMutation = useMutation(feedApi.postFeedClaim, {
+    onSuccess: () => {
+      void refetchMyFavorites();
+
+      setIsQuestionOptionBottomSheetOpen(false);
+      setSelectedFeedId(null);
+    },
+  });
+  const feedBlockMutation = useMutation(feedApi.postFeedBlock, {
+    onSuccess: () => {
+      void refetchMyFavorites();
+
+      setIsQuestionOptionBottomSheetOpen(false);
+      setSelectedFeedId(null);
     },
   });
 
@@ -249,16 +266,6 @@ const MyPage = () => {
                     >
                       <ShareIcon />
                     </Styled.QuestionItemOptionButton>
-                    <Styled.QuestionItemOptionButton
-                      type="button"
-                      onClick={(event) => {
-                        event.stopPropagation();
-
-                        setIsQuestionOptionBottomSheetOpen(true);
-                      }}
-                    >
-                      <MoreIcon />
-                    </Styled.QuestionItemOptionButton>
                   </Styled.QuestionItemOptionButtonList>
                 </Styled.QuestionItemFooter>
               </Styled.QuestionItem>
@@ -329,6 +336,7 @@ const MyPage = () => {
                         event.stopPropagation();
 
                         setIsQuestionOptionBottomSheetOpen(true);
+                        setSelectedFeedId(favorite.id);
                       }}
                     >
                       <MoreIcon />
@@ -354,19 +362,24 @@ const MyPage = () => {
         open={isQuestionOptionBottomSheetOpen}
         onClose={() => {
           setIsQuestionOptionBottomSheetOpen(false);
+          setSelectedFeedId(null);
         }}
       >
         <Styled.QuestionOptionBottomSheet>
           <Styled.QuestionOption
             onClick={() => {
-              // TODO: 차단하기 API 연동
+              if (selectedFeedId === null) return;
+
+              feedBlockMutation.mutate({ feedId: selectedFeedId });
             }}
           >
             차단하기
           </Styled.QuestionOption>
           <Styled.QuestionOption
             onClick={() => {
-              // TODO: 신고하기 API 연동
+              if (selectedFeedId === null) return;
+
+              feedClaimMutation.mutate({ feedId: selectedFeedId });
             }}
           >
             신고하기

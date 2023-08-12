@@ -41,6 +41,7 @@ const Feed = () => {
   const [isAnswerFormOpen, setIsAnswerFormOpen] = useState(false);
   const [isCardOptionBottomSheetOpen, setIsCardOptionBottomSheetOpen] = useState(false);
   const [isPromotionBottomSheetOpen, setIsPromotionBottomSheetOpen] = useState(false);
+  const [selectedFeedId, setSelectedFeedId] = useState<number | null>(null);
   const [isTabBarVisible, setIsTabBarVisible] = useState(true);
   const [swiperIndex, setSwiperIndex] = useState(0);
   const [promotionIndex, setPromotionIndex] = useState(0);
@@ -61,6 +62,26 @@ const Feed = () => {
   const feedFavoriteCancelMutation = useMutation(feedApi.deleteFeedFavorite, {
     onSuccess: async () => {
       await refetchFeeds();
+    },
+  });
+  const feedClaimMutation = useMutation(feedApi.postFeedClaim, {
+    onSuccess: async () => {
+      await refetchFeeds();
+
+      setIsCardOptionBottomSheetOpen(false);
+      setSelectedFeedId(null);
+
+      toast.success(<>신고했어요</>);
+    },
+  });
+  const feedBlockMutation = useMutation(feedApi.postFeedBlock, {
+    onSuccess: async () => {
+      await refetchFeeds();
+
+      setIsCardOptionBottomSheetOpen(false);
+      setSelectedFeedId(null);
+
+      toast.success(<>차단했어요</>);
     },
   });
 
@@ -188,6 +209,7 @@ const Feed = () => {
                           event.stopPropagation();
 
                           setIsCardOptionBottomSheetOpen(true);
+                          setSelectedFeedId(feed.id);
                         }}
                       >
                         <MoreIcon />
@@ -242,11 +264,28 @@ const Feed = () => {
         open={isCardOptionBottomSheetOpen}
         onClose={() => {
           setIsCardOptionBottomSheetOpen(false);
+          setSelectedFeedId(null);
         }}
       >
         <Styled.FeedOptionBottomSheet>
-          <Styled.FeedOption>차단하기</Styled.FeedOption>
-          <Styled.FeedOption>신고하기</Styled.FeedOption>
+          <Styled.FeedOption
+            onClick={() => {
+              if (selectedFeedId === null) return;
+
+              feedBlockMutation.mutate({ feedId: selectedFeedId });
+            }}
+          >
+            차단하기
+          </Styled.FeedOption>
+          <Styled.FeedOption
+            onClick={() => {
+              if (selectedFeedId === null) return;
+
+              feedClaimMutation.mutate({ feedId: selectedFeedId });
+            }}
+          >
+            신고하기
+          </Styled.FeedOption>
         </Styled.FeedOptionBottomSheet>
       </BottomSheet>
       <BottomSheet
