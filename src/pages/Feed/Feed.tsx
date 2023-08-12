@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow } from 'swiper/modules';
 import Styled from './Feed.styles';
@@ -28,6 +29,8 @@ import { promotionApi } from '@/apis/handlers/promotion';
 import { feedApi } from '@/apis/handlers/feed';
 
 const Feed = () => {
+  const navigate = useNavigate();
+
   const toast = useToast();
 
   const { showShareSheet } = useNativeMessage();
@@ -142,7 +145,11 @@ const Feed = () => {
           >
             {feeds?.map((feed) => (
               <SwiperSlide key={feed.id}>
-                <Styled.FeedCard>
+                <Styled.FeedCard
+                  onClick={() => {
+                    navigate(`/question-detail/${feed.id}`);
+                  }}
+                >
                   <Styled.FeedCardTitle>{feed.content}</Styled.FeedCardTitle>
                   <Styled.FeedCardLike>좋아요 {feed.favoriteCount} 명</Styled.FeedCardLike>
                   <Styled.FeedCardFooter>
