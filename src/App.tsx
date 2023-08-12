@@ -11,43 +11,47 @@ import { ThemeProvider } from './styles/theme';
 import Toast from './components/Toast/Toast';
 import Kakao from './pages/Login/Kakao';
 import { QueryClientProvider } from './QueryClientProvider';
+import { AuthGuard } from './pages/Login/AuthGuard';
 
 const router = createBrowserRouter([
+  { path: '/login', element: <Login /> },
   {
     path: '/',
-    element: <Login />,
-  },
-  {
-    path: '/callback/kakao',
-    element: <Kakao />,
-  },
-  {
-    path: '/new-profile',
-    element: <NewProfile />,
-  },
-  {
-    path: '/new-profile-card-view',
-    element: <NewProfileCardView />,
-  },
-  {
-    path: '/feed',
-    element: <Feed />,
-  },
-  {
-    path: '/my-page',
-    element: <MyPage />,
-  },
-  {
-    path: '/my-page/setting',
-    element: <Setting />,
-  },
-  {
-    path: '/new-question',
-    element: <NewQuestion />,
-  },
-  {
-    path: '/question-detail/:id',
-    element: <QuestionDetail />,
+    element: <AuthGuard />,
+    children: [
+      {
+        path: 'callback/kakao',
+        element: <Kakao />,
+      },
+      {
+        path: 'new-profile',
+        element: <NewProfile />,
+      },
+      {
+        path: 'new-profile-card-view',
+        element: <NewProfileCardView />,
+      },
+      {
+        path: 'feed',
+        element: <Feed />,
+      },
+      {
+        path: 'my-page',
+        element: <MyPage />,
+      },
+      {
+        path: 'my-page/setting',
+        element: <Setting />,
+      },
+      {
+        path: 'new-question',
+        element: <NewQuestion />,
+      },
+      {
+        path: 'question-detail/:id',
+        element: <QuestionDetail />,
+      },
+    ],
   },
 ]);
 
