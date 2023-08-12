@@ -94,7 +94,7 @@ const NewQuestion = () => {
     return `${genderTag || ''}\u00A0\u00A0${peerTag || ''}\u00A0\u00A0${mbtiTag || ''}`;
   };
 
-  const { mutate } = useMutation(feedApi.postFeeds, {
+  const { mutate: postFeetMutate } = useMutation(feedApi.postFeeds, {
     onSuccess: () => {
       navigate('/feed');
       toast.success(
@@ -113,7 +113,7 @@ const NewQuestion = () => {
             centerElement={`${value.length}/150`}
             rightElement={'등록'}
             onSubmit={() =>
-              mutate({
+              postFeetMutate({
                 content: value,
                 ageOption,
                 genders: genders,
