@@ -27,10 +27,14 @@ import { PROMOTION_TITLE } from '@/constants/promotion';
 import { useMutation } from '@tanstack/react-query';
 import { promotionApi } from '@/apis/handlers/promotion';
 import { feedApi } from '@/apis/handlers/feed';
+import isUserAgentWebview from 'is-ua-webview';
+import { dynamicLink } from '@/utils/dynamicLink';
 
 const Feed = () => {
   const navigate = useNavigate();
   const toast = useToast();
+
+  const isWebview = isUserAgentWebview(window.navigator.userAgent);
 
   const { showShareSheet } = useNativeMessage();
 
@@ -95,7 +99,15 @@ const Feed = () => {
     answerFormRef.current.style.height = `${answerTextAreaRef.current.scrollHeight}px`;
   }, []);
 
-  const handleClickShareButton = (id: number) => {
+  const handleClickShareButton = (event: React.MouseEvent<HTMLButtonElement>, id: number) => {
+    event.stopPropagation();
+
+    if (!isWebview) {
+      dynamicLink('/feed');
+
+      return;
+    }
+
     showShareSheet(`${window.location.origin}/question-detail/${id}`);
   };
 
@@ -167,6 +179,12 @@ const Feed = () => {
               <SwiperSlide key={feed.id}>
                 <Styled.FeedCard
                   onClick={() => {
+                    if (!isWebview) {
+                      dynamicLink(`/question-detail/${feed.id}`);
+
+                      return;
+                    }
+
                     navigate(`/question-detail/${feed.id}`);
                   }}
                 >
@@ -182,6 +200,12 @@ const Feed = () => {
                           onClick={(event) => {
                             event.stopPropagation();
 
+                            if (!isWebview) {
+                              dynamicLink('/feed');
+
+                              return;
+                            }
+
                             feedFavoriteCancelMutation.mutate({ feedId: feed.id });
                           }}
                         >
@@ -193,19 +217,34 @@ const Feed = () => {
                           onClick={(event) => {
                             event.stopPropagation();
 
+                            if (!isWebview) {
+                              dynamicLink('/feed');
+
+                              return;
+                            }
+
                             feedFavoriteMutation.mutate({ feedId: feed.id });
                           }}
                         >
                           <HeartIcon />
                         </Styled.FeedCardOptionButton>
                       )}
-                      <Styled.FeedCardOptionButton type="button" onClick={() => handleClickShareButton(feed.id)}>
+                      <Styled.FeedCardOptionButton
+                        type="button"
+                        onClick={(event) => handleClickShareButton(event, feed.id)}
+                      >
                         <ShareIcon />
                       </Styled.FeedCardOptionButton>
                       <Styled.FeedCardOptionButton
                         type="button"
                         onClick={(event) => {
                           event.stopPropagation();
+
+                          if (!isWebview) {
+                            dynamicLink('/feed');
+
+                            return;
+                          }
 
                           setIsCardOptionBottomSheetOpen(true);
                           setSelectedFeedId(feed.id);
@@ -252,6 +291,12 @@ const Feed = () => {
           <Styled.FakeAnswerTextAreaButton
             type="button"
             onClick={() => {
+              if (!isWebview) {
+                dynamicLink('/feed');
+
+                return;
+              }
+
               setIsAnswerFormOpen(true);
             }}
           >
