@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useInView } from 'react-intersection-observer';
 import Styled from './MyPage.styles';
 import BottomSheet from '@/components/BottomSheet/BottomSheet';
 import { ReactComponent as SettingIcon } from '@/assets/setting.svg';
@@ -9,6 +10,9 @@ import { ReactComponent as ShareIcon } from '@/assets/share.svg';
 import { ReactComponent as MoreIcon } from '@/assets/more.svg';
 import { palette } from '@/styles/palette';
 import Layout from '@/components/Layout/Layout';
+import useMyQuestions from '@/hooks/api/useMyQuestions';
+import useMyReplies from '@/hooks/api/useMyReplies';
+import useMyFavorites from '@/hooks/api/useMyFavorites';
 
 const tabList = [
   {
@@ -25,51 +29,27 @@ const tabList = [
   },
 ];
 
-const questionList = [
-  {
-    id: 1,
-    title: '내 질문 ㅋㅋㅋ 배고픈 사람~?',
-    likes: 10,
-  },
-  {
-    id: 2,
-    title:
-      '내 질문 ㅋㅋㅋ 배고픈 사람~? 내 질문 ㅋㅋㅋ 배고픈 사람~? 내 질문 ㅋㅋㅋ 배고픈 사람~? 내 질문 ㅋㅋㅋ 배고픈 사람~? 내 질문 ㅋㅋㅋ 배고픈 사람~? 내 질문 ㅋㅋㅋ 배고픈 사람~?',
-    likes: 10,
-  },
-  {
-    id: 3,
-    title: '내 질문 ㅋㅋㅋ',
-    likes: 10,
-  },
-];
-
-const answerList = [
-  {
-    id: 1,
-    answer: '내 답변입니둥내 답변입니둥내 답변입니둥내 답변입니둥내 답변입니둥내 답변입니둥내 답변입니둥내',
-    question: 'T도 박은빈 시상식 보고 우나요? 우나요?',
-  },
-  {
-    id: 2,
-    answer: '내 답변입니둥내 답변입니둥내 답변입니둥내 답변입니둥내 답변입니둥내 답변입니둥내 답변입니둥내',
-    question: 'T도 박은빈 시상식 보고 우나요? 우나요?',
-  },
-  {
-    id: 3,
-    answer: '내 답변입니둥내 답변입니둥내 답변입니둥내 답변입니둥내 답',
-    question: 'T도 박은빈 시상식 보고 우나요? 우나요?',
-  },
-];
-
 const MyPage = () => {
   const navigate = useNavigate();
+
+  const { ref: fetchTriggerRef, inView: fetchTriggerInView } = useInView({
+    threshold: 0,
+  });
 
   const [selectedTab, setSelectedTab] = useState<string>('question');
   const [isQuestionOptionBottomSheetOpen, setIsQuestionOptionBottomSheetOpen] = useState(false);
 
-  const handleClickTabItem = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setSelectedTab(event.currentTarget.name);
+  const { data: myQuestionsData, fetchNextPage: fetchMyQuestionsDataNextPage } = useMyQuestions();
+  const myQuestions = myQuestionsData?.pages.flatMap((page) => page.feeds);
+
+  const { data: myRepliesData, fetchNextPage: fetchMyRepliesDataNextPage } = useMyReplies();
+  const myReplies = myRepliesData?.pages.flatMap((page) => page.myReplies);
+
+  const { data: myFavoritesData, fetchNextPage: fetchMyFavoritesDataNextPage } = useMyFavorites();
+  const myFavorites = myFavoritesData?.pages.flatMap((page) => page.myFavoriteFeeds);
+
+  const handleClickTabItem = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    setSelectedTab(event.currentTarget.id);
   };
 
   const handleClickQuestionItem = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -89,6 +69,32 @@ const MyPage = () => {
 
     navigate('/question-detail/1');
   };
+
+  const fetchNextPage = useCallback(() => {
+    if (fetchTriggerInView) {
+      switch (selectedTab) {
+        case 'question':
+          void fetchMyQuestionsDataNextPage();
+          break;
+        case 'answer':
+          void fetchMyRepliesDataNextPage();
+          break;
+        case 'favorite':
+          void fetchMyFavoritesDataNextPage();
+          break;
+      }
+    }
+  }, [
+    fetchMyFavoritesDataNextPage,
+    fetchMyQuestionsDataNextPage,
+    fetchMyRepliesDataNextPage,
+    fetchTriggerInView,
+    selectedTab,
+  ]);
+
+  useEffect(() => {
+    fetchNextPage();
+  }, [fetchNextPage]);
 
   return (
     <Layout backgroundColor={palette.background.white1} hasTabBar>
@@ -115,7 +121,7 @@ const MyPage = () => {
         </Styled.Point>
       </Styled.PointContainer>
       <Styled.StickyTop>
-        <Styled.TagList>
+        <Styled.TagList id="tab">
           <Styled.TagItem># INFJ</Styled.TagItem>
           <Styled.TagItem># 여자</Styled.TagItem>
           <Styled.TagItem># 24살</Styled.TagItem>
@@ -124,8 +130,8 @@ const MyPage = () => {
           {tabList.map((item) => (
             <Styled.TabItem
               key={item.value}
-              type="button"
-              name={item.value}
+              href="#tab"
+              id={item.value}
               isActive={selectedTab === item.value}
               onClick={handleClickTabItem}
             >
@@ -137,10 +143,10 @@ const MyPage = () => {
       {selectedTab === 'question' && (
         <Styled.TabPane>
           <Styled.QuestionList>
-            {questionList.map((item) => (
-              <Styled.QuestionItem key={item.id} onClick={handleClickQuestionItem}>
-                <Styled.QuestionItemTitle>{item.title}</Styled.QuestionItemTitle>
-                <Styled.QuestionItemLike>좋아요 {item.likes} 명</Styled.QuestionItemLike>
+            {myQuestions?.map((question) => (
+              <Styled.QuestionItem key={question.id} onClick={handleClickQuestionItem}>
+                <Styled.QuestionItemTitle>{question.content}</Styled.QuestionItemTitle>
+                <Styled.QuestionItemLike>좋아요 {question.favoriteCount} 명</Styled.QuestionItemLike>
                 <Styled.QuestionItemFooter>
                   <Styled.QuestionItemOptionButtonList>
                     <Styled.QuestionItemOptionButton type="button">
@@ -162,7 +168,7 @@ const MyPage = () => {
               </Styled.QuestionItem>
             ))}
           </Styled.QuestionList>
-          {questionList.length === 0 && (
+          {myQuestions?.length === 0 && (
             <Styled.NoContentContainer>
               아직 보관된 질문이 없어요!
               <br />
@@ -174,29 +180,30 @@ const MyPage = () => {
       {selectedTab === 'answer' && (
         <Styled.TabPane>
           <Styled.AnswerList>
-            {answerList.map((item) => (
-              <Styled.AnswerItem key={item.id} onClick={handleClickAnswerItem}>
-                <Styled.AnswerItemAnswer>{item.answer}</Styled.AnswerItemAnswer>
-                <Styled.AnswerItemQuestion>{item.question}</Styled.AnswerItemQuestion>
+            {myReplies?.map((reply) => (
+              <Styled.AnswerItem key={reply.replyId} onClick={handleClickAnswerItem}>
+                <Styled.AnswerItemAnswer>{reply.replyContent}</Styled.AnswerItemAnswer>
+                <Styled.AnswerItemQuestion>{reply.feedContent}</Styled.AnswerItemQuestion>
               </Styled.AnswerItem>
             ))}
-            {answerList.length === 0 && (
-              <Styled.NoContentContainer>
-                아직 보관된 답변이 없어요!
-                <br />
-                질문을 탐색해 보세요
-              </Styled.NoContentContainer>
-            )}
           </Styled.AnswerList>
+
+          {myReplies?.length === 0 && (
+            <Styled.NoContentContainer>
+              아직 보관된 답변이 없어요!
+              <br />
+              질문을 탐색해 보세요
+            </Styled.NoContentContainer>
+          )}
         </Styled.TabPane>
       )}
       {selectedTab === 'favorite' && (
         <Styled.TabPane>
           <Styled.QuestionList>
-            {questionList.map((item) => (
-              <Styled.QuestionItem key={item.id} onClick={handleClickFavoriteItem}>
-                <Styled.QuestionItemTitle>{item.title}</Styled.QuestionItemTitle>
-                <Styled.QuestionItemLike>좋아요 {item.likes} 명</Styled.QuestionItemLike>
+            {myFavorites?.map((favorite) => (
+              <Styled.QuestionItem key={favorite.id} onClick={handleClickFavoriteItem}>
+                <Styled.QuestionItemTitle>{favorite.content}</Styled.QuestionItemTitle>
+                <Styled.QuestionItemLike>좋아요 {favorite.favoriteCount} 명</Styled.QuestionItemLike>
                 <Styled.QuestionItemFooter>
                   <Styled.QuestionItemOptionButtonList>
                     <Styled.QuestionItemOptionButton type="button" isActive>
@@ -218,7 +225,7 @@ const MyPage = () => {
               </Styled.QuestionItem>
             ))}
           </Styled.QuestionList>
-          {questionList.length === 0 && (
+          {myFavorites?.length === 0 && (
             <Styled.NoContentContainer>
               좋아요가 없어요!
               <br />
@@ -227,6 +234,8 @@ const MyPage = () => {
           )}
         </Styled.TabPane>
       )}
+
+      {myQuestions?.length !== 0 && <Styled.FetchTrigger ref={fetchTriggerRef} />}
 
       <BottomSheet
         open={isQuestionOptionBottomSheetOpen}
