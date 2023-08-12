@@ -1,4 +1,3 @@
-import { setQueryString } from '@/utils/setQueryString';
 import { request } from '../axios';
 import { LoginResult, OAuthReq, RefreshReq, RegisterReq } from '../types/user';
 
