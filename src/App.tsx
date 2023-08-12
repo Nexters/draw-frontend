@@ -24,13 +24,13 @@ const router = createBrowserRouter([
     element: <QuestionDetail />,
   },
   {
+    path: 'callback/kakao',
+    element: <Kakao />,
+  },
+  {
     path: '/',
     element: <AuthGuard />,
     children: [
-      {
-        path: 'callback/kakao',
-        element: <Kakao />,
-      },
       {
         path: 'new-profile',
         element: <NewProfile />,
