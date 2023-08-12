@@ -15,10 +15,10 @@ import Layout from '@/components/Layout/Layout';
 import useMyQuestions from '@/hooks/api/useMyQuestions';
 import useMyReplies from '@/hooks/api/useMyReplies';
 import useMyFavorites from '@/hooks/api/useMyFavorites';
+import { useMutation } from '@tanstack/react-query';
 import useMyInfo from '@/hooks/api/useMyInfo';
 import { lottieDictionary } from '@/constants/lottie';
 import useNativeMessage from '@/hooks/useNativeMessage';
-import { useMutation } from '@tanstack/react-query';
 import { feedApi } from '@/apis/handlers/feed';
 
 const tabList = [
