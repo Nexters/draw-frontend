@@ -23,6 +23,8 @@ import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import usePromotions from '@/hooks/api/usePromotions';
 import { PROMOTION_TITLE } from '@/constants/promotion';
+import { useMutation } from '@tanstack/react-query';
+import { promotionApi } from '@/apis/handlers/promotion';
 
 const Feed = () => {
   const toast = useToast();
@@ -46,6 +48,8 @@ const Feed = () => {
 
   const { data: promotions } = usePromotions();
   const currentPromotion = promotions?.[promotionIndex];
+
+  const consumePromotionMutation = useMutation(promotionApi.postConsumePromotion);
 
   const calculateAnswerFormHeight = useCallback(() => {
     if (!answerFormRef.current) return;
@@ -93,10 +97,15 @@ const Feed = () => {
   }, [calculateAnswerFormHeight, isAnswerFormOpen]);
 
   useEffect(() => {
-    if (promotions?.length === 0) return;
+    if (!promotions || promotions.length === 0) return;
 
+    void Promise.all(
+      promotions.map((promotion) => {
+        consumePromotionMutation.mutate(promotion.id);
+      }) ?? []
+    );
     setIsPromotionBottomSheetOpen(true);
-  }, [promotions?.length]);
+  }, [consumePromotionMutation, promotions]);
 
   return (
     <Layout backgroundColor={palette.background.white1} hasTabBar={isTabBarVisible}>
