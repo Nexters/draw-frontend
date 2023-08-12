@@ -8,14 +8,23 @@ import BottomSheet from '@/components/BottomSheet/BottomSheet';
 import { MBTI } from '@/components/MBTIPicker/MBTIPicker';
 import Layout from '@/components/Layout/Layout';
 import { palette } from '@/styles/palette';
+import { useMutation } from '@tanstack/react-query';
+import { feedApi } from '@/apis/handlers/feed';
+import { useNavigate } from 'react-router-dom';
+import useToast from '@/hooks/useToast';
+import { AgeOptionType, GenderType, MbtiCharType } from '@/apis/types/feed';
+import { ReactComponent as FireIcon } from '@/assets/fire.svg';
 
 const NewQuestion = () => {
+  const navigate = useNavigate();
+  const toast = useToast();
+
   const [value, onChange] = useInput('');
   const [isTextAreaFocused, setIsTextAreaFocused] = useState(false);
   const [isOptionSelectOpen, setIsOptionSelectOpen] = useState(false);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const [gender, setGender] = useState<string | null>(null);
-  const [isPeer, setIsPeer] = useState<string | null>('peer');
+  const [genders, setGenders] = useState<GenderType[]>([]);
+  const [ageOption, setAgeOption] = useState<AgeOptionType>('SAME_AGE_GROUP');
   const [mbti, setMBTI] = useState<MBTI>([null, null, null, null]);
   const [selectedOptionText, setSelectedOptionText] = useState<string | null>(null);
   const [prevVisualViewport, setPrevVisualViewport] = useState(0);
@@ -60,11 +69,11 @@ const NewQuestion = () => {
     }
   }, [prevVisualViewport]);
 
-  const handleChangeGender = (value: string) => {
-    setGender(value);
+  const handleChangeGender = (value: GenderType) => {
+    setGenders([value]);
   };
-  const handleChangeIsPeer = (value: string) => {
-    setIsPeer(value);
+  const handleChangeAgeOption = (value: AgeOptionType) => {
+    setAgeOption(value);
   };
   const handleChangeMBTI = (value: MBTI) => {
     setMBTI(value);
@@ -73,23 +82,45 @@ const NewQuestion = () => {
   const toggleOptionSelectOpen = () => setIsOptionSelectOpen(!isOptionSelectOpen);
 
   useEffect(() => {
-    setSelectedOptionText(() => getSelectedOptionText(gender, isPeer, mbti));
-  }, [gender, isPeer, mbti]);
+    setSelectedOptionText(() => getSelectedOptionText(genders[0], ageOption, mbti));
+  }, [genders, ageOption, mbti]);
 
   const getSelectedOptionText = (gender: string | null, peer: string | null, mbti: MBTI) => {
-    const genderTag = gender ? `# ${gender === 'male' ? '남자' : '여자'}` : null;
-    const peerTag = peer === 'all' ? `# 모두` : null;
+    const genderTag = gender ? `# ${gender === 'MALE' ? '남자' : '여자'}` : null;
+    const peerTag = peer === 'ALL' ? `# 모두` : null;
     const mbtiTag = !mbti.every((v) => v === null) ? `# ${mbti.filter((v) => v !== null).join(',')}` : null;
 
     if (!genderTag && !peerTag && !mbtiTag) return null;
     return `${genderTag || ''}\u00A0\u00A0${peerTag || ''}\u00A0\u00A0${mbtiTag || ''}`;
   };
 
+  const { mutate } = useMutation(feedApi.postFeeds, {
+    onSuccess: () => {
+      navigate('/feed');
+      toast.success(
+        <>
+          답변 작성 완료 <FireIcon />
+        </>
+      );
+    },
+  });
+
   return (
     <Layout backgroundColor={palette.background.white2}>
       <Styled.PageWrapper height={prevVisualViewport} isTextAreaFocused={isTextAreaFocused}>
         <Styled.PageBody>
-          <TopBar centerElement={`${value.length}/150`} rightElement={'등록'} />
+          <TopBar
+            centerElement={`${value.length}/150`}
+            rightElement={'등록'}
+            onSubmit={() =>
+              mutate({
+                content: value,
+                ageOption,
+                genders: genders,
+                mbtiChars: mbti.filter((v) => v !== null) as MbtiCharType[],
+              })
+            }
+          />
           <Spacing size={28} />
           <Styled.TextArea
             maxLength={150}
@@ -116,10 +147,10 @@ const NewQuestion = () => {
           <OptionSelect
             closeOptionSelect={toggleOptionSelectOpen}
             onChangeGender={handleChangeGender}
-            onChangeIsPeer={handleChangeIsPeer}
+            onChangeAgeOption={handleChangeAgeOption}
             onChangeMBTI={handleChangeMBTI}
-            gender={gender}
-            isPeer={isPeer}
+            gender={genders[0]}
+            ageOption={ageOption}
             mbti={mbti}
           />
         </BottomSheet>
