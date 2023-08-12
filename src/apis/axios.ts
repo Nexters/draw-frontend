@@ -7,7 +7,6 @@ type CustomError = { code: number; message: string };
 export const request = axios.create({
   baseURL: BASE_ENDPOINT_URL,
   timeout: 15000,
-  //withCredentials: true,
 });
 
 request.interceptors.request.use(
