@@ -8,9 +8,11 @@ export const promotionApi = {
 
     return response.data;
   },
-  postConsumePromotion: async (promotionId: number) => {
-    const url = `api/v1/promotions/consume/${promotionId}`;
+  postConsumePromotion: async (promotionIds: number[]) => {
+    const url = `api/v1/promotions/consume`;
 
-    return await request.post<PostConsumePromotionResponse>(url);
+    return await request.post<PostConsumePromotionResponse>(url, {
+      promotionIds,
+    });
   },
 };

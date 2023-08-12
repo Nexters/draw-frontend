@@ -2,6 +2,7 @@ import { request } from '../axios';
 import {
   GetMyFavoritesRequest,
   GetMyFavoritesResponse,
+  GetMyInfoResponse,
   GetMyQuestionsRequest,
   GetMyQuestionsResponse,
   GetMyRepliesRequest,
@@ -27,6 +28,12 @@ export const myPageApi = {
     const queryString = lastFavoriteId ? `?lastFavoriteId=${lastFavoriteId}` : '';
     const url = `api/v1/feeds/me/favorites${queryString}`;
     const response = await request.get<GetMyFavoritesResponse>(url);
+
+    return response.data;
+  },
+  getMyInfo: async () => {
+    const url = 'api/v1/users/me';
+    const response = await request.get<GetMyInfoResponse>(url);
 
     return response.data;
   },

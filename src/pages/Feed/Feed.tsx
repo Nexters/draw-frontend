@@ -98,14 +98,11 @@ const Feed = () => {
 
   useEffect(() => {
     if (!promotions || promotions.length === 0) return;
+    consumePromotionMutation.mutate(promotions.map((promotion) => promotion.id));
 
-    void Promise.all(
-      promotions.map((promotion) => {
-        consumePromotionMutation.mutate(promotion.id);
-      }) ?? []
-    );
     setIsPromotionBottomSheetOpen(true);
-  }, [consumePromotionMutation, promotions]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [promotions]);
 
   return (
     <Layout backgroundColor={palette.background.white1} hasTabBar={isTabBarVisible}>
