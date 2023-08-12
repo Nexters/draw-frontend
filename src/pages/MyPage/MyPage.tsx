@@ -17,6 +17,7 @@ import useMyReplies from '@/hooks/api/useMyReplies';
 import useMyFavorites from '@/hooks/api/useMyFavorites';
 import useMyInfo from '@/hooks/api/useMyInfo';
 import { lottieDictionary } from '@/constants/lottie';
+import useNativeMessage from '@/hooks/useNativeMessage';
 
 const tabList = [
   {
@@ -40,6 +41,8 @@ const genderDictionary = {
 
 const MyPage = () => {
   const navigate = useNavigate();
+
+  const { showShareSheet } = useNativeMessage();
 
   const { ref: fetchTriggerRef, inView: fetchTriggerInView } = useInView({
     threshold: 0,
@@ -66,22 +69,22 @@ const MyPage = () => {
     setSelectedTab(event.currentTarget.id);
   };
 
-  const handleClickQuestionItem = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleClickQuestionItem = (event: React.MouseEvent<HTMLDivElement>, id: number) => {
     event.stopPropagation();
 
-    navigate('/question-detail/1');
+    navigate(`/question-detail/${id}`);
   };
 
-  const handleClickAnswerItem = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleClickAnswerItem = (event: React.MouseEvent<HTMLDivElement>, id: number) => {
     event.stopPropagation();
 
-    navigate('/question-detail/1');
+    navigate(`/question-detail/${id}`);
   };
 
-  const handleClickFavoriteItem = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleClickFavoriteItem = (event: React.MouseEvent<HTMLDivElement>, id: number) => {
     event.stopPropagation();
 
-    navigate('/question-detail/1');
+    navigate(`/question-detail/${id}`);
   };
 
   const fetchNextPage = useCallback(() => {
@@ -182,20 +185,36 @@ const MyPage = () => {
         <Styled.TabPane>
           <Styled.QuestionList>
             {myQuestions?.map((question) => (
-              <Styled.QuestionItem key={question.id} onClick={handleClickQuestionItem}>
+              <Styled.QuestionItem key={question.id} onClick={(event) => handleClickQuestionItem(event, question.id)}>
                 <Styled.QuestionItemTitle>{question.content}</Styled.QuestionItemTitle>
                 <Styled.QuestionItemLike>좋아요 {question.favoriteCount} 명</Styled.QuestionItemLike>
                 <Styled.QuestionItemFooter>
                   <Styled.QuestionItemOptionButtonList>
-                    <Styled.QuestionItemOptionButton type="button">
+                    <Styled.QuestionItemOptionButton
+                      type="button"
+                      onClick={(event) => {
+                        event.stopPropagation();
+
+                        // TODO: 좋아요 API 연동
+                      }}
+                    >
                       <HeartIcon />
                     </Styled.QuestionItemOptionButton>
-                    <Styled.QuestionItemOptionButton type="button">
+                    <Styled.QuestionItemOptionButton
+                      type="button"
+                      onClick={(event) => {
+                        event.stopPropagation();
+
+                        showShareSheet(`${window.location.origin}/question-detail/${question.id}`);
+                      }}
+                    >
                       <ShareIcon />
                     </Styled.QuestionItemOptionButton>
                     <Styled.QuestionItemOptionButton
                       type="button"
-                      onClick={() => {
+                      onClick={(event) => {
+                        event.stopPropagation();
+
                         setIsQuestionOptionBottomSheetOpen(true);
                       }}
                     >
@@ -219,7 +238,7 @@ const MyPage = () => {
         <Styled.TabPane>
           <Styled.AnswerList>
             {myReplies?.map((reply) => (
-              <Styled.AnswerItem key={reply.replyId} onClick={handleClickAnswerItem}>
+              <Styled.AnswerItem key={reply.replyId} onClick={(event) => handleClickAnswerItem(event, reply.feedId)}>
                 <Styled.AnswerItemAnswer>{reply.replyContent}</Styled.AnswerItemAnswer>
                 <Styled.AnswerItemQuestion>{reply.feedContent}</Styled.AnswerItemQuestion>
               </Styled.AnswerItem>
@@ -239,20 +258,37 @@ const MyPage = () => {
         <Styled.TabPane>
           <Styled.QuestionList>
             {myFavorites?.map((favorite) => (
-              <Styled.QuestionItem key={favorite.id} onClick={handleClickFavoriteItem}>
+              <Styled.QuestionItem key={favorite.id} onClick={(event) => handleClickFavoriteItem(event, favorite.id)}>
                 <Styled.QuestionItemTitle>{favorite.content}</Styled.QuestionItemTitle>
                 <Styled.QuestionItemLike>좋아요 {favorite.favoriteCount} 명</Styled.QuestionItemLike>
                 <Styled.QuestionItemFooter>
                   <Styled.QuestionItemOptionButtonList>
-                    <Styled.QuestionItemOptionButton type="button" isActive>
+                    <Styled.QuestionItemOptionButton
+                      type="button"
+                      isActive
+                      onClick={(event) => {
+                        event.stopPropagation();
+
+                        // TODO: 좋아요 API 연동
+                      }}
+                    >
                       <HeartActiveIcon />
                     </Styled.QuestionItemOptionButton>
-                    <Styled.QuestionItemOptionButton type="button">
+                    <Styled.QuestionItemOptionButton
+                      type="button"
+                      onClick={(event) => {
+                        event.stopPropagation();
+
+                        showShareSheet(`${window.location.origin}/question-detail/${favorite.id}`);
+                      }}
+                    >
                       <ShareIcon />
                     </Styled.QuestionItemOptionButton>
                     <Styled.QuestionItemOptionButton
                       type="button"
-                      onClick={() => {
+                      onClick={(event) => {
+                        event.stopPropagation();
+
                         setIsQuestionOptionBottomSheetOpen(true);
                       }}
                     >
@@ -282,8 +318,20 @@ const MyPage = () => {
         }}
       >
         <Styled.QuestionOptionBottomSheet>
-          <Styled.QuestionOption>차단하기</Styled.QuestionOption>
-          <Styled.QuestionOption>신고하기</Styled.QuestionOption>
+          <Styled.QuestionOption
+            onClick={() => {
+              // TODO: 차단하기 API 연동
+            }}
+          >
+            차단하기
+          </Styled.QuestionOption>
+          <Styled.QuestionOption
+            onClick={() => {
+              // TODO: 신고하기 API 연동
+            }}
+          >
+            신고하기
+          </Styled.QuestionOption>
         </Styled.QuestionOptionBottomSheet>
       </BottomSheet>
     </Layout>
