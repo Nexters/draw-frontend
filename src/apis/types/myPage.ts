@@ -1,4 +1,5 @@
-import { FeedResponse, GenderType } from './feed';
+import { GenderType } from '.';
+import { FeedResponse } from './feed';
 
 export type MyReplyResponse = {
   feedId: number;

@@ -1,6 +1,6 @@
 import React from 'react';
 import Styled from './MBTIPickerItem.styles';
-import { MbtiCharType } from '@/apis/types/feed';
+import { MbtiCharType } from '@/apis/types';
 
 type MBTIPickerItemOption = {
   value: MbtiCharType;
