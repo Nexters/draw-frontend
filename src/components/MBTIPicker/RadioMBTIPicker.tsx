@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Styled from './MBTIPicker.styles';
 import MBTIPickerItem from './MBTIPickerItem';
 import { MBTIPickerProps } from './MBTIPicker';
-import { MbtiCharType } from '@/apis/types/feed';
+import { MbtiCharType } from '@/apis/types';
 
 const SingleMBTIPicker = ({ onChange, defaultValue }: MBTIPickerProps) => {
   const [eOrI, setEOrI] = useState<MbtiCharType | null>(defaultValue?.[0] || null);

@@ -1,6 +1,6 @@
 import RadioMBTIPicker from './RadioMBTIPicker';
 import CheckboxMBTIPicker from './CheckboxMBTIPicker';
-import { MbtiCharType } from '@/apis/types/feed';
+import { MbtiCharType } from '@/apis/types';
 
 export type MBTIPickerProps = {
   onChange?: (value: MBTI) => void;

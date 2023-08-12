@@ -25,6 +25,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "src/pages/QuestionDetail/components/AnswerCard/.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

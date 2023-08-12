@@ -2,7 +2,7 @@ import Styled from './OptionSelect.styles';
 import Spacing from '@/components/Spacing/Spacing';
 import BinaryPicker from '@/components/BinaryPicker/BinaryPicker';
 import MBTIPicker, { MBTI } from '@/components/MBTIPicker/MBTIPicker';
-import { AgeOptionType, GenderType } from '@/apis/types/feed';
+import { AgeOptionType, GenderType } from '@/apis/types';
 
 interface OptionSelectProps {
   closeOptionSelect: () => void;

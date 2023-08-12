@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow } from 'swiper/modules';
 import Styled from './Feed.styles';
@@ -19,9 +19,9 @@ import Layout from '@/components/Layout/Layout';
 import { palette } from '@/styles/palette';
 import useFeeds from '@/hooks/api/useFeeds';
 import useNativeMessage from '@/hooks/useNativeMessage';
-
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
+import { useNavigate } from 'react-router-dom';
 import usePromotions from '@/hooks/api/usePromotions';
 import { PROMOTION_TITLE } from '@/constants/promotion';
 import { useMutation } from '@tanstack/react-query';
@@ -30,7 +30,6 @@ import { feedApi } from '@/apis/handlers/feed';
 
 const Feed = () => {
   const navigate = useNavigate();
-
   const toast = useToast();
 
   const { showShareSheet } = useNativeMessage();

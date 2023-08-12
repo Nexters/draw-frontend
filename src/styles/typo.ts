@@ -39,4 +39,5 @@ export const typo = {
   'sub.4.sb': generateTypo(12, 600),
   'point.1': generateTypo(32, 600),
   'point.2': generateTypo(20, 600),
+  'card.1': generateTypo(21, 600),
 } as const;
