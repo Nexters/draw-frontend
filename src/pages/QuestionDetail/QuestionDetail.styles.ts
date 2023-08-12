@@ -32,6 +32,8 @@ const QuestionDetailFooterContainer = styled.div`
 const NoReply = styled.div`
   height: 180px;
   display: flex;
+  flex-direction: column;
+  gap: 6px;
   align-items: center;
   justify-content: center;
   width: 100%;

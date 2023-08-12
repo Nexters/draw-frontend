@@ -8,6 +8,7 @@ import { ReactComponent as HeartIcon } from '@/assets/heart.svg';
 import { ReactComponent as HeartActiveIcon } from '@/assets/heart_active.svg';
 import { ReactComponent as ShareIcon } from '@/assets/share.svg';
 import { ReactComponent as MoreIcon } from '@/assets/more.svg';
+import { ReactComponent as Blank } from '@/assets/blank.svg';
 import { ANSWER_MAX_LENGTH } from '@/constants/feed';
 import useInput from '@/hooks/useInput';
 import TopBar from '@/components/TopBar/TopBar';
@@ -16,6 +17,7 @@ import Layout from '@/components/Layout/Layout';
 import useNativeMessage from '@/hooks/useNativeMessage';
 import { useQuery } from '@tanstack/react-query';
 import { feedApi } from '@/apis/handlers/feed';
+import { css } from '@emotion/react';
 
 /* const MOCK_DATA = {
   contents: 'T도 박은빈 시상식 보고 우나요?',
@@ -138,7 +140,16 @@ const QuestionDetail = () => {
           </FeedStyled.FakeAnswerTextAreaButtonContainer>
           <Styled.AnswersContainer>
             {replyData && replyData.replies.map((v) => <AnswerCard replyData={v} key={v.id} />)}
-            {replyData?.replies.length === 0 && <Styled.NoReply>첫 답변을 작성해주세요</Styled.NoReply>}
+            {replyData?.replies.length === 0 && (
+              <Styled.NoReply>
+                <Blank />
+                <div css={css({ textAlign: 'center' })}>
+                  첫 답변을
+                  <br />
+                  작성해주세요
+                </div>
+              </Styled.NoReply>
+            )}
             {replyStatus === 'loading' && <Styled.NoReply />}
           </Styled.AnswersContainer>
           <Spacing size={42} />
