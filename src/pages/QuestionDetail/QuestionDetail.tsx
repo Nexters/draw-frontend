@@ -135,7 +135,7 @@ const QuestionDetail = () => {
             </FeedStyled.FakeAnswerTextAreaButton>
           </FeedStyled.FakeAnswerTextAreaButtonContainer>
           <Styled.AnswersContainer>
-            {replyData && replyData.replies.map((v) => <AnswerCard replyData={v} />)}
+            {replyData && replyData.replies.map((v) => <AnswerCard replyData={v} key={v.id} />)}
           </Styled.AnswersContainer>
           <Spacing size={42} />
         </Styled.QuestionDetailBody>

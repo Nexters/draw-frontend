@@ -5,27 +5,19 @@ import CardButton from './CardButton';
 import { ComponentProps, useState } from 'react';
 import { getCardBackImage } from './getCardBackImage';
 import { ReplyWriterRes } from '@/apis/types/reply';
-import { useMutation } from '@tanstack/react-query';
-import { replyApi } from '@/apis/handlers/reply';
 
 interface FrontProps extends ComponentProps<'div'> {
   contents: string;
-  feedId: number;
   flippable: boolean;
-  onFlipCard: () => void;
+  onPeekCard: () => void;
 }
 interface BackProps extends ComponentProps<'div'> {
   onReflipCard: () => void;
-  writerInfo: ReplyWriterRes;
+  writerInfo: ReplyWriterRes | null;
 }
 
-const Front = ({ contents, feedId, flippable, onFlipCard, ...rest }: FrontProps) => {
+const Front = ({ contents, flippable, onPeekCard, ...rest }: FrontProps) => {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const { mutate: postPeekMutate } = useMutation(replyApi.postPeek);
-  const handleClickBottomSheetConfirmButton = () => {
-    postPeekMutate(feedId);
-    onFlipCard();
-  };
 
   return (
     <Styled.AnswerCardContainer {...rest}>
@@ -39,14 +31,10 @@ const Front = ({ contents, feedId, flippable, onFlipCard, ...rest }: FrontProps)
               css={{ color: `${palette.btn.green}` }}
               onClick={() => setIsSheetOpen(true)}
             />
-            <FlipBottomSheet
-              isOpen={isSheetOpen}
-              onClose={() => setIsSheetOpen(false)}
-              onClickYes={handleClickBottomSheetConfirmButton}
-            />
+            <FlipBottomSheet isOpen={isSheetOpen} onClose={() => setIsSheetOpen(false)} onClickYes={onPeekCard} />
           </>
         ) : (
-          <CardButton variants="flipCard" css={{ color: `${palette.text.grey2}` }} onClick={onFlipCard} />
+          <CardButton variants="flipCard" css={{ color: `${palette.text.grey2}` }} onClick={onPeekCard} />
         )}
       </Styled.CardButtons>
     </Styled.AnswerCardContainer>
@@ -54,10 +42,9 @@ const Front = ({ contents, feedId, flippable, onFlipCard, ...rest }: FrontProps)
 };
 
 const Back = ({ onReflipCard, writerInfo, ...rest }: BackProps) => {
-  const { gender, age, mbti } = writerInfo;
   return (
     <Styled.AnswerCardContainer isFlipped {...rest}>
-      <Styled.BackImage>{getCardBackImage(gender, mbti)}</Styled.BackImage>
+      {writerInfo && <Styled.BackImage>{getCardBackImage(writerInfo.gender, writerInfo.mbti)}</Styled.BackImage>}
       <div></div>
       <Styled.CardButtons>
         <Styled.ChatSuspenseButton>챗 준비중</Styled.ChatSuspenseButton>
