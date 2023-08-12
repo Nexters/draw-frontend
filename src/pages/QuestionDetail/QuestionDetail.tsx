@@ -1,3 +1,5 @@
+import { useRef, useState, useCallback, useEffect } from 'react';
+import { useParams } from 'react-router';
 import Spacing from '@/components/Spacing/Spacing';
 import Styled from './QuestionDetail.styles';
 import FeedStyled from '@/pages/Feed/Feed.styles';
@@ -8,10 +10,10 @@ import { ReactComponent as ShareIcon } from '@/assets/share.svg';
 import { ReactComponent as MoreIcon } from '@/assets/more.svg';
 import { ANSWER_MAX_LENGTH } from '@/constants/feed';
 import useInput from '@/hooks/useInput';
-import { useRef, useState, useCallback, useEffect } from 'react';
 import TopBar from '@/components/TopBar/TopBar';
 import { palette } from '@/styles/palette';
 import Layout from '@/components/Layout/Layout';
+import useNativeMessage from '@/hooks/useNativeMessage';
 
 const MOCK_DATA = {
   contents: 'T도 박은빈 시상식 보고 우나요?',
@@ -31,6 +33,10 @@ const MOCK_DATA = {
 };
 
 const QuestionDetail = () => {
+  const { id } = useParams<{ id: string }>();
+
+  const { showShareSheet } = useNativeMessage();
+
   const answerFormRef = useRef<HTMLFormElement>(null);
   const answerTextAreaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -45,6 +51,12 @@ const QuestionDetail = () => {
     answerFormRef.current.style.height = 'auto';
     answerFormRef.current.style.height = `${answerTextAreaRef.current.scrollHeight}px`;
   }, []);
+
+  const handleClickShareButton = () => {
+    if (!id) return;
+
+    showShareSheet(`${window.location.origin}/question-detail/${id}`);
+  };
 
   const handleSubmitAnswerForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -77,7 +89,7 @@ const QuestionDetail = () => {
                 <FeedStyled.FeedCardOptionButton type="button" isActive={MOCK_DATA.isLiked}>
                   {MOCK_DATA.isLiked ? <HeartActiveIcon /> : <HeartIcon />}
                 </FeedStyled.FeedCardOptionButton>
-                <FeedStyled.FeedCardOptionButton type="button">
+                <FeedStyled.FeedCardOptionButton type="button" onClick={handleClickShareButton}>
                   <ShareIcon />
                 </FeedStyled.FeedCardOptionButton>
                 <FeedStyled.FeedCardOptionButton type="button">
