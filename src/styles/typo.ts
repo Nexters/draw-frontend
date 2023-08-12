@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-const generateTypo = (size: number, weight: number) => css`
+const generateTypo = (size: number, weight: number, height?: number) => css`
   font-family:
     'Pretendard Variable',
     Pretendard,
@@ -18,7 +18,7 @@ const generateTypo = (size: number, weight: number) => css`
     'Segoe UI Symbol',
     sans-serif;
   font-style: normal;
-  line-height: 140%;
+  line-height: ${height || 140}%;
   font-display: auto;
   font-weight: ${weight};
   font-size: ${size}px;
@@ -39,5 +39,5 @@ export const typo = {
   'sub.4.sb': generateTypo(12, 600),
   'point.1': generateTypo(32, 600),
   'point.2': generateTypo(20, 600),
-  'card.1': generateTypo(21, 600),
+  'card.1': generateTypo(21, 600, 150),
 } as const;

@@ -2,7 +2,7 @@ import { palette } from '@/styles/palette';
 import FlipBottomSheet from '../FlipBottomSheet/FlipBottomSheet';
 import Styled from './CardFace.styles';
 import CardButton from './CardButton';
-import { ComponentProps, useState } from 'react';
+import { ComponentProps, useCallback, useState } from 'react';
 import { ReplyWriterRes } from '@/apis/types/reply';
 import { getCardSource } from './getCardSoure';
 
@@ -42,11 +42,36 @@ const Front = ({ contents, flippable, onPeekCard, ...rest }: FrontProps) => {
 };
 
 const Back = ({ onReflipCard, writerInfo, ...rest }: BackProps) => {
+  const countOnes = useCallback(
+    (num: number) => {
+      const matches = String(num).match(/1/g);
+      return matches ? matches.length : 0;
+    },
+    [Number]
+  );
   return (
     <Styled.AnswerCardContainer isFlipped {...rest}>
       {writerInfo && (
         <>
-          <Styled.Age color={getCardSource(writerInfo.gender, writerInfo.mbti).color}>{writerInfo?.age}</Styled.Age>
+          <Styled.Age
+            oneCount={countOnes(writerInfo.age)}
+            color={getCardSource(writerInfo.gender, writerInfo.mbti).color}
+            type={getCardSource(writerInfo.gender, writerInfo.mbti).type}
+          >
+            {writerInfo?.age}
+          </Styled.Age>
+          <Styled.Mbti
+            color={getCardSource(writerInfo.gender, writerInfo.mbti).color}
+            type={getCardSource(writerInfo.gender, writerInfo.mbti).type}
+          >
+            {writerInfo?.mbti}
+          </Styled.Mbti>
+          <Styled.Gender
+            color={getCardSource(writerInfo.gender, writerInfo.mbti).color}
+            type={getCardSource(writerInfo.gender, writerInfo.mbti).type}
+          >
+            {writerInfo?.gender === 'FEMALE' ? 'Woman' : 'Man'}
+          </Styled.Gender>
           <Styled.BackImage>{getCardSource(writerInfo.gender, writerInfo.mbti).image}</Styled.BackImage>
         </>
       )}

@@ -14,9 +14,8 @@ import TopBar from '@/components/TopBar/TopBar';
 import { palette } from '@/styles/palette';
 import Layout from '@/components/Layout/Layout';
 import useNativeMessage from '@/hooks/useNativeMessage';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { feedApi } from '@/apis/handlers/feed';
-import { userApi } from '@/apis/handlers/user';
 
 /* const MOCK_DATA = {
   contents: 'T도 박은빈 시상식 보고 우나요?',
@@ -38,7 +37,9 @@ import { userApi } from '@/apis/handlers/user';
 const QuestionDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { data: feedData } = useQuery(['feed-detail', id], () => feedApi.getFeedDetail(Number(id)));
-  const { data: replyData } = useQuery(['feed-replies', id], () => feedApi.getFeedRepies(Number(id)));
+  const { data: replyData, status: replyStatus } = useQuery(['feed-replies', id], () =>
+    feedApi.getFeedRepies(Number(id))
+  );
 
   const { showShareSheet } = useNativeMessage();
 
@@ -71,14 +72,6 @@ const QuestionDetail = () => {
     onChangeAnswer(event);
     calculateAnswerFormHeight();
   };
-
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  const { mutate: testLogin } = useMutation(userApi.testLogin, {
-    onSuccess: (data) => {
-      window.localStorage.setItem('aT', data.accessToken);
-      window.localStorage.setItem('rT', data.refreshToken);
-    },
-  });
 
   useEffect(() => {
     calculateAnswerFormHeight();
@@ -132,7 +125,6 @@ const QuestionDetail = () => {
               />
             </FeedStyled.AnswerForm>
           )}
-          <button onClick={() => testLogin()}>토큰 발급</button>
           <Spacing size={24} />
           <FeedStyled.FakeAnswerTextAreaButtonContainer isTransparent={isAnswerFormOpen} css={{ padding: '0 24px' }}>
             <FeedStyled.FakeAnswerTextAreaButton
@@ -146,15 +138,8 @@ const QuestionDetail = () => {
           </FeedStyled.FakeAnswerTextAreaButtonContainer>
           <Styled.AnswersContainer>
             {replyData && replyData.replies.map((v) => <AnswerCard replyData={v} key={v.id} />)}
-            <AnswerCard
-              replyData={{
-                content: 'sadffas',
-                id: 123,
-                status: 'PEEKED',
-                writerId: 12,
-                writer: { age: 12, gender: 'FEMALE', mbti: 'ENFJ' },
-              }}
-            />
+            {replyData?.replies.length === 0 && <Styled.NoReply>첫 답변을 작성해주세요</Styled.NoReply>}
+            {replyStatus === 'loading' && <Styled.NoReply />}
           </Styled.AnswersContainer>
           <Spacing size={42} />
         </Styled.QuestionDetailBody>

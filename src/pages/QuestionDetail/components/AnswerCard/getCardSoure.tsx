@@ -22,5 +22,9 @@ const typoColorMap: Record<string, string> = {
 
 export const getCardSource = (gender: GenderType, mbti: MbtiType) => {
   const IorE = mbti[0];
-  return { image: backImageMap[`${gender}-${IorE}`], color: typoColorMap[`${gender}-${IorE}`] };
+  return {
+    image: backImageMap[`${gender}-${IorE}`],
+    color: typoColorMap[`${gender}-${IorE}`],
+    type: `${gender}-${IorE}`,
+  };
 };
