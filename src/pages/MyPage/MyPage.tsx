@@ -158,8 +158,8 @@ const MyPage = () => {
           </Styled.Point>
         )}
       </Styled.PointContainer>
-      <Styled.StickyTop>
-        <Styled.TagList id="tab">
+      <Styled.StickyTop id="tab">
+        <Styled.TagList>
           {myInfo && <Styled.TagItem># {myInfo.mbti}</Styled.TagItem>}
           {myInfo && <Styled.TagItem># {genderDictionary[myInfo.gender]}</Styled.TagItem>}
           {myInfo && <Styled.TagItem># {myInfo.age}살</Styled.TagItem>}
