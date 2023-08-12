@@ -16,6 +16,14 @@ import { AuthGuard } from './pages/Login/AuthGuard';
 const router = createBrowserRouter([
   { path: '/login', element: <Login /> },
   {
+    path: 'feed',
+    element: <Feed />,
+  },
+  {
+    path: 'question-detail/:id',
+    element: <QuestionDetail />,
+  },
+  {
     path: '/',
     element: <AuthGuard />,
     children: [
@@ -32,10 +40,6 @@ const router = createBrowserRouter([
         element: <NewProfileCardView />,
       },
       {
-        path: 'feed',
-        element: <Feed />,
-      },
-      {
         path: 'my-page',
         element: <MyPage />,
       },
@@ -46,10 +50,6 @@ const router = createBrowserRouter([
       {
         path: 'new-question',
         element: <NewQuestion />,
-      },
-      {
-        path: 'question-detail/:id',
-        element: <QuestionDetail />,
       },
     ],
   },
