@@ -12,8 +12,8 @@ import { useMutation } from '@tanstack/react-query';
 import { feedApi } from '@/apis/handlers/feed';
 import { useNavigate } from 'react-router-dom';
 import useToast from '@/hooks/useToast';
-import { AgeOptionType, GenderType, MbtiCharType } from '@/apis/types/feed';
 import { ReactComponent as FireIcon } from '@/assets/fire.svg';
+import { AgeOptionType, GenderType, MbtiCharType } from '@/apis/types';
 
 const NewQuestion = () => {
   const navigate = useNavigate();
@@ -143,7 +143,7 @@ const NewQuestion = () => {
             {!isTextAreaFocused && <Styled.BottomSpace />}
           </Styled.AskOption>
         </Styled.PageFooter>
-        <BottomSheet open={isOptionSelectOpen} onClose={toggleOptionSelectOpen}>
+        <BottomSheet open={isOptionSelectOpen} onClose={toggleOptionSelectOpen} isBottomBarToggleDisabled>
           <OptionSelect
             closeOptionSelect={toggleOptionSelectOpen}
             onChangeGender={handleChangeGender}

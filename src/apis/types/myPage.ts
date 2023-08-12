@@ -1,3 +1,4 @@
+import { GenderType } from '.';
 import { FeedResponse } from './feed';
 
 export type MyReplyResponse = {
@@ -32,4 +33,12 @@ export type GetMyFavoritesRequest = {
 export type GetMyFavoritesResponse = {
   myFavoriteFeeds: FeedResponse[];
   hasNext: boolean;
+};
+
+export type GetMyInfoResponse = {
+  id: number;
+  gender: GenderType;
+  mbti: string;
+  age: number;
+  point: number;
 };

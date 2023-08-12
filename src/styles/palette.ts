@@ -29,4 +29,10 @@ export const palette = {
     white2: '#FFFFFF',
     dim: '#FFFFFF80',
   },
+  card: {
+    woI: '#218B5D',
+    woE: '#C86F20',
+    manI: '#529FCF',
+    manE: '#995FD4',
+  },
 } as const;

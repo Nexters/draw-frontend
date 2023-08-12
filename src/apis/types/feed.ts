@@ -1,3 +1,6 @@
+import { AgeOptionType, GenderType, MbtiCharType } from '.';
+import { ReplyWriterRes } from './reply';
+
 export type FeedResponse = {
   id: number;
   content: string;
@@ -22,6 +25,44 @@ export type PostFeedRequest = {
   mbtiChars: MbtiCharType[];
 };
 
-export type GenderType = 'MALE' | 'FEMALE';
-export type AgeOptionType = 'ALL' | 'SAME_AGE_GROUP';
-export type MbtiCharType = 'E' | 'I' | 'S' | 'N' | 'T' | 'F' | 'J' | 'P';
+export type GetFeedDetailReponse = {
+  id: number;
+  content: string;
+  isFavorite: boolean;
+  favoriteCount: number;
+  isFit: boolean;
+};
+
+export type GetRepliesResponse = {
+  replies: ReplyResponse[];
+};
+export type ReplyResponse = {
+  id: number;
+  content: string;
+  status: 'NORMAL' | 'MINE' | 'PEEKED';
+  writerId: number;
+  writer: ReplyWriterRes | null;
+};
+export type PostFeedFavoriteRequest = {
+  feedId: number;
+};
+
+export type PostFeedFavoriteResponse = void;
+
+export type DeleteFeedFavoriteRequest = {
+  feedId: number;
+};
+
+export type DeleteFeedFavoriteResponse = void;
+
+export type PostFeedClaimRequest = {
+  feedId: number;
+};
+
+export type PostFeedClaimResponse = void;
+
+export type PostFeedBlockRequest = {
+  feedId: number;
+};
+
+export type PostFeedBlockResponse = void;
