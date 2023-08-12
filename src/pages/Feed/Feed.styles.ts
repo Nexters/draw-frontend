@@ -176,6 +176,90 @@ const FeedOption = styled.button`
   ${({ theme }) => theme.typo['sub.3']};
 `;
 
+const PromotionBottomSheet = styled.div`
+  padding: 40px 24px 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const PromotionTitle = styled.p`
+  ${({ theme }) => theme.typo['sub.1']};
+  margin-bottom: 4px;
+`;
+
+const PromotionPoint = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 32px;
+`;
+
+const PromotionPointText = styled.div`
+  color: ${({ theme }) => theme.palette.text.black};
+  ${({ theme }) => theme.typo['point.1']};
+  margin-left: 4px;
+`;
+
+const PromotionPointStatus = styled.div`
+  // TODO: opacity: 0.5 추가
+  border: 1px solid ${({ theme }) => theme.palette.sub.grey};
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 20px 0;
+  margin-bottom: 16px;
+`;
+
+const PromotionPointBefore = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const PromotionPointBeforeLabel = styled.span`
+  color: ${({ theme }) => theme.palette.text.grey1};
+  ${({ theme }) => theme.typo['sub.2']};
+  margin-bottom: 6px;
+`;
+
+const PromotionPointBeforeValue = styled.span`
+  color: ${({ theme }) => theme.palette.text.black};
+  ${({ theme }) => theme.typo['sub.1']};
+`;
+
+const PromotionPointArrow = styled.div``;
+
+const PromotionPointAfter = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const PromotionPointAfterLabel = styled.span`
+  color: ${({ theme }) => theme.palette.text.black};
+  ${({ theme }) => theme.typo['sub.3']};
+  margin-bottom: 6px;
+`;
+
+const PromotionPointAfterValue = styled.span`
+  color: ${({ theme }) => theme.palette.text.black};
+  ${({ theme }) => theme.typo['sub.1']};
+`;
+
+const PromotionButton = styled.button`
+  width: 100%;
+  padding: 15px 0;
+  border-radius: 12px;
+  text-align: center;
+  background-color: ${({ theme }) => theme.palette.btn.black};
+  color: ${({ theme }) => theme.palette.text.white};
+  ${({ theme }) => theme.typo['body.4']};
+`;
+
 export default {
   Feed,
   Header,
@@ -196,4 +280,17 @@ export default {
   FakeAnswerTextAreaButton,
   FeedOptionBottomSheet,
   FeedOption,
+  PromotionBottomSheet,
+  PromotionTitle,
+  PromotionPoint,
+  PromotionPointText,
+  PromotionPointStatus,
+  PromotionPointBefore,
+  PromotionPointBeforeLabel,
+  PromotionPointBeforeValue,
+  PromotionPointArrow,
+  PromotionPointAfter,
+  PromotionPointAfterLabel,
+  PromotionPointAfterValue,
+  PromotionButton,
 };
