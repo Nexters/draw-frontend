@@ -41,7 +41,6 @@ const NewProfile = () => {
     if (gender === null) return;
     if (birthday.length !== BIRTHDAY_LENGTH) return;
 
-    // TODO: API 연동
     registerMutate({ birthday, gender: gender as GenderType, mbti: mbti.join('') as MbtiType });
   };
 
