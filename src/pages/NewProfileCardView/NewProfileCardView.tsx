@@ -10,7 +10,7 @@ import { ReactComponent as ShadowManI } from '@/assets/shadow_man_i.svg';
 import { ReactComponent as ShadowManE } from '@/assets/shadow_man_e.svg';
 
 const lottieDictionary: Record<string, Record<string, string>> = {
-  female: {
+  FEMALE: {
     ENFJ: 'wo_enfj',
     ENFP: 'wo_enfp',
     ENTJ: 'wo_entj',
@@ -28,7 +28,7 @@ const lottieDictionary: Record<string, Record<string, string>> = {
     ISTJ: 'wo_istj',
     ISTP: 'wo_istp',
   },
-  male: {
+  MALE: {
     ENFJ: 'man_enfj',
     ENFP: 'man_enfp',
     ENTJ: 'man_entj',
