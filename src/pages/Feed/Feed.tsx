@@ -21,6 +21,8 @@ import useNativeMessage from '@/hooks/useNativeMessage';
 
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
+import usePromotions from '@/hooks/api/usePromotions';
+import { PROMOTION_TITLE } from '@/constants/promotion';
 
 const Feed = () => {
   const toast = useToast();
@@ -32,14 +34,18 @@ const Feed = () => {
 
   const [isAnswerFormOpen, setIsAnswerFormOpen] = useState(false);
   const [isCardOptionBottomSheetOpen, setIsCardOptionBottomSheetOpen] = useState(false);
-  const [isPromotionBottomSheetOpen, setIsPromotionBottomSheetOpen] = useState(true);
+  const [isPromotionBottomSheetOpen, setIsPromotionBottomSheetOpen] = useState(false);
   const [isTabBarVisible, setIsTabBarVisible] = useState(true);
   const [swiperIndex, setSwiperIndex] = useState(0);
+  const [promotionIndex, setPromotionIndex] = useState(0);
 
   const [answer, onChangeAnswer, setAnswer] = useInput('');
 
   const { data: feedsData, fetchNextPage } = useFeeds();
   const feeds = feedsData?.pages.flatMap((page) => page.feeds);
+
+  const { data: promotions } = usePromotions();
+  const currentPromotion = promotions?.[promotionIndex];
 
   const calculateAnswerFormHeight = useCallback(() => {
     if (!answerFormRef.current) return;
@@ -85,6 +91,12 @@ const Feed = () => {
   useEffect(() => {
     calculateAnswerFormHeight();
   }, [calculateAnswerFormHeight, isAnswerFormOpen]);
+
+  useEffect(() => {
+    if (promotions?.length === 0) return;
+
+    setIsPromotionBottomSheetOpen(true);
+  }, [promotions?.length]);
 
   return (
     <Layout backgroundColor={palette.background.white1} hasTabBar={isTabBarVisible}>
@@ -201,34 +213,46 @@ const Feed = () => {
           setIsPromotionBottomSheetOpen(false);
         }}
       >
-        <Styled.PromotionBottomSheet>
-          <Styled.PromotionTitle>웰컴 선물이에요!</Styled.PromotionTitle>
-          <Styled.PromotionPoint>
-            <CoinIcon />
-            <Styled.PromotionPointText>500D</Styled.PromotionPointText>
-          </Styled.PromotionPoint>
-          <Styled.PromotionPointStatus>
-            <Styled.PromotionPointBefore>
-              <Styled.PromotionPointBeforeLabel>현재</Styled.PromotionPointBeforeLabel>
-              <Styled.PromotionPointBeforeValue>120D</Styled.PromotionPointBeforeValue>
-            </Styled.PromotionPointBefore>
-            <Styled.PromotionPointArrow>
-              <RightIcon />
-            </Styled.PromotionPointArrow>
-            <Styled.PromotionPointAfter>
-              <Styled.PromotionPointAfterLabel>받은 후</Styled.PromotionPointAfterLabel>
-              <Styled.PromotionPointAfterValue>500D</Styled.PromotionPointAfterValue>
-            </Styled.PromotionPointAfter>
-          </Styled.PromotionPointStatus>
-          <Styled.PromotionButton
-            type="button"
-            onClick={() => {
-              setIsPromotionBottomSheetOpen(false);
-            }}
-          >
-            좋아요
-          </Styled.PromotionButton>
-        </Styled.PromotionBottomSheet>
+        {currentPromotion && (
+          <Styled.PromotionBottomSheet>
+            <Styled.PromotionTitle>{PROMOTION_TITLE[currentPromotion?.promotionType]}</Styled.PromotionTitle>
+            <Styled.PromotionPoint>
+              <CoinIcon />
+              <Styled.PromotionPointText>{currentPromotion?.grantedPoint.value}D</Styled.PromotionPointText>
+            </Styled.PromotionPoint>
+            <Styled.PromotionPointStatus>
+              <Styled.PromotionPointBefore>
+                <Styled.PromotionPointBeforeLabel>현재</Styled.PromotionPointBeforeLabel>
+                <Styled.PromotionPointBeforeValue>
+                  {currentPromotion?.asIsPoint.value}D
+                </Styled.PromotionPointBeforeValue>
+              </Styled.PromotionPointBefore>
+              <Styled.PromotionPointArrow>
+                <RightIcon />
+              </Styled.PromotionPointArrow>
+              <Styled.PromotionPointAfter>
+                <Styled.PromotionPointAfterLabel>받은 후</Styled.PromotionPointAfterLabel>
+                <Styled.PromotionPointAfterValue>{currentPromotion?.toBePoint.value}D</Styled.PromotionPointAfterValue>
+              </Styled.PromotionPointAfter>
+            </Styled.PromotionPointStatus>
+            <Styled.PromotionButton
+              type="button"
+              onClick={() => {
+                if (!promotions) return;
+
+                if (promotionIndex + 1 >= promotions.length) {
+                  setIsPromotionBottomSheetOpen(false);
+
+                  return;
+                }
+
+                setPromotionIndex(promotionIndex + 1);
+              }}
+            >
+              좋아요
+            </Styled.PromotionButton>
+          </Styled.PromotionBottomSheet>
+        )}
       </BottomSheet>
     </Layout>
   );
