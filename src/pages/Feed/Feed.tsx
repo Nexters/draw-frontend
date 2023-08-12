@@ -12,6 +12,8 @@ import { ReactComponent as HeartActiveIcon } from '@/assets/heart_active.svg';
 import { ReactComponent as ShareIcon } from '@/assets/share.svg';
 import { ReactComponent as MoreIcon } from '@/assets/more.svg';
 import { ReactComponent as FireIcon } from '@/assets/fire.svg';
+import { ReactComponent as CoinIcon } from '@/assets/coin.svg';
+import { ReactComponent as RightIcon } from '@/assets/right.svg';
 import Layout from '@/components/Layout/Layout';
 import { palette } from '@/styles/palette';
 import useFeeds from '@/hooks/api/useFeeds';
@@ -30,6 +32,7 @@ const Feed = () => {
 
   const [isAnswerFormOpen, setIsAnswerFormOpen] = useState(false);
   const [isCardOptionBottomSheetOpen, setIsCardOptionBottomSheetOpen] = useState(false);
+  const [isPromotionBottomSheetOpen, setIsPromotionBottomSheetOpen] = useState(true);
   const [isTabBarVisible, setIsTabBarVisible] = useState(true);
   const [swiperIndex, setSwiperIndex] = useState(0);
 
@@ -191,6 +194,41 @@ const Feed = () => {
           <Styled.FeedOption>차단하기</Styled.FeedOption>
           <Styled.FeedOption>신고하기</Styled.FeedOption>
         </Styled.FeedOptionBottomSheet>
+      </BottomSheet>
+      <BottomSheet
+        open={isPromotionBottomSheetOpen}
+        onClose={() => {
+          setIsPromotionBottomSheetOpen(false);
+        }}
+      >
+        <Styled.PromotionBottomSheet>
+          <Styled.PromotionTitle>웰컴 선물이에요!</Styled.PromotionTitle>
+          <Styled.PromotionPoint>
+            <CoinIcon />
+            <Styled.PromotionPointText>500D</Styled.PromotionPointText>
+          </Styled.PromotionPoint>
+          <Styled.PromotionPointStatus>
+            <Styled.PromotionPointBefore>
+              <Styled.PromotionPointBeforeLabel>현재</Styled.PromotionPointBeforeLabel>
+              <Styled.PromotionPointBeforeValue>120D</Styled.PromotionPointBeforeValue>
+            </Styled.PromotionPointBefore>
+            <Styled.PromotionPointArrow>
+              <RightIcon />
+            </Styled.PromotionPointArrow>
+            <Styled.PromotionPointAfter>
+              <Styled.PromotionPointAfterLabel>받은 후</Styled.PromotionPointAfterLabel>
+              <Styled.PromotionPointAfterValue>500D</Styled.PromotionPointAfterValue>
+            </Styled.PromotionPointAfter>
+          </Styled.PromotionPointStatus>
+          <Styled.PromotionButton
+            type="button"
+            onClick={() => {
+              setIsPromotionBottomSheetOpen(false);
+            }}
+          >
+            좋아요
+          </Styled.PromotionButton>
+        </Styled.PromotionBottomSheet>
       </BottomSheet>
     </Layout>
   );
