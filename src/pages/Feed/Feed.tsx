@@ -12,34 +12,12 @@ import { ReactComponent as HeartActiveIcon } from '@/assets/heart_active.svg';
 import { ReactComponent as ShareIcon } from '@/assets/share.svg';
 import { ReactComponent as MoreIcon } from '@/assets/more.svg';
 import { ReactComponent as FireIcon } from '@/assets/fire.svg';
+import Layout from '@/components/Layout/Layout';
+import { palette } from '@/styles/palette';
+import useFeeds from '@/hooks/api/useFeeds';
 
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
-import Layout from '@/components/Layout/Layout';
-import { palette } from '@/styles/palette';
-
-const sampleItems = [
-  {
-    id: '1',
-    question: 'T도 박은빈 시상식 보고 우나요?',
-  },
-  {
-    id: '2',
-    question: '가장 최선을 다했던 경험은 무엇인가요?',
-  },
-  {
-    id: '3',
-    question: '갈등을 겪고 해결해본 적이 있나요?',
-  },
-  {
-    id: '4',
-    question: '이루기 어려운 목표를 달성한 경험이 있나요?',
-  },
-  {
-    id: '5',
-    question: '창의성을 발휘해 어려운 상황을 극복한 적이 있나요?',
-  },
-];
 
 const Feed = () => {
   const toast = useToast();
@@ -50,8 +28,12 @@ const Feed = () => {
   const [isAnswerFormOpen, setIsAnswerFormOpen] = useState(false);
   const [isCardOptionBottomSheetOpen, setIsCardOptionBottomSheetOpen] = useState(false);
   const [isTabBarVisible, setIsTabBarVisible] = useState(true);
+  const [swiperIndex, setSwiperIndex] = useState(0);
 
   const [answer, onChangeAnswer, setAnswer] = useInput('');
+
+  const { data: feedsData, fetchNextPage } = useFeeds();
+  const feeds = feedsData?.pages.flatMap((page) => page.feeds);
 
   const calculateAnswerFormHeight = useCallback(() => {
     if (!answerFormRef.current) return;
@@ -80,6 +62,16 @@ const Feed = () => {
     calculateAnswerFormHeight();
   };
 
+  const fetchNextFeedsData = useCallback(() => {
+    if (feeds?.length !== undefined && swiperIndex === feeds.length - 5) {
+      void fetchNextPage();
+    }
+  }, [feeds, fetchNextPage, swiperIndex]);
+
+  useEffect(() => {
+    fetchNextFeedsData();
+  }, [fetchNextFeedsData]);
+
   useEffect(() => {
     calculateAnswerFormHeight();
   }, [calculateAnswerFormHeight, isAnswerFormOpen]);
@@ -104,21 +96,27 @@ const Feed = () => {
               scale: 1,
               slideShadows: false,
             }}
+            onRealIndexChange={(swiper) => {
+              setSwiperIndex(swiper.realIndex);
+            }}
           >
-            {sampleItems.map((item) => (
-              <SwiperSlide key={item.id}>
+            {feeds?.map((feed) => (
+              <SwiperSlide key={feed.id}>
                 <Styled.FeedCard>
-                  <Styled.FeedCardTitle>{item.question}</Styled.FeedCardTitle>
-                  <Styled.FeedCardLike>좋아요 0 명</Styled.FeedCardLike>
+                  <Styled.FeedCardTitle>{feed.content}</Styled.FeedCardTitle>
+                  <Styled.FeedCardLike>좋아요 {feed.favoriteCount} 명</Styled.FeedCardLike>
                   <Styled.FeedCardFooter>
-                    <Styled.FeedCardBadge>맞춤질문</Styled.FeedCardBadge>
+                    {feed.isFit && <Styled.FeedCardBadge>맞춤질문</Styled.FeedCardBadge>}
                     <Styled.FeedCardOptionButtonList>
-                      <Styled.FeedCardOptionButton type="button">
-                        <HeartIcon />
-                      </Styled.FeedCardOptionButton>
-                      <Styled.FeedCardOptionButton type="button" isActive>
-                        <HeartActiveIcon />
-                      </Styled.FeedCardOptionButton>
+                      {feed.isFavorite ? (
+                        <Styled.FeedCardOptionButton type="button" isActive>
+                          <HeartActiveIcon />
+                        </Styled.FeedCardOptionButton>
+                      ) : (
+                        <Styled.FeedCardOptionButton type="button">
+                          <HeartIcon />
+                        </Styled.FeedCardOptionButton>
+                      )}
                       <Styled.FeedCardOptionButton type="button">
                         <ShareIcon />
                       </Styled.FeedCardOptionButton>
