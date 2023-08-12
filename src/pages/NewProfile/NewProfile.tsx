@@ -31,8 +31,12 @@ const NewProfile = () => {
   const handleSubmitForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    if (mbti.some((value) => value === null)) return;
+    if (gender === null) return;
+    if (birthday.length !== BIRTHDAY_LENGTH) return;
+
     // TODO: API 연동
-    navigate('/new-profile-card-view');
+    navigate('/new-profile-card-view', { state: { mbti: mbti.join(''), gender } });
   };
 
   const isValidForm = gender !== null && birthday.length === BIRTHDAY_LENGTH && mbti.every((value) => value !== null);

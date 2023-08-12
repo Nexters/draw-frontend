@@ -26,10 +26,23 @@ const StartButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 2;
+`;
+
+const ShadowContainer = styled.div`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 `;
 
 export default {
   NewProfile,
   GraphicContainer,
   StartButton,
+  ShadowContainer,
 };
