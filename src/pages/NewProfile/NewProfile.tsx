@@ -6,6 +6,9 @@ import { BIRTHDAY_REGEXP_STRING } from '@/constants/regexp';
 import MBTIPicker, { MBTI } from '@/components/MBTIPicker/MBTIPicker';
 import Layout from '@/components/Layout/Layout';
 import { palette } from '@/styles/palette';
+import { useMutation } from '@tanstack/react-query';
+import { userApi } from '@/apis/handlers/user';
+import { GenderType, MbtiType } from '@/apis/types';
 
 const BIRTHDAY_LENGTH = 6;
 
@@ -27,6 +30,9 @@ const NewProfile = () => {
   const handleChangeMBTI = (value: MBTI) => {
     setMBTI(value);
   };
+  const { mutate: registerMutate } = useMutation(userApi.postRegister, {
+    onSuccess: () => navigate('/new-profile-card-view', { state: { mbti: mbti.join(''), gender } }),
+  });
 
   const handleSubmitForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -35,8 +41,7 @@ const NewProfile = () => {
     if (gender === null) return;
     if (birthday.length !== BIRTHDAY_LENGTH) return;
 
-    // TODO: API 연동
-    navigate('/new-profile-card-view', { state: { mbti: mbti.join(''), gender } });
+    registerMutate({ birthday, gender: gender as GenderType, mbti: mbti.join('') as MbtiType });
   };
 
   const isValidForm = gender !== null && birthday.length === BIRTHDAY_LENGTH && mbti.every((value) => value !== null);
@@ -57,11 +62,11 @@ const NewProfile = () => {
                 <BinaryPicker
                   options={[
                     {
-                      value: 'male',
+                      value: 'MALE',
                       label: '남자',
                     },
                     {
-                      value: 'female',
+                      value: 'FEMALE',
                       label: '여자',
                     },
                   ]}

@@ -1,6 +1,6 @@
 import { setQueryString } from '@/utils/setQueryString';
 import { request } from '../axios';
-import { LoginResult, OAuthReq } from '../types/user';
+import { LoginResult, OAuthReq, RegisterReq } from '../types/user';
 
 const USERS_BASE_URL = `/api/v1/users`;
 
@@ -21,5 +21,12 @@ export const userApi = {
   postFcm: async (token: string) => {
     const url = `${USERS_BASE_URL}/fcm`;
     await request.post(url, { fcm_token: token });
+  },
+  /**
+   * 회원정보 입력 및 가입 완료
+   */
+  postRegister: async (payload: RegisterReq) => {
+    const url = `${USERS_BASE_URL}/register`;
+    await request.post(url, payload);
   },
 };

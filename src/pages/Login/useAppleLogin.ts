@@ -21,7 +21,6 @@ const useAppleLogin = () => {
     data.refreshToken && localStorage.setItem('rT', data.refreshToken);
 
     switch (data.result) {
-      //TODO (네이티브 파트와 논의 필요)
       case 'NEWLY_REGISTERED':
         navigate('/new-profile', { replace: true });
         break;
