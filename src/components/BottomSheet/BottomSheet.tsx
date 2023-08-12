@@ -7,10 +7,11 @@ import useNativeMessage from '@/hooks/useNativeMessage';
 type BottomSheetProps = {
   open: boolean;
   children?: React.ReactNode;
+  isBottomBarToggleDisabled?: boolean;
   onClose?: () => void;
 };
 
-const BottomSheet = ({ open, children, onClose }: BottomSheetProps) => {
+const BottomSheet = ({ open, children, isBottomBarToggleDisabled = false, onClose }: BottomSheetProps) => {
   const { showBottomBar } = useNativeMessage();
 
   const dimmedTransition = useTransition(open, {
@@ -46,8 +47,10 @@ const BottomSheet = ({ open, children, onClose }: BottomSheetProps) => {
   ));
 
   useLayoutEffect(() => {
+    if (isBottomBarToggleDisabled) return;
+
     showBottomBar(!open);
-  }, [open, showBottomBar]);
+  }, [isBottomBarToggleDisabled, open, showBottomBar]);
 
   return createPortal(
     <>
