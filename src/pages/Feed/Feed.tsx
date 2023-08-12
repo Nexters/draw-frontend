@@ -19,9 +19,11 @@ import useNativeMessage from '@/hooks/useNativeMessage';
 
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
+import { useNavigate } from 'react-router-dom';
 
 const Feed = () => {
   const toast = useToast();
+  const navigate = useNavigate();
 
   const { showShareSheet } = useNativeMessage();
 
@@ -109,7 +111,12 @@ const Feed = () => {
           >
             {feeds?.map((feed) => (
               <SwiperSlide key={feed.id}>
-                <Styled.FeedCard>
+                <Styled.FeedCard
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/question-detail/${feed.id}`);
+                  }}
+                >
                   <Styled.FeedCardTitle>{feed.content}</Styled.FeedCardTitle>
                   <Styled.FeedCardLike>좋아요 {feed.favoriteCount} 명</Styled.FeedCardLike>
                   <Styled.FeedCardFooter>

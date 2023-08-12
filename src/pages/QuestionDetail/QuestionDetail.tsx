@@ -14,8 +14,10 @@ import TopBar from '@/components/TopBar/TopBar';
 import { palette } from '@/styles/palette';
 import Layout from '@/components/Layout/Layout';
 import useNativeMessage from '@/hooks/useNativeMessage';
+import { useQuery } from '@tanstack/react-query';
+import { feedApi } from '@/apis/handlers/feed';
 
-const MOCK_DATA = {
+/* const MOCK_DATA = {
   contents: 'T도 박은빈 시상식 보고 우나요?',
   likes: 10,
   isMatchedQuestion: true,
@@ -30,10 +32,12 @@ const MOCK_DATA = {
     { id: 3, contents: '왜움?', flippable: false },
     { id: 4, contents: '왜움?', flippable: true },
   ],
-};
+}; */
 
 const QuestionDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const { data: feedData } = useQuery(['feed-detail', id], () => feedApi.getFeedDetail(Number(id)));
+  const { data: replyData } = useQuery(['feed-replies', id], () => feedApi.getFeedRepies(Number(id)));
 
   const { showShareSheet } = useNativeMessage();
 
@@ -77,17 +81,17 @@ const QuestionDetail = () => {
         <Styled.QuestionDetailHeader>
           <TopBar />
           <Styled.QuestionDetailTitle>
-            <FeedStyled.FeedCardTitle>{MOCK_DATA.contents}</FeedStyled.FeedCardTitle>
+            <FeedStyled.FeedCardTitle>{feedData?.content}</FeedStyled.FeedCardTitle>
           </Styled.QuestionDetailTitle>
         </Styled.QuestionDetailHeader>
         <Styled.QuestionDetailBody>
           <Styled.QuestionDetailFooterContainer>
-            <FeedStyled.FeedCardLike>좋아요 0 명</FeedStyled.FeedCardLike>
+            <FeedStyled.FeedCardLike>좋아요 {feedData?.favoriteCount} 명</FeedStyled.FeedCardLike>
             <FeedStyled.FeedCardFooter>
-              {MOCK_DATA.isMatchedQuestion && <FeedStyled.FeedCardBadge>맞춤질문</FeedStyled.FeedCardBadge>}
+              {feedData?.isFit && <FeedStyled.FeedCardBadge>맞춤질문</FeedStyled.FeedCardBadge>}
               <FeedStyled.FeedCardOptionButtonList>
-                <FeedStyled.FeedCardOptionButton type="button" isActive={MOCK_DATA.isLiked}>
-                  {MOCK_DATA.isLiked ? <HeartActiveIcon /> : <HeartIcon />}
+                <FeedStyled.FeedCardOptionButton type="button" isActive={feedData?.isFavorite}>
+                  {feedData?.isFavorite ? <HeartActiveIcon /> : <HeartIcon />}
                 </FeedStyled.FeedCardOptionButton>
                 <FeedStyled.FeedCardOptionButton type="button" onClick={handleClickShareButton}>
                   <ShareIcon />
@@ -131,9 +135,7 @@ const QuestionDetail = () => {
             </FeedStyled.FakeAnswerTextAreaButton>
           </FeedStyled.FakeAnswerTextAreaButtonContainer>
           <Styled.AnswersContainer>
-            {MOCK_DATA.answerList.map((v) => (
-              <AnswerCard contents={v.contents} flippable={v.flippable} key={v.id} />
-            ))}
+            {replyData && replyData.replies.map((v) => <AnswerCard replyData={v} />)}
           </Styled.AnswersContainer>
           <Spacing size={42} />
         </Styled.QuestionDetailBody>
