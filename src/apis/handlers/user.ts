@@ -16,7 +16,7 @@ export const userApi = {
       {
         userId: 36,
         accessTokenLifeTime: 100,
-        refreshTokenLifeTime: 10000000,
+        refreshTokenLifeTime: 300,
       }
     );
     return response.data;
@@ -41,6 +41,7 @@ export const userApi = {
   postRefresh: async (payload: RefreshReq) => {
     const url = `/auth/v1/token/refresh`;
     const response = await request.post<RefreshReq>(url, payload);
+
     return response.data;
   },
 };

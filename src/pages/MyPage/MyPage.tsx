@@ -16,7 +16,6 @@ import useMyQuestions from '@/hooks/api/useMyQuestions';
 import useMyReplies from '@/hooks/api/useMyReplies';
 import useMyFavorites from '@/hooks/api/useMyFavorites';
 import { useMutation } from '@tanstack/react-query';
-import { userApi } from '@/apis/handlers/user';
 import useMyInfo from '@/hooks/api/useMyInfo';
 import { lottieDictionary } from '@/constants/lottie';
 import useNativeMessage from '@/hooks/useNativeMessage';
@@ -165,12 +164,6 @@ const MyPage = () => {
     fetchNextPage();
   }, [fetchNextPage]);
 
-  const { mutate: testLogin } = useMutation(userApi.testLogin, {
-    onSuccess: (data) => {
-      window.localStorage.setItem('aT', data.accessToken);
-      window.localStorage.setItem('rT', data.refreshToken);
-    },
-  });
   useEffect(() => {
     void getLottieJSON();
   }, [getLottieJSON]);
@@ -202,7 +195,6 @@ const MyPage = () => {
         )}
         {isLottieLoading && <Loading width="80px" />}
       </Styled.GraphicContainer>
-      <button onClick={() => testLogin()}>토큰 발급</button>
       <Styled.PointContainer>
         {myInfo && (
           <Styled.Point>

@@ -57,6 +57,7 @@ request.interceptors.response.use(
         } catch (error) {
           window.localStorage.removeItem('aT');
           window.localStorage.removeItem('rT');
+          window.location.href = '/login?expired=true';
         }
       }
     }
