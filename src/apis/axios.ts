@@ -43,15 +43,21 @@ request.interceptors.response.use(
     const { code } = error.response?.data as CustomError;
     const origin = error.config as AxiosRequestConfig;
 
-    if (code === 41110) {
+    if (code === 40110) {
       const aT = window.localStorage.getItem('aT');
       const rT = window.localStorage.getItem('rT');
 
       if (aT && rT) {
-        const data = await userApi.postRefresh({ refreshToken: rT, accessToken: aT });
-        data && (origin.headers as AxiosHeaders).set('Authorization', `Bearer ${data.accessToken}`);
+        try {
+          const data = await userApi.postRefresh({ refreshToken: rT, accessToken: aT });
+          console.log(data);
+          data && (origin.headers as AxiosHeaders).set('Authorization', `Bearer ${data.accessToken}`);
+          return axios(origin);
+        } catch (error) {
+          window.localStorage.removeItem('aT');
+          window.localStorage.removeItem('rT');
+        }
       }
-      return axios(origin);
     }
     return Promise.reject(error.response);
   }

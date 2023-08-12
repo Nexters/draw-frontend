@@ -25,6 +25,7 @@ import usePromotions from '@/hooks/api/usePromotions';
 import { PROMOTION_TITLE } from '@/constants/promotion';
 import { useMutation } from '@tanstack/react-query';
 import { promotionApi } from '@/apis/handlers/promotion';
+import { userApi } from '@/apis/handlers/user';
 
 const Feed = () => {
   const toast = useToast();
@@ -106,6 +107,13 @@ const Feed = () => {
     );
     setIsPromotionBottomSheetOpen(true);
   }, [consumePromotionMutation, promotions]);
+
+  const { mutate: testLogin } = useMutation(userApi.testLogin, {
+    onSuccess: (data) => {
+      window.localStorage.setItem('aT', data.accessToken);
+      window.localStorage.setItem('rT', data.refreshToken);
+    },
+  });
 
   return (
     <Layout backgroundColor={palette.background.white1} hasTabBar={isTabBarVisible}>
@@ -194,6 +202,7 @@ const Feed = () => {
             />
           </Styled.AnswerForm>
         )}
+        <button onClick={() => testLogin()}>토큰 발급</button>
         <Styled.FakeAnswerTextAreaButtonContainer isTransparent={isAnswerFormOpen}>
           <Styled.FakeAnswerTextAreaButton
             type="button"
