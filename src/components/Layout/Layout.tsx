@@ -9,10 +9,11 @@ import useNavigateEvent from '@/hooks/useNavigateEvent';
 type LayoutProps = {
   backgroundColor: (typeof palette.background)[keyof typeof palette.background];
   hasTabBar?: boolean;
+  hasScrollBouncing?: boolean;
   children?: React.ReactNode;
 };
 
-const Layout = ({ backgroundColor, hasTabBar, children }: LayoutProps) => {
+const Layout = ({ backgroundColor, hasTabBar, hasScrollBouncing = true, children }: LayoutProps) => {
   const { showBottomBar } = useNativeMessage();
   useNavigateEvent();
 
@@ -29,6 +30,8 @@ const Layout = ({ backgroundColor, hasTabBar, children }: LayoutProps) => {
           body {
             background-color: ${backgroundColor};
             user-select: none;
+            ${!hasScrollBouncing && 'overscroll-behavior: none;'};
+            ${!hasScrollBouncing && '-webkit-overflow-scrolling: touch;'};
           }
         `}
       />

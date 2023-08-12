@@ -152,7 +152,7 @@ const Feed = () => {
   }, [promotions]);
 
   return (
-    <Layout backgroundColor={palette.background.white1} hasTabBar={isTabBarVisible}>
+    <Layout backgroundColor={palette.background.white1} hasTabBar={isTabBarVisible} hasScrollBouncing={false}>
       <Styled.Feed>
         <Styled.Header>
           <DrawLogoTemp />
