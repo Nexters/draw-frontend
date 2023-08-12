@@ -136,6 +136,15 @@ const QuestionDetail = () => {
           </FeedStyled.FakeAnswerTextAreaButtonContainer>
           <Styled.AnswersContainer>
             {replyData && replyData.replies.map((v) => <AnswerCard replyData={v} key={v.id} />)}
+            <AnswerCard
+              replyData={{
+                content: 'sadffas',
+                id: 123,
+                status: 'PEEKED',
+                writerId: 12,
+                writer: { age: 12, gender: 'FEMALE', mbti: 'ENFJ' },
+              }}
+            />
           </Styled.AnswersContainer>
           <Spacing size={42} />
         </Styled.QuestionDetailBody>

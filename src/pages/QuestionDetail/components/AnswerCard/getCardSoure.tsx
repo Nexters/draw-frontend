@@ -3,6 +3,7 @@ import { ReactComponent as ManE } from '@/assets/mini-card/man_E.svg';
 import { ReactComponent as ManI } from '@/assets/mini-card/man_I.svg';
 import { ReactComponent as WomanE } from '@/assets/mini-card/wo_E.svg';
 import { ReactComponent as WomanI } from '@/assets/mini-card/wo_I.svg';
+import { palette } from '@/styles/palette';
 import { ReactNode } from 'react';
 
 const backImageMap: Record<string, ReactNode> = {
@@ -12,7 +13,14 @@ const backImageMap: Record<string, ReactNode> = {
   'FEMALE-I': <WomanI />,
 };
 
-export const getCardBackImage = (gender: GenderType, mbti: MbtiType) => {
+const typoColorMap: Record<string, string> = {
+  'MALE-E': palette.card.manE,
+  'MALE-I': palette.card.manI,
+  'FEMALE-E': palette.card.woE,
+  'FEMALE-I': palette.card.woI,
+};
+
+export const getCardSource = (gender: GenderType, mbti: MbtiType) => {
   const IorE = mbti[0];
-  return backImageMap[`${gender}-${IorE}`];
+  return { image: backImageMap[`${gender}-${IorE}`], color: typoColorMap[`${gender}-${IorE}`] };
 };

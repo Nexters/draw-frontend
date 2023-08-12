@@ -51,4 +51,12 @@ const ChatSuspenseButton = styled.button`
   align-items: center;
 `;
 
-export default { AnswerCardContainer, Contents, CardButtons, BackImage, ChatSuspenseButton };
+const CardText = styled.div<{ color: string }>`
+  position: absolute;
+  ${({ theme }) => theme.typo['card.1']}
+  color : ${({ color }) => color};
+`;
+
+const Age = styled(CardText)``;
+
+export default { AnswerCardContainer, Contents, CardButtons, BackImage, ChatSuspenseButton, Age };

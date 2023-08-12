@@ -3,8 +3,8 @@ import FlipBottomSheet from '../FlipBottomSheet/FlipBottomSheet';
 import Styled from './CardFace.styles';
 import CardButton from './CardButton';
 import { ComponentProps, useState } from 'react';
-import { getCardBackImage } from './getCardBackImage';
 import { ReplyWriterRes } from '@/apis/types/reply';
+import { getCardSource } from './getCardSoure';
 
 interface FrontProps extends ComponentProps<'div'> {
   contents: string;
@@ -44,7 +44,13 @@ const Front = ({ contents, flippable, onPeekCard, ...rest }: FrontProps) => {
 const Back = ({ onReflipCard, writerInfo, ...rest }: BackProps) => {
   return (
     <Styled.AnswerCardContainer isFlipped {...rest}>
-      {writerInfo && <Styled.BackImage>{getCardBackImage(writerInfo.gender, writerInfo.mbti)}</Styled.BackImage>}
+      {writerInfo && (
+        <>
+          <Styled.Age color={getCardSource(writerInfo.gender, writerInfo.mbti).color}>{writerInfo?.age}</Styled.Age>
+          <Styled.BackImage>{getCardSource(writerInfo.gender, writerInfo.mbti).image}</Styled.BackImage>
+        </>
+      )}
+
       <div></div>
       <Styled.CardButtons>
         <Styled.ChatSuspenseButton>챗 준비중</Styled.ChatSuspenseButton>
