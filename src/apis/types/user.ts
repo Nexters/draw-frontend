@@ -14,3 +14,7 @@ export interface RegisterReq {
   gender: GenderType;
   mbti: MbtiType;
 }
+export interface RefreshReq {
+  accessToken: string;
+  refreshToken: string;
+}

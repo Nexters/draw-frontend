@@ -10,8 +10,9 @@ import QuestionDetail from './pages/QuestionDetail/QuestionDetail';
 import { ThemeProvider } from './styles/theme';
 import Toast from './components/Toast/Toast';
 import Kakao from './pages/Login/Kakao';
-import { QueryClientProvider } from './QueryClientProvider';
 import { AuthGuard } from './pages/Login/AuthGuard';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useState } from 'react';
 
 const router = createBrowserRouter([
   { path: '/login', element: <Login /> },
@@ -56,8 +57,26 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
+  const [queryClient] = useState(() => new QueryClient());
+
+  queryClient.setDefaultOptions({
+    mutations: {
+      retry: false,
+      onError: () => {
+        //TODO
+      },
+    },
+    queries: {
+      retry: false,
+      refetchOnWindowFocus: false,
+      onError: () => {
+        //TODO
+      },
+    },
+  });
+
   return (
-    <QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <RouterProvider router={router} />
         <Toast />

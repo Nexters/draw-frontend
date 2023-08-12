@@ -1,6 +1,6 @@
 import { setQueryString } from '@/utils/setQueryString';
 import { request } from '../axios';
-import { LoginResult, OAuthReq, RegisterReq } from '../types/user';
+import { LoginResult, OAuthReq, RefreshReq, RegisterReq } from '../types/user';
 
 const USERS_BASE_URL = `/api/v1/users`;
 
@@ -28,5 +28,17 @@ export const userApi = {
   postRegister: async (payload: RegisterReq) => {
     const url = `${USERS_BASE_URL}/register`;
     await request.post(url, payload);
+  },
+  /**
+   * 리프레쉬
+   */
+  postRefresh: async (payload: RefreshReq) => {
+    const url = `/auth/v1/token/refresh`;
+    try {
+      const response = await request.post<RefreshReq>(url, payload);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
   },
 };
