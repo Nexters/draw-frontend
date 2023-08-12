@@ -1,13 +1,11 @@
 import { useRef, useState } from 'react';
 import Styled from './AnswerCard.styles';
 import CardFace from './CardFace';
+import { ReplyResponse } from '@/apis/types/feed';
 
-interface AnswerCard {
-  contents: string;
-  flippable: boolean;
-}
+const AnswerCard = ({ replyData }: { replyData: ReplyResponse }) => {
+  const { content, status, writer, writerId, id } = replyData;
 
-const AnswerCard = ({ contents, flippable }: AnswerCard) => {
   const ref = useRef<any>();
   const [isFlipped, setIsFlipped] = useState(false);
   const handleToggleFlip = () => setIsFlipped(!isFlipped);
@@ -15,8 +13,8 @@ const AnswerCard = ({ contents, flippable }: AnswerCard) => {
   return (
     <>
       <Styled.FlipCard ref={ref} isFlipped={isFlipped}>
-        <CardFace.Front contents={contents} flippable={flippable} onFlipCard={handleToggleFlip} />
-        <CardFace.Back className="back" onReflipCard={handleToggleFlip} />
+        <CardFace.Front contents={content} flippable={status !== 'PEEKED'} onFlipCard={handleToggleFlip} />
+        {writer && <CardFace.Back className="back" onReflipCard={handleToggleFlip} writerInfo={writer} />}
       </Styled.FlipCard>
     </>
   );
