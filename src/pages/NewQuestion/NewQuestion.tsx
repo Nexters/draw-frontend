@@ -143,7 +143,7 @@ const NewQuestion = () => {
             {!isTextAreaFocused && <Styled.BottomSpace />}
           </Styled.AskOption>
         </Styled.PageFooter>
-        <BottomSheet open={isOptionSelectOpen} onClose={toggleOptionSelectOpen}>
+        <BottomSheet open={isOptionSelectOpen} onClose={toggleOptionSelectOpen} isBottomBarToggleDisabled>
           <OptionSelect
             closeOptionSelect={toggleOptionSelectOpen}
             onChangeGender={handleChangeGender}

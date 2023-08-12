@@ -18,6 +18,8 @@ import useMyFavorites from '@/hooks/api/useMyFavorites';
 import useMyInfo from '@/hooks/api/useMyInfo';
 import { lottieDictionary } from '@/constants/lottie';
 import useNativeMessage from '@/hooks/useNativeMessage';
+import { useMutation } from '@tanstack/react-query';
+import { feedApi } from '@/apis/handlers/feed';
 
 const tabList = [
   {
@@ -50,20 +52,60 @@ const MyPage = () => {
 
   const [selectedTab, setSelectedTab] = useState<string>('question');
   const [isQuestionOptionBottomSheetOpen, setIsQuestionOptionBottomSheetOpen] = useState(false);
+  const [selectedFeedId, setSelectedFeedId] = useState<number | null>(null);
 
   const [lottie, setLottie] = useState<unknown | null>(null);
   const [isLottieLoading, setIsLottieLoading] = useState<boolean>(true);
 
   const { data: myInfo } = useMyInfo();
 
-  const { data: myQuestionsData, fetchNextPage: fetchMyQuestionsDataNextPage } = useMyQuestions();
+  const {
+    data: myQuestionsData,
+    fetchNextPage: fetchMyQuestionsDataNextPage,
+    refetch: refetchMyQuestions,
+  } = useMyQuestions();
   const myQuestions = myQuestionsData?.pages.flatMap((page) => page.feeds);
 
-  const { data: myRepliesData, fetchNextPage: fetchMyRepliesDataNextPage } = useMyReplies();
+  const { data: myRepliesData, fetchNextPage: fetchMyRepliesDataNextPage, refetch: refetchMyReplies } = useMyReplies();
   const myReplies = myRepliesData?.pages.flatMap((page) => page.myReplies);
 
-  const { data: myFavoritesData, fetchNextPage: fetchMyFavoritesDataNextPage } = useMyFavorites();
+  const {
+    data: myFavoritesData,
+    fetchNextPage: fetchMyFavoritesDataNextPage,
+    refetch: refetchMyFavorites,
+  } = useMyFavorites();
   const myFavorites = myFavoritesData?.pages.flatMap((page) => page.myFavoriteFeeds);
+
+  const feedFavoriteMutation = useMutation(feedApi.postFeedFavorite, {
+    onSuccess: () => {
+      void refetchMyFavorites();
+      void refetchMyQuestions();
+      void refetchMyReplies();
+    },
+  });
+  const feedFavoriteCancelMutation = useMutation(feedApi.deleteFeedFavorite, {
+    onSuccess: () => {
+      void refetchMyFavorites();
+      void refetchMyQuestions();
+      void refetchMyReplies();
+    },
+  });
+  const feedClaimMutation = useMutation(feedApi.postFeedClaim, {
+    onSuccess: () => {
+      void refetchMyFavorites();
+
+      setIsQuestionOptionBottomSheetOpen(false);
+      setSelectedFeedId(null);
+    },
+  });
+  const feedBlockMutation = useMutation(feedApi.postFeedBlock, {
+    onSuccess: () => {
+      void refetchMyFavorites();
+
+      setIsQuestionOptionBottomSheetOpen(false);
+      setSelectedFeedId(null);
+    },
+  });
 
   const handleClickTabItem = (event: React.MouseEvent<HTMLAnchorElement>) => {
     setSelectedTab(event.currentTarget.id);
@@ -190,16 +232,30 @@ const MyPage = () => {
                 <Styled.QuestionItemLike>좋아요 {question.favoriteCount} 명</Styled.QuestionItemLike>
                 <Styled.QuestionItemFooter>
                   <Styled.QuestionItemOptionButtonList>
-                    <Styled.QuestionItemOptionButton
-                      type="button"
-                      onClick={(event) => {
-                        event.stopPropagation();
+                    {question.isFavorite ? (
+                      <Styled.QuestionItemOptionButton
+                        type="button"
+                        isActive
+                        onClick={(event) => {
+                          event.stopPropagation();
 
-                        // TODO: 좋아요 API 연동
-                      }}
-                    >
-                      <HeartIcon />
-                    </Styled.QuestionItemOptionButton>
+                          feedFavoriteCancelMutation.mutate({ feedId: question.id });
+                        }}
+                      >
+                        <HeartActiveIcon />
+                      </Styled.QuestionItemOptionButton>
+                    ) : (
+                      <Styled.QuestionItemOptionButton
+                        type="button"
+                        onClick={(event) => {
+                          event.stopPropagation();
+
+                          feedFavoriteMutation.mutate({ feedId: question.id });
+                        }}
+                      >
+                        <HeartIcon />
+                      </Styled.QuestionItemOptionButton>
+                    )}
                     <Styled.QuestionItemOptionButton
                       type="button"
                       onClick={(event) => {
@@ -209,16 +265,6 @@ const MyPage = () => {
                       }}
                     >
                       <ShareIcon />
-                    </Styled.QuestionItemOptionButton>
-                    <Styled.QuestionItemOptionButton
-                      type="button"
-                      onClick={(event) => {
-                        event.stopPropagation();
-
-                        setIsQuestionOptionBottomSheetOpen(true);
-                      }}
-                    >
-                      <MoreIcon />
                     </Styled.QuestionItemOptionButton>
                   </Styled.QuestionItemOptionButtonList>
                 </Styled.QuestionItemFooter>
@@ -269,7 +315,7 @@ const MyPage = () => {
                       onClick={(event) => {
                         event.stopPropagation();
 
-                        // TODO: 좋아요 API 연동
+                        feedFavoriteCancelMutation.mutate({ feedId: favorite.id });
                       }}
                     >
                       <HeartActiveIcon />
@@ -290,6 +336,7 @@ const MyPage = () => {
                         event.stopPropagation();
 
                         setIsQuestionOptionBottomSheetOpen(true);
+                        setSelectedFeedId(favorite.id);
                       }}
                     >
                       <MoreIcon />
@@ -315,19 +362,24 @@ const MyPage = () => {
         open={isQuestionOptionBottomSheetOpen}
         onClose={() => {
           setIsQuestionOptionBottomSheetOpen(false);
+          setSelectedFeedId(null);
         }}
       >
         <Styled.QuestionOptionBottomSheet>
           <Styled.QuestionOption
             onClick={() => {
-              // TODO: 차단하기 API 연동
+              if (selectedFeedId === null) return;
+
+              feedBlockMutation.mutate({ feedId: selectedFeedId });
             }}
           >
             차단하기
           </Styled.QuestionOption>
           <Styled.QuestionOption
             onClick={() => {
-              // TODO: 신고하기 API 연동
+              if (selectedFeedId === null) return;
+
+              feedClaimMutation.mutate({ feedId: selectedFeedId });
             }}
           >
             신고하기

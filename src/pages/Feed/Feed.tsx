@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow } from 'swiper/modules';
 import Styled from './Feed.styles';
@@ -26,8 +27,11 @@ import usePromotions from '@/hooks/api/usePromotions';
 import { PROMOTION_TITLE } from '@/constants/promotion';
 import { useMutation } from '@tanstack/react-query';
 import { promotionApi } from '@/apis/handlers/promotion';
+import { feedApi } from '@/apis/handlers/feed';
 
 const Feed = () => {
+  const navigate = useNavigate();
+
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -39,17 +43,49 @@ const Feed = () => {
   const [isAnswerFormOpen, setIsAnswerFormOpen] = useState(false);
   const [isCardOptionBottomSheetOpen, setIsCardOptionBottomSheetOpen] = useState(false);
   const [isPromotionBottomSheetOpen, setIsPromotionBottomSheetOpen] = useState(false);
+  const [selectedFeedId, setSelectedFeedId] = useState<number | null>(null);
   const [isTabBarVisible, setIsTabBarVisible] = useState(true);
   const [swiperIndex, setSwiperIndex] = useState(0);
   const [promotionIndex, setPromotionIndex] = useState(0);
 
   const [answer, onChangeAnswer, setAnswer] = useInput('');
 
-  const { data: feedsData, fetchNextPage } = useFeeds();
+  const { data: feedsData, fetchNextPage, refetch: refetchFeeds } = useFeeds();
   const feeds = feedsData?.pages.flatMap((page) => page.feeds);
 
   const { data: promotions } = usePromotions();
   const currentPromotion = promotions?.[promotionIndex];
+
+  const feedFavoriteMutation = useMutation(feedApi.postFeedFavorite, {
+    onSuccess: async () => {
+      await refetchFeeds();
+    },
+  });
+  const feedFavoriteCancelMutation = useMutation(feedApi.deleteFeedFavorite, {
+    onSuccess: async () => {
+      await refetchFeeds();
+    },
+  });
+  const feedClaimMutation = useMutation(feedApi.postFeedClaim, {
+    onSuccess: async () => {
+      await refetchFeeds();
+
+      setIsCardOptionBottomSheetOpen(false);
+      setSelectedFeedId(null);
+
+      toast.success(<>신고했어요</>);
+    },
+  });
+  const feedBlockMutation = useMutation(feedApi.postFeedBlock, {
+    onSuccess: async () => {
+      await refetchFeeds();
+
+      setIsCardOptionBottomSheetOpen(false);
+      setSelectedFeedId(null);
+
+      toast.success(<>차단했어요</>);
+    },
+  });
 
   const consumePromotionMutation = useMutation(promotionApi.postConsumePromotion);
 
@@ -133,8 +169,12 @@ const Feed = () => {
             {feeds?.map((feed) => (
               <SwiperSlide key={feed.id}>
                 <Styled.FeedCard
+<<<<<<< HEAD
                   onClick={(e) => {
                     e.stopPropagation();
+=======
+                  onClick={() => {
+>>>>>>> 32112da818322703602c49c74a85b66cee5db436
                     navigate(`/question-detail/${feed.id}`);
                   }}
                 >
@@ -144,11 +184,26 @@ const Feed = () => {
                     {feed.isFit && <Styled.FeedCardBadge>맞춤질문</Styled.FeedCardBadge>}
                     <Styled.FeedCardOptionButtonList>
                       {feed.isFavorite ? (
-                        <Styled.FeedCardOptionButton type="button" isActive>
+                        <Styled.FeedCardOptionButton
+                          type="button"
+                          isActive
+                          onClick={(event) => {
+                            event.stopPropagation();
+
+                            feedFavoriteCancelMutation.mutate({ feedId: feed.id });
+                          }}
+                        >
                           <HeartActiveIcon />
                         </Styled.FeedCardOptionButton>
                       ) : (
-                        <Styled.FeedCardOptionButton type="button">
+                        <Styled.FeedCardOptionButton
+                          type="button"
+                          onClick={(event) => {
+                            event.stopPropagation();
+
+                            feedFavoriteMutation.mutate({ feedId: feed.id });
+                          }}
+                        >
                           <HeartIcon />
                         </Styled.FeedCardOptionButton>
                       )}
@@ -157,8 +212,11 @@ const Feed = () => {
                       </Styled.FeedCardOptionButton>
                       <Styled.FeedCardOptionButton
                         type="button"
-                        onClick={() => {
+                        onClick={(event) => {
+                          event.stopPropagation();
+
                           setIsCardOptionBottomSheetOpen(true);
+                          setSelectedFeedId(feed.id);
                         }}
                       >
                         <MoreIcon />
@@ -213,11 +271,28 @@ const Feed = () => {
         open={isCardOptionBottomSheetOpen}
         onClose={() => {
           setIsCardOptionBottomSheetOpen(false);
+          setSelectedFeedId(null);
         }}
       >
         <Styled.FeedOptionBottomSheet>
-          <Styled.FeedOption>차단하기</Styled.FeedOption>
-          <Styled.FeedOption>신고하기</Styled.FeedOption>
+          <Styled.FeedOption
+            onClick={() => {
+              if (selectedFeedId === null) return;
+
+              feedBlockMutation.mutate({ feedId: selectedFeedId });
+            }}
+          >
+            차단하기
+          </Styled.FeedOption>
+          <Styled.FeedOption
+            onClick={() => {
+              if (selectedFeedId === null) return;
+
+              feedClaimMutation.mutate({ feedId: selectedFeedId });
+            }}
+          >
+            신고하기
+          </Styled.FeedOption>
         </Styled.FeedOptionBottomSheet>
       </BottomSheet>
       <BottomSheet

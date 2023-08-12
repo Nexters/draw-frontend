@@ -1,4 +1,4 @@
-import { AgeOptionType, GenderType, MbtiCharType, MbtiType } from '.';
+import { AgeOptionType, GenderType, MbtiCharType } from '.';
 import { ReplyWriterRes } from './reply';
 
 export type FeedResponse = {
@@ -43,3 +43,26 @@ export type ReplyResponse = {
   writerId: number;
   writer: ReplyWriterRes | null;
 };
+export type PostFeedFavoriteRequest = {
+  feedId: number;
+};
+
+export type PostFeedFavoriteResponse = void;
+
+export type DeleteFeedFavoriteRequest = {
+  feedId: number;
+};
+
+export type DeleteFeedFavoriteResponse = void;
+
+export type PostFeedClaimRequest = {
+  feedId: number;
+};
+
+export type PostFeedClaimResponse = void;
+
+export type PostFeedBlockRequest = {
+  feedId: number;
+};
+
+export type PostFeedBlockResponse = void;
