@@ -2,24 +2,25 @@ import Styled from './OptionSelect.styles';
 import Spacing from '@/components/Spacing/Spacing';
 import BinaryPicker from '@/components/BinaryPicker/BinaryPicker';
 import MBTIPicker, { MBTI } from '@/components/MBTIPicker/MBTIPicker';
+import { AgeOptionType, GenderType } from '@/apis/types/feed';
 
 interface OptionSelectProps {
   closeOptionSelect: () => void;
-  onChangeGender: (value: string) => void;
-  onChangeIsPeer: (value: string) => void;
+  onChangeGender: (value: GenderType) => void;
+  onChangeAgeOption: (value: AgeOptionType) => void;
   onChangeMBTI: (value: MBTI) => void;
-  gender: string | null;
-  isPeer: string | null;
+  gender: GenderType | null;
+  ageOption: AgeOptionType;
   mbti: MBTI;
 }
 
 const OptionSelect = ({
   closeOptionSelect,
   onChangeGender,
-  onChangeIsPeer,
+  onChangeAgeOption,
   onChangeMBTI,
   gender,
-  isPeer,
+  ageOption,
   mbti,
   ...rest
 }: OptionSelectProps) => {
@@ -42,11 +43,11 @@ const OptionSelect = ({
             <BinaryPicker
               options={[
                 {
-                  value: 'male',
+                  value: 'MALE',
                   label: '남자',
                 },
                 {
-                  value: 'female',
+                  value: 'FEMALE',
                   label: '여자',
                 },
               ]}
@@ -62,16 +63,16 @@ const OptionSelect = ({
             <BinaryPicker
               options={[
                 {
-                  value: 'all',
+                  value: 'ALL',
                   label: '모두',
                 },
                 {
-                  value: 'peer',
+                  value: 'SAME_AGE_GROUP',
                   label: '또래',
                 },
               ]}
-              onChange={onChangeIsPeer}
-              defaultChecked={isPeer}
+              onChange={onChangeAgeOption}
+              defaultChecked={ageOption}
             />
           </Styled.OptionFormContainer>
           <Spacing size={41} />

@@ -1,12 +1,13 @@
 import RadioMBTIPicker from './RadioMBTIPicker';
 import CheckboxMBTIPicker from './CheckboxMBTIPicker';
+import { MbtiCharType } from '@/apis/types/feed';
 
 export type MBTIPickerProps = {
   onChange?: (value: MBTI) => void;
   checkbox?: boolean;
   defaultValue?: MBTI;
 };
-export type MBTI = [string | null, string | null, string | null, string | null];
+export type MBTI = [MbtiCharType | null, MbtiCharType | null, MbtiCharType | null, MbtiCharType | null];
 
 const MBTIPicker = ({ onChange, checkbox = false, defaultValue }: MBTIPickerProps) => {
   return checkbox ? (

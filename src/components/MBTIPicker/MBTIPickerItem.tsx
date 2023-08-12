@@ -1,8 +1,9 @@
 import React from 'react';
 import Styled from './MBTIPickerItem.styles';
+import { MbtiCharType } from '@/apis/types/feed';
 
 type MBTIPickerItemOption = {
-  value: string;
+  value: MbtiCharType;
   title: string;
   description: string;
 };
@@ -10,18 +11,18 @@ type MBTIPickerItemOption = {
 type MBTIPickerItemProps = {
   options: [MBTIPickerItemOption, MBTIPickerItemOption];
   name: string;
-  onChange?: (value: string) => void;
-  onClick?: (value: string) => void;
+  onChange?: (value: MbtiCharType) => void;
+  onClick?: (value: MbtiCharType) => void;
   type?: 'radio' | 'checkbox';
-  checkedValue?: string | null;
+  checkedValue?: MbtiCharType | null;
 };
 
 const MBTIPickerItem = ({ options, name, onChange, onClick, type = 'radio', checkedValue }: MBTIPickerItemProps) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onChange?.(event.target.value);
+    onChange?.(event.target.value as MbtiCharType);
   };
   const handleClick = (event: React.MouseEvent<HTMLInputElement>) => {
-    onClick?.(event.currentTarget.value);
+    onClick?.(event.currentTarget.value as MbtiCharType);
   };
 
   return (

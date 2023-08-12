@@ -2,32 +2,33 @@ import { useState } from 'react';
 import Styled from './MBTIPicker.styles';
 import MBTIPickerItem from './MBTIPickerItem';
 import { MBTIPickerProps } from './MBTIPicker';
+import { MbtiCharType } from '@/apis/types/feed';
 
 const CheckboxMBTIPicker = ({ onChange, defaultValue }: MBTIPickerProps) => {
-  const [eOrI, setEOrI] = useState<string | null>(defaultValue?.[0] || null);
-  const [sOrN, setSOrN] = useState<string | null>(defaultValue?.[1] || null);
-  const [tOrF, setTOrF] = useState<string | null>(defaultValue?.[2] || null);
-  const [jOrP, setJOrP] = useState<string | null>(defaultValue?.[3] || null);
+  const [eOrI, setEOrI] = useState<MbtiCharType | null>(defaultValue?.[0] || null);
+  const [sOrN, setSOrN] = useState<MbtiCharType | null>(defaultValue?.[1] || null);
+  const [tOrF, setTOrF] = useState<MbtiCharType | null>(defaultValue?.[2] || null);
+  const [jOrP, setJOrP] = useState<MbtiCharType | null>(defaultValue?.[3] || null);
 
-  const handleChangeEOrI = (value: string) => {
+  const handleChangeEOrI = (value: MbtiCharType) => {
     const newValue = eOrI === value ? null : value;
     setEOrI(newValue);
     onChange?.([newValue, sOrN, tOrF, jOrP]);
   };
 
-  const handleChangeSOrN = (value: string) => {
+  const handleChangeSOrN = (value: MbtiCharType) => {
     const newValue = sOrN === value ? null : value;
     setSOrN(newValue);
     onChange?.([eOrI, newValue, tOrF, jOrP]);
   };
 
-  const handleChangeTOrF = (value: string) => {
+  const handleChangeTOrF = (value: MbtiCharType) => {
     const newValue = tOrF === value ? null : value;
     setTOrF(newValue);
     onChange?.([eOrI, sOrN, newValue, jOrP]);
   };
 
-  const handleChangeJOrP = (value: string) => {
+  const handleChangeJOrP = (value: MbtiCharType) => {
     const newValue = jOrP === value ? null : value;
     setJOrP(newValue);
     onChange?.([eOrI, sOrN, tOrF, newValue]);

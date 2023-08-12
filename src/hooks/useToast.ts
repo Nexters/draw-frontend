@@ -4,6 +4,7 @@ const useToast = () => {
   const success = (message: JSX.Element | null) =>
     toast.success(message, {
       icon: null,
+      duration: 2000,
     });
 
   const error = (message: JSX.Element | null) =>

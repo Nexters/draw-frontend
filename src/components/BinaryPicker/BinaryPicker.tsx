@@ -2,22 +2,22 @@ import React, { useMemo } from 'react';
 import { nanoid } from 'nanoid';
 import Styled from './BinaryPicker.styles';
 
-type BinaryPickerOption = {
-  value: string;
+type BinaryPickerOption<T> = {
+  value: T;
   label: string;
 };
 
-type BinaryPickerProps = {
-  options: [BinaryPickerOption, BinaryPickerOption];
-  onChange?: (value: string) => void;
+type BinaryPickerProps<T> = {
+  options: [BinaryPickerOption<T>, BinaryPickerOption<T>];
+  onChange?: (value: T) => void;
   defaultChecked?: string | null;
 };
 
-const BinaryPicker = ({ options, onChange, defaultChecked }: BinaryPickerProps) => {
+const BinaryPicker = <T extends string>({ options, onChange, defaultChecked }: BinaryPickerProps<T>) => {
   const name = useMemo(() => nanoid(10), []);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onChange?.(event.target.value);
+    onChange?.(event.target.value as T);
   };
 
   return (
