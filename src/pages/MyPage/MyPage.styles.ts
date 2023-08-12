@@ -113,7 +113,7 @@ const Tab = styled.div`
   padding: 0 24px;
 `;
 
-const TabItem = styled.button<TabItemProps>`
+const TabItem = styled.a<TabItemProps>`
   flex: 1;
   padding: 12px 0;
   display: inline-flex;
@@ -238,6 +238,12 @@ const AnswerItemQuestion = styled.p`
   color: ${({ theme }) => theme.palette.text.grey1};
 `;
 
+const FetchTrigger = styled.div`
+  width: 1px;
+  height: 1px;
+  background-color: transparent;
+`;
+
 export default {
   Header,
   SettingButton,
@@ -269,4 +275,5 @@ export default {
   AnswerItem,
   AnswerItemAnswer,
   AnswerItemQuestion,
+  FetchTrigger,
 };
