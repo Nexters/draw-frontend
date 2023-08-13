@@ -33,12 +33,12 @@ const NoReply = styled.div`
   height: 180px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
   align-items: center;
   justify-content: center;
   width: 100%;
-  ${({ theme }) => theme.typo['sub.2']}
-  color : ${({ theme }) => theme.palette.text.grey1};
+  ${({ theme }) => theme.typo['heading.2']}
+  color : ${({ theme }) => theme.palette.text.grey2};
 `;
 
 export default {

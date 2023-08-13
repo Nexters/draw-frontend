@@ -9,47 +9,39 @@ import { ReactComponent as HeartActiveIcon } from '@/assets/heart_active.svg';
 import { ReactComponent as ShareIcon } from '@/assets/share.svg';
 import { ReactComponent as MoreIcon } from '@/assets/more.svg';
 import { ReactComponent as Blank } from '@/assets/blank.svg';
+import { ReactComponent as FireIcon } from '@/assets/fire.svg';
 import { ANSWER_MAX_LENGTH } from '@/constants/feed';
 import useInput from '@/hooks/useInput';
 import TopBar from '@/components/TopBar/TopBar';
 import { palette } from '@/styles/palette';
 import Layout from '@/components/Layout/Layout';
 import useNativeMessage from '@/hooks/useNativeMessage';
-import { useQuery } from '@tanstack/react-query';
+import isUserAgentWebview from 'is-ua-webview';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { feedApi } from '@/apis/handlers/feed';
 import { css } from '@emotion/react';
-
-/* const MOCK_DATA = {
-  contents: 'T도 박은빈 시상식 보고 우나요?',
-  likes: 10,
-  isMatchedQuestion: true,
-  isLiked: false,
-  answerList: [
-    { id: 1, contents: '왜움?', flippable: true },
-    {
-      id: 2,
-      contents: '왜움?왜움?왜움?왜움?왜움?왜움?왜움?왜움?왜움?왜움?왜움?asdfasdfasdf왜움?ㅋ?',
-      flippable: false,
-    },
-    { id: 3, contents: '왜움?', flippable: false },
-    { id: 4, contents: '왜움?', flippable: true },
-  ],
-}; */
+import { dynamicLink } from '@/utils/dynamicLink';
+import useToast from '@/hooks/useToast';
+import BottomSheet from '@/components/BottomSheet/BottomSheet';
+import { replyApi } from '@/apis/handlers/reply';
 
 const QuestionDetail = () => {
+  const queryClient = useQueryClient();
+  const toast = useToast();
   const { id } = useParams<{ id: string }>();
   const { data: feedData } = useQuery(['feed-detail', id], () => feedApi.getFeedDetail(Number(id)));
   const { data: replyData, status: replyStatus } = useQuery(['feed-replies', id], () =>
     feedApi.getFeedRepies(Number(id))
   );
-
+  const [isCardOptionBottomSheetOpen, setIsCardOptionBottomSheetOpen] = useState(false);
+  const isWebview = isUserAgentWebview(window.navigator.userAgent);
   const { showShareSheet } = useNativeMessage();
 
   const answerFormRef = useRef<HTMLFormElement>(null);
   const answerTextAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const [isAnswerFormOpen, setIsAnswerFormOpen] = useState(false);
-  const [answer, onChangeAnswer] = useInput('');
+  const [answer, onChangeAnswer, setAnswer] = useInput('');
 
   const calculateAnswerFormHeight = useCallback(() => {
     if (!answerFormRef.current) return;
@@ -60,14 +52,60 @@ const QuestionDetail = () => {
     answerFormRef.current.style.height = `${answerTextAreaRef.current.scrollHeight}px`;
   }, []);
 
-  const handleClickShareButton = () => {
-    if (!id) return;
+  const feedFavoriteMutation = useMutation(feedApi.postFeedFavorite, {
+    onSuccess: async () => await queryClient.invalidateQueries(['feed-detail', id]),
+  });
+  const feedFavoriteCancelMutation = useMutation(feedApi.deleteFeedFavorite, {
+    onSuccess: async () => await queryClient.invalidateQueries(['feed-detail', id]),
+  });
+  const feedClaimMutation = useMutation(feedApi.postFeedClaim, {
+    onSuccess: () => {
+      setIsCardOptionBottomSheetOpen(false);
+      toast.success(<>신고했어요</>);
+    },
+  });
+  const feedBlockMutation = useMutation(feedApi.postFeedBlock, {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(['feed-detail', id]);
+      setIsCardOptionBottomSheetOpen(false);
 
-    showShareSheet(`${window.location.origin}/question-detail/${id}`);
+      toast.success(<>차단했어요</>);
+    },
+  });
+  const relpyMutation = useMutation((content: string) => replyApi.postReply(feedData!.id, { content }), {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(['feed-replies', id]);
+      toast.success(
+        <>
+          답변 작성 완료 <FireIcon />
+        </>
+      );
+    },
+  });
+
+  const handleClickShareButton = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+
+    if (!isWebview || !feedData) {
+      dynamicLink('/feed');
+
+      return;
+    }
+
+    showShareSheet(`${window.location.origin}/question-detail/${feedData?.id}`);
   };
-
   const handleSubmitAnswerForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (!isWebview) {
+      dynamicLink('/feed');
+
+      return;
+    }
+
+    relpyMutation.mutate(answer);
+    setIsAnswerFormOpen(false);
+    setAnswer('');
   };
 
   const handleChangeAnswer = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -94,13 +132,57 @@ const QuestionDetail = () => {
             <FeedStyled.FeedCardFooter>
               {feedData?.isFit && <FeedStyled.FeedCardBadge>맞춤질문</FeedStyled.FeedCardBadge>}
               <FeedStyled.FeedCardOptionButtonList>
-                <FeedStyled.FeedCardOptionButton type="button" isActive={feedData?.isFavorite}>
-                  {feedData?.isFavorite ? <HeartActiveIcon /> : <HeartIcon />}
-                </FeedStyled.FeedCardOptionButton>
-                <FeedStyled.FeedCardOptionButton type="button" onClick={handleClickShareButton}>
+                {feedData?.isFavorite ? (
+                  <FeedStyled.FeedCardOptionButton
+                    type="button"
+                    isActive
+                    onClick={(event) => {
+                      event.stopPropagation();
+
+                      if (!isWebview || !feedData) {
+                        dynamicLink('/feed');
+
+                        return;
+                      }
+
+                      feedFavoriteCancelMutation.mutate({ feedId: feedData.id });
+                    }}
+                  >
+                    <HeartActiveIcon />
+                  </FeedStyled.FeedCardOptionButton>
+                ) : (
+                  <FeedStyled.FeedCardOptionButton
+                    type="button"
+                    onClick={(event) => {
+                      event.stopPropagation();
+
+                      if (!isWebview) {
+                        dynamicLink('/feed');
+                        return;
+                      }
+
+                      feedData && feedFavoriteMutation.mutate({ feedId: feedData.id });
+                    }}
+                  >
+                    <HeartIcon />
+                  </FeedStyled.FeedCardOptionButton>
+                )}
+                <FeedStyled.FeedCardOptionButton type="button" onClick={(event) => handleClickShareButton(event)}>
                   <ShareIcon />
                 </FeedStyled.FeedCardOptionButton>
-                <FeedStyled.FeedCardOptionButton type="button">
+                <FeedStyled.FeedCardOptionButton
+                  type="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+
+                    if (!isWebview) {
+                      dynamicLink('/feed');
+                      return;
+                    }
+
+                    setIsCardOptionBottomSheetOpen(true);
+                  }}
+                >
                   <MoreIcon />
                 </FeedStyled.FeedCardOptionButton>
               </FeedStyled.FeedCardOptionButtonList>
@@ -155,6 +237,29 @@ const QuestionDetail = () => {
           <Spacing size={42} />
         </Styled.QuestionDetailBody>
       </Styled.QuestionDetailContainer>
+      <BottomSheet
+        open={isCardOptionBottomSheetOpen}
+        onClose={() => {
+          setIsCardOptionBottomSheetOpen(false);
+        }}
+      >
+        <FeedStyled.FeedOptionBottomSheet>
+          <FeedStyled.FeedOption
+            onClick={() => {
+              feedData && feedBlockMutation.mutate({ feedId: feedData.id });
+            }}
+          >
+            차단하기
+          </FeedStyled.FeedOption>
+          <FeedStyled.FeedOption
+            onClick={() => {
+              feedData && feedClaimMutation.mutate({ feedId: feedData?.id });
+            }}
+          >
+            신고하기
+          </FeedStyled.FeedOption>
+        </FeedStyled.FeedOptionBottomSheet>
+      </BottomSheet>
     </Layout>
   );
 };
