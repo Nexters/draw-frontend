@@ -23,7 +23,7 @@ import { css } from '@emotion/react';
 import { dynamicLink } from '@/utils/dynamicLink';
 import useToast from '@/hooks/useToast';
 import BottomSheet from '@/components/BottomSheet/BottomSheet';
-import Feed from '../Feed/Feed';
+import { replyApi } from '@/apis/handlers/reply';
 
 const QuestionDetail = () => {
   const queryClient = useQueryClient();
@@ -72,6 +72,16 @@ const QuestionDetail = () => {
       toast.success(<>차단했어요</>);
     },
   });
+  const relpyMutation = useMutation((content: string) => replyApi.postReply(feedData!.id, { content }), {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(['feed-replies', id]);
+      toast.success(
+        <>
+          답변 작성 완료 <FireIcon />
+        </>
+      );
+    },
+  });
 
   const handleClickShareButton = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
@@ -87,14 +97,15 @@ const QuestionDetail = () => {
   const handleSubmitAnswerForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    if (!isWebview) {
+      dynamicLink('/feed');
+
+      return;
+    }
+
+    relpyMutation.mutate(answer);
     setIsAnswerFormOpen(false);
     setAnswer('');
-
-    toast.success(
-      <>
-        답변 작성 완료 <FireIcon />
-      </>
-    );
   };
 
   const handleChangeAnswer = (event: React.ChangeEvent<HTMLTextAreaElement>) => {

@@ -29,6 +29,7 @@ import { promotionApi } from '@/apis/handlers/promotion';
 import { feedApi } from '@/apis/handlers/feed';
 import isUserAgentWebview from 'is-ua-webview';
 import { dynamicLink } from '@/utils/dynamicLink';
+import { replyApi } from '@/apis/handlers/reply';
 
 const Feed = () => {
   const navigate = useNavigate();
@@ -87,6 +88,14 @@ const Feed = () => {
       toast.success(<>차단했어요</>);
     },
   });
+  const relpyMutation = useMutation((content: string) => replyApi.postReply(selectedFeedId!, { content }), {
+    onSuccess: () =>
+      toast.success(
+        <>
+          답변 작성 완료 <FireIcon />
+        </>
+      ),
+  });
 
   const consumePromotionMutation = useMutation(promotionApi.postConsumePromotion);
 
@@ -114,14 +123,9 @@ const Feed = () => {
   const handleSubmitAnswerForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    relpyMutation.mutate(answer);
     setIsAnswerFormOpen(false);
     setAnswer('');
-
-    toast.success(
-      <>
-        답변 작성 완료 <FireIcon />
-      </>
-    );
   };
 
   const handleChangeAnswer = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
