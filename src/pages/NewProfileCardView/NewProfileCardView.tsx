@@ -8,7 +8,7 @@ import { ReactComponent as ShadowWoI } from '@/assets/shadow_wo_i.svg';
 import { ReactComponent as ShadowWoE } from '@/assets/shadow_wo_e.svg';
 import { ReactComponent as ShadowManI } from '@/assets/shadow_man_i.svg';
 import { ReactComponent as ShadowManE } from '@/assets/shadow_man_e.svg';
-import { ReactComponent as CardLoading } from '@/assets/card_loading.svg';
+import cardLoadingUrl from '@/assets/card_loading.svg';
 import { lottieDictionary } from '@/constants/lottie';
 
 const NewProfileCardView = () => {
@@ -69,7 +69,12 @@ const NewProfileCardView = () => {
         <Styled.GraphicContainer>
           {isValidProfile && isLottieLoading && (
             <Styled.CardLoading>
-              <CardLoading />
+              <object
+                data={cardLoadingUrl}
+                type="image/svg+xml"
+                aria-label="프로필 카드 로딩 중"
+                style={{ width: '51px' }}
+              />
             </Styled.CardLoading>
           )}
           {isValidProfile && !isLottieLoading && lottie !== null && (
