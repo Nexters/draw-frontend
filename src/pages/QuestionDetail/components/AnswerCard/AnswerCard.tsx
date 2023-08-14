@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import { replyApi } from '@/apis/handlers/reply';
 import { ReplyWriterRes } from '@/apis/types/reply';
 
-const AnswerCard = ({ replyData }: { replyData: ReplyResponse }) => {
+const AnswerCard = ({ replyData, onSelectAnswer }: { replyData: ReplyResponse; onSelectAnswer: () => void }) => {
   const { id, writer, content, status } = replyData;
   const ref = useRef<any>();
   const [isFlipped, setIsFlipped] = useState(false);
@@ -31,7 +31,13 @@ const AnswerCard = ({ replyData }: { replyData: ReplyResponse }) => {
   return (
     <>
       <Styled.FlipCard ref={ref} isFlipped={isFlipped}>
-        <CardFace.Front contents={content} flippable={status !== 'PEEKED'} onPeekCard={handlePeekCard} />
+        <CardFace.Front
+          contents={content}
+          flippable={status !== 'PEEKED'}
+          onPeekCard={handlePeekCard}
+          hidePeekButton={status === 'MINE'}
+          onMenuClick={onSelectAnswer}
+        />
         <CardFace.Back
           className="back"
           onReflipCard={handleToggleFlip}
