@@ -25,7 +25,7 @@ const Front = ({ contents, flippable, onPeekCard, hidePeekButton = false, onMenu
     <Styled.AnswerCardContainer {...rest}>
       <Styled.Contents>{contents}</Styled.Contents>
       <Styled.CardButtons>
-        {hidePeekButton && (
+        {!hidePeekButton && (
           <>
             <CardButton variants="threeDots" onClick={onMenuClick} />
             {flippable ? (
