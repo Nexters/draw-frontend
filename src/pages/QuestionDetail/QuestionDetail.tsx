@@ -29,6 +29,7 @@ import { DetailBottomSheetProvider, useDetailBottomSheetContext } from './compon
 const QuestionDetailPage = () => {
   const queryClient = useQueryClient();
   const toast = useToast();
+
   const { openSheet, setType, setSelectedId } = useDetailBottomSheetContext();
   const { id } = useParams<{ id: string }>();
   const { data: feedData } = useQuery(['feed-detail', id], () => feedApi.getFeedDetail(Number(id)));

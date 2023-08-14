@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import useToast from '@/hooks/useToast';
 import { ReactComponent as FireIcon } from '@/assets/fire.svg';
 import { AgeOptionType, GenderType, MbtiCharType } from '@/apis/types';
+import useVisualViewportResize from '@/hooks/useVisualViewportResize';
 
 const NewQuestion = () => {
   const navigate = useNavigate();
@@ -27,47 +28,7 @@ const NewQuestion = () => {
   const [ageOption, setAgeOption] = useState<AgeOptionType>('SAME_AGE_GROUP');
   const [mbti, setMBTI] = useState<MBTI>([null, null, null, null]);
   const [selectedOptionText, setSelectedOptionText] = useState<string | null>(null);
-  const [prevVisualViewport, setPrevVisualViewport] = useState(0);
-
-  const handleVisualViewportResize = () => {
-    if (typeof window === 'undefined' || !window.visualViewport) {
-      return; // 비주얼 뷰포트 API가 지원되지 않거나 window 객체를 사용할 수 없는 경우
-    }
-    const currentVisualViewport = window.visualViewport.height;
-
-    if (prevVisualViewport - 30 > currentVisualViewport && prevVisualViewport - 100 < currentVisualViewport) {
-      const scrollHeight = document.body.scrollHeight;
-      const scrollTop = scrollHeight - window.visualViewport.height;
-
-      window.scrollTo(0, scrollTop); // 입력창이 키보드에 가려지지 않도록 조절
-    }
-
-    setPrevVisualViewport(window.visualViewport.height);
-  };
-
-  useEffect(() => {
-    if (typeof window === 'undefined' || !window.visualViewport) {
-      return; // 비주얼 뷰포트 API가 지원되지 않거나 window 객체를 사용할 수 없는 경우
-    }
-    window.visualViewport.onresize = handleVisualViewportResize;
-
-    // Clean up the event listener on component unmount
-    return () => {
-      if (typeof window === 'undefined' || !window.visualViewport) {
-        return; // 비주얼 뷰포트 API가 지원되지 않거나 window 객체를 사용할 수 없는 경우
-      }
-      window.visualViewport.onresize = null;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (typeof window === 'undefined' || !window.visualViewport) {
-      return;
-    }
-    if (prevVisualViewport === 0) {
-      setPrevVisualViewport(window.visualViewport.height);
-    }
-  }, [prevVisualViewport]);
+  const prevVisualViewport = useVisualViewportResize();
 
   const handleChangeGender = (value: GenderType) => {
     setGenders([value]);
