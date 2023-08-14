@@ -31,7 +31,12 @@ const AnswerCard = ({ replyData }: { replyData: ReplyResponse }) => {
   return (
     <>
       <Styled.FlipCard ref={ref} isFlipped={isFlipped}>
-        <CardFace.Front contents={content} flippable={status !== 'PEEKED'} onPeekCard={handlePeekCard} />
+        <CardFace.Front
+          contents={content}
+          flippable={status !== 'PEEKED'}
+          onPeekCard={handlePeekCard}
+          hidePeekButton={status === 'MINE'}
+        />
         <CardFace.Back
           className="back"
           onReflipCard={handleToggleFlip}

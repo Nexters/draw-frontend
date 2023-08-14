@@ -9,6 +9,7 @@ import { getCardSource } from './getCardSoure';
 interface FrontProps extends ComponentProps<'div'> {
   contents: string;
   flippable: boolean;
+  hidePeekButton?: boolean;
   onPeekCard: () => void;
 }
 interface BackProps extends ComponentProps<'div'> {
@@ -16,25 +17,29 @@ interface BackProps extends ComponentProps<'div'> {
   writerInfo: ReplyWriterRes | null;
 }
 
-const Front = ({ contents, flippable, onPeekCard, ...rest }: FrontProps) => {
+const Front = ({ contents, flippable, onPeekCard, hidePeekButton = false, ...rest }: FrontProps) => {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   return (
     <Styled.AnswerCardContainer {...rest}>
       <Styled.Contents>{contents}</Styled.Contents>
       <Styled.CardButtons>
-        <CardButton variants="threeDots" />
-        {flippable ? (
+        {hidePeekButton && (
           <>
-            <CardButton
-              variants="flipCard"
-              css={{ color: `${palette.btn.green}` }}
-              onClick={() => setIsSheetOpen(true)}
-            />
-            <FlipBottomSheet isOpen={isSheetOpen} onClose={() => setIsSheetOpen(false)} onClickYes={onPeekCard} />
+            <CardButton variants="threeDots" />
+            {flippable ? (
+              <>
+                <CardButton
+                  variants="flipCard"
+                  css={{ color: `${palette.btn.green}` }}
+                  onClick={() => setIsSheetOpen(true)}
+                />
+                <FlipBottomSheet isOpen={isSheetOpen} onClose={() => setIsSheetOpen(false)} onClickYes={onPeekCard} />
+              </>
+            ) : (
+              <CardButton variants="flipCard" css={{ color: `${palette.text.grey2}` }} onClick={onPeekCard} />
+            )}
           </>
-        ) : (
-          <CardButton variants="flipCard" css={{ color: `${palette.text.grey2}` }} onClick={onPeekCard} />
         )}
       </Styled.CardButtons>
     </Styled.AnswerCardContainer>

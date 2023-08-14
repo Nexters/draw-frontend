@@ -97,11 +97,11 @@ const QuestionDetail = () => {
   const handleSubmitAnswerForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!isWebview) {
+    /*  if (!isWebview) {
       dynamicLink('/feed');
 
       return;
-    }
+    } */
 
     relpyMutation.mutate(answer);
     setIsAnswerFormOpen(false);
