@@ -11,13 +11,14 @@ interface FrontProps extends ComponentProps<'div'> {
   flippable: boolean;
   hidePeekButton?: boolean;
   onPeekCard: () => void;
+  onMenuClick: () => void;
 }
 interface BackProps extends ComponentProps<'div'> {
   onReflipCard: () => void;
   writerInfo: ReplyWriterRes | null;
 }
 
-const Front = ({ contents, flippable, onPeekCard, hidePeekButton = false, ...rest }: FrontProps) => {
+const Front = ({ contents, flippable, onPeekCard, hidePeekButton = false, onMenuClick, ...rest }: FrontProps) => {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   return (
@@ -26,7 +27,7 @@ const Front = ({ contents, flippable, onPeekCard, hidePeekButton = false, ...res
       <Styled.CardButtons>
         {hidePeekButton && (
           <>
-            <CardButton variants="threeDots" />
+            <CardButton variants="threeDots" onClick={onMenuClick} />
             {flippable ? (
               <>
                 <CardButton

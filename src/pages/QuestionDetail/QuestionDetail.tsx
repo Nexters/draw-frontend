@@ -22,18 +22,20 @@ import { feedApi } from '@/apis/handlers/feed';
 import { css } from '@emotion/react';
 import { dynamicLink } from '@/utils/dynamicLink';
 import useToast from '@/hooks/useToast';
-import BottomSheet from '@/components/BottomSheet/BottomSheet';
 import { replyApi } from '@/apis/handlers/reply';
+import { QuestionDetailBottomSheet } from './components/QuestionDetailBottomSheet';
+import { DetailBottomSheetProvider, useDetailBottomSheetContext } from './components/useDetailBottomSheetContext';
 
-const QuestionDetail = () => {
+const QuestionDetailPage = () => {
   const queryClient = useQueryClient();
   const toast = useToast();
+  const { openSheet, setType, setSelectedId } = useDetailBottomSheetContext();
   const { id } = useParams<{ id: string }>();
   const { data: feedData } = useQuery(['feed-detail', id], () => feedApi.getFeedDetail(Number(id)));
   const { data: replyData, status: replyStatus } = useQuery(['feed-replies', id], () =>
     feedApi.getFeedRepies(Number(id))
   );
-  const [isCardOptionBottomSheetOpen, setIsCardOptionBottomSheetOpen] = useState(false);
+
   const isWebview = isUserAgentWebview(window.navigator.userAgent);
   const { showShareSheet } = useNativeMessage();
 
@@ -58,20 +60,7 @@ const QuestionDetail = () => {
   const feedFavoriteCancelMutation = useMutation(feedApi.deleteFeedFavorite, {
     onSuccess: async () => await queryClient.invalidateQueries(['feed-detail', id]),
   });
-  const feedClaimMutation = useMutation(feedApi.postFeedClaim, {
-    onSuccess: () => {
-      setIsCardOptionBottomSheetOpen(false);
-      toast.success(<>신고했어요</>);
-    },
-  });
-  const feedBlockMutation = useMutation(feedApi.postFeedBlock, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(['feed-detail', id]);
-      setIsCardOptionBottomSheetOpen(false);
 
-      toast.success(<>차단했어요</>);
-    },
-  });
   const relpyMutation = useMutation((content: string) => replyApi.postReply(feedData!.id, { content }), {
     onSuccess: async () => {
       await queryClient.invalidateQueries(['feed-replies', id]);
@@ -97,11 +86,11 @@ const QuestionDetail = () => {
   const handleSubmitAnswerForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    /*  if (!isWebview) {
+    if (!isWebview) {
       dynamicLink('/feed');
 
       return;
-    } */
+    }
 
     relpyMutation.mutate(answer);
     setIsAnswerFormOpen(false);
@@ -180,7 +169,9 @@ const QuestionDetail = () => {
                       return;
                     }
 
-                    setIsCardOptionBottomSheetOpen(true);
+                    openSheet();
+                    setType('feed');
+                    feedData && setSelectedId(feedData?.id);
                   }}
                 >
                   <MoreIcon />
@@ -210,6 +201,7 @@ const QuestionDetail = () => {
             </FeedStyled.AnswerForm>
           )}
           <Spacing size={24} />
+
           <FeedStyled.FakeAnswerTextAreaButtonContainer isTransparent={isAnswerFormOpen} css={{ padding: '0 24px' }}>
             <FeedStyled.FakeAnswerTextAreaButton
               type="button"
@@ -220,8 +212,20 @@ const QuestionDetail = () => {
               답변하기
             </FeedStyled.FakeAnswerTextAreaButton>
           </FeedStyled.FakeAnswerTextAreaButtonContainer>
+
           <Styled.AnswersContainer>
-            {replyData && replyData.replies.map((v) => <AnswerCard replyData={v} key={v.id} />)}
+            {replyData &&
+              replyData.replies.map((v) => (
+                <AnswerCard
+                  replyData={v}
+                  key={v.id}
+                  onSelectAnswer={() => {
+                    openSheet();
+                    setType('reply');
+                    setSelectedId(v.id);
+                  }}
+                />
+              ))}
             {replyData?.replies.length === 0 && (
               <Styled.NoReply>
                 <Blank />
@@ -237,31 +241,15 @@ const QuestionDetail = () => {
           <Spacing size={42} />
         </Styled.QuestionDetailBody>
       </Styled.QuestionDetailContainer>
-      <BottomSheet
-        open={isCardOptionBottomSheetOpen}
-        onClose={() => {
-          setIsCardOptionBottomSheetOpen(false);
-        }}
-      >
-        <FeedStyled.FeedOptionBottomSheet>
-          <FeedStyled.FeedOption
-            onClick={() => {
-              feedData && feedBlockMutation.mutate({ feedId: feedData.id });
-            }}
-          >
-            차단하기
-          </FeedStyled.FeedOption>
-          <FeedStyled.FeedOption
-            onClick={() => {
-              feedData && feedClaimMutation.mutate({ feedId: feedData?.id });
-            }}
-          >
-            신고하기
-          </FeedStyled.FeedOption>
-        </FeedStyled.FeedOptionBottomSheet>
-      </BottomSheet>
+
+      <QuestionDetailBottomSheet />
     </Layout>
   );
 };
 
+const QuestionDetail = () => (
+  <DetailBottomSheetProvider>
+    <QuestionDetailPage />
+  </DetailBottomSheetProvider>
+);
 export default QuestionDetail;
