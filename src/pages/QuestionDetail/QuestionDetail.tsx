@@ -75,22 +75,16 @@ const QuestionDetailPage = () => {
   const handleClickShareButton = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
 
-    if (!isWebview || !feedData) {
-      dynamicLink('/feed');
+    if (!isWebview && feedData) {
+      dynamicLink(`/question-detail/${feedData.id}`);
 
       return;
     }
 
-    showShareSheet(`${window.location.origin}/question-detail/${feedData?.id}`);
+    feedData && showShareSheet(`${window.location.origin}/question-detail/${feedData?.id}`);
   };
   const handleSubmitAnswerForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    if (!isWebview) {
-      dynamicLink('/feed');
-
-      return;
-    }
 
     relpyMutation.mutate(answer);
     setIsAnswerFormOpen(false);
@@ -128,8 +122,8 @@ const QuestionDetailPage = () => {
                     onClick={(event) => {
                       event.stopPropagation();
 
-                      if (!isWebview || !feedData) {
-                        dynamicLink('/feed');
+                      if (!isWebview && feedData) {
+                        dynamicLink(`/question-detail/${feedData.id}`);
 
                         return;
                       }
@@ -145,8 +139,9 @@ const QuestionDetailPage = () => {
                     onClick={(event) => {
                       event.stopPropagation();
 
-                      if (!isWebview) {
-                        dynamicLink('/feed');
+                      if (!isWebview && feedData) {
+                        dynamicLink(`/question-detail/${feedData.id}`);
+
                         return;
                       }
 
@@ -164,8 +159,9 @@ const QuestionDetailPage = () => {
                   onClick={(event) => {
                     event.stopPropagation();
 
-                    if (!isWebview) {
-                      dynamicLink('/feed');
+                    if (!isWebview && feedData) {
+                      dynamicLink(`/question-detail/${feedData.id}`);
+
                       return;
                     }
 
@@ -206,6 +202,11 @@ const QuestionDetailPage = () => {
             <FeedStyled.FakeAnswerTextAreaButton
               type="button"
               onClick={() => {
+                if (!isWebview && feedData) {
+                  dynamicLink(`/question-detail/${feedData.id}`);
+
+                  return;
+                }
                 setIsAnswerFormOpen(true);
               }}
             >

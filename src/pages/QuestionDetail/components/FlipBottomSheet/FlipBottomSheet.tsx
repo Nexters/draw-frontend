@@ -4,6 +4,7 @@ import BottomSheet from '@/components/BottomSheet/BottomSheet';
 import { ReactComponent as Point } from '@/assets/point.svg';
 import { ReactComponent as ToIcon } from '@/assets/to-icon.svg';
 import Spacing from '@/components/Spacing/Spacing';
+import useMyInfo from '@/hooks/api/useMyInfo';
 
 interface FlipBottomSheetProps {
   isOpen: boolean;
@@ -12,6 +13,7 @@ interface FlipBottomSheetProps {
 }
 
 const FlipBottomSheet = ({ isOpen, onClose, onClickYes }: FlipBottomSheetProps) => {
+  const { data: myData } = useMyInfo();
   return (
     <BottomSheet open={isOpen} onClose={onClose}>
       <Styled.SheetContentContainer>
@@ -24,12 +26,12 @@ const FlipBottomSheet = ({ isOpen, onClose, onClickYes }: FlipBottomSheetProps) 
         <Styled.PointInformation>
           <Styled.PointBefore>
             <p>현재</p>
-            <p>100D</p>
+            <p>{myData?.point}D</p>
           </Styled.PointBefore>
           <ToIcon />
           <Styled.PointAfter>
             <p>사용 후</p>
-            <p>90D</p>
+            <p>{myData && myData?.point - 10}D</p>
           </Styled.PointAfter>
         </Styled.PointInformation>
         <Spacing size={20} />
