@@ -24,6 +24,9 @@ const Setting = () => {
       navigate('/login');
     },
   });
+  const handleClickTerms = () => {
+    navigate('/my-page/terms');
+  };
 
   const handleWithdrawUser = () => {
     withdrawMutate();
@@ -38,8 +41,10 @@ const Setting = () => {
         </Styled.BackButton>
       </Styled.Header>
       <Styled.SettingList>
-        <Styled.SettingButton type="button">이용약관</Styled.SettingButton>
-        <Styled.SettingButton type="button" onClick={() => setSheetOpen(true)}>
+        <Styled.SettingButton type="button" onClick={handleClickTerms}>
+          이용약관
+        </Styled.SettingButton>
+        <Styled.SettingButton type="button" onClick={handleWithdrawUser}>
           회원 탈퇴
         </Styled.SettingButton>
       </Styled.SettingList>

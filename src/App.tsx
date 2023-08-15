@@ -12,6 +12,7 @@ import Toast from './components/Toast/Toast';
 import Kakao from './pages/Login/Kakao';
 import { AuthGuard } from './pages/Login/AuthGuard';
 import { QueryClientProvider } from './QueryClientProvider';
+import Terms from './pages/Terms/Terms';
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
           {
             path: 'my-page/setting',
             element: <Setting />,
+          },
+          {
+            path: 'my-page/terms',
+            element: <Terms />,
           },
           {
             path: 'new-question',

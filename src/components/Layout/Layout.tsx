@@ -1,10 +1,10 @@
 import { useLayoutEffect } from 'react';
 import { Global, css } from '@emotion/react';
-import isUserAgentWebview from 'is-ua-webview';
 import { palette } from '@/styles/palette';
 import Styled from './Layout.styles';
 import useNativeMessage from '@/hooks/useNativeMessage';
 import useNavigateEvent from '@/hooks/useNavigateEvent';
+import { isDrawWebview } from '@/utils/webview';
 
 type LayoutProps = {
   backgroundColor: (typeof palette.background)[keyof typeof palette.background];
@@ -13,11 +13,11 @@ type LayoutProps = {
   children?: React.ReactNode;
 };
 
+const isWebview = isDrawWebview();
+
 const Layout = ({ backgroundColor, hasTabBar, hasScrollBouncing = true, children }: LayoutProps) => {
   const { showBottomBar } = useNativeMessage();
   useNavigateEvent();
-
-  const isWebview = isUserAgentWebview(window.navigator.userAgent);
 
   useLayoutEffect(() => {
     showBottomBar(hasTabBar ?? false);
