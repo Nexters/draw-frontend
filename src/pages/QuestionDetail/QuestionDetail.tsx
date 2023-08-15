@@ -107,7 +107,7 @@ const QuestionDetailPage = () => {
   }, [calculateAnswerFormHeight, isAnswerFormOpen]);
 
   return (
-    <Layout backgroundColor={palette.background.white2}>
+    <Layout backgroundColor={palette.background.white2} hasTabBar={false}>
       <Styled.QuestionDetailContainer>
         <Styled.QuestionDetailHeader>
           <TopBar />
