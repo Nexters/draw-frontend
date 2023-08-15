@@ -8,6 +8,11 @@ import useToast from '@/hooks/useToast';
 const Setting = () => {
   const navigate = useNavigate();
   const toast = useToast();
+
+  const handleClickTerms = () => {
+    navigate('/my-page/terms');
+  };
+
   const handleWithdrawUser = () => {
     window.localStorage.removeItem('aT');
     window.localStorage.removeItem('rT');
@@ -23,7 +28,9 @@ const Setting = () => {
         </Styled.BackButton>
       </Styled.Header>
       <Styled.SettingList>
-        <Styled.SettingButton type="button">이용약관</Styled.SettingButton>
+        <Styled.SettingButton type="button" onClick={handleClickTerms}>
+          이용약관
+        </Styled.SettingButton>
         <Styled.SettingButton type="button" onClick={handleWithdrawUser}>
           회원 탈퇴
         </Styled.SettingButton>
