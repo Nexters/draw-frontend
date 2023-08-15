@@ -77,7 +77,7 @@ const QuestionDetailPage = () => {
     event.stopPropagation();
 
     if (!isWebview || !feedData) {
-      dynamicLink('/feed');
+      dynamicLink(window.location.pathname);
 
       return;
     }
@@ -88,7 +88,7 @@ const QuestionDetailPage = () => {
     event.preventDefault();
 
     if (!isWebview) {
-      dynamicLink('/feed');
+      dynamicLink(window.location.pathname);
 
       return;
     }
@@ -130,7 +130,7 @@ const QuestionDetailPage = () => {
                       event.stopPropagation();
 
                       if (!isWebview || !feedData) {
-                        dynamicLink('/feed');
+                        dynamicLink(window.location.pathname);
 
                         return;
                       }
@@ -147,7 +147,7 @@ const QuestionDetailPage = () => {
                       event.stopPropagation();
 
                       if (!isWebview) {
-                        dynamicLink('/feed');
+                        dynamicLink(window.location.pathname);
                         return;
                       }
 
@@ -166,7 +166,7 @@ const QuestionDetailPage = () => {
                     event.stopPropagation();
 
                     if (!isWebview) {
-                      dynamicLink('/feed');
+                      dynamicLink(window.location.pathname);
                       return;
                     }
 
