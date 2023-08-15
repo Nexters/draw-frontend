@@ -1,12 +1,12 @@
 import { Toaster, ToasterProps } from 'react-hot-toast';
-import isUserAgentWebview from 'is-ua-webview';
 import { palette } from '@/styles/palette';
+import { isDrawWebview } from '@/utils/webview';
 
 type ToastProps = ToasterProps;
 
-const Toast = (props: ToastProps) => {
-  const isWebview = isUserAgentWebview(window.navigator.userAgent);
+const isWebview = isDrawWebview();
 
+const Toast = (props: ToastProps) => {
   return (
     <Toaster
       toastOptions={{

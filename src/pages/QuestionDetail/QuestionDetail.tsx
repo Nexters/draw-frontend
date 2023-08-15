@@ -16,7 +16,6 @@ import TopBar from '@/components/TopBar/TopBar';
 import { palette } from '@/styles/palette';
 import Layout from '@/components/Layout/Layout';
 import useNativeMessage from '@/hooks/useNativeMessage';
-import isUserAgentWebview from 'is-ua-webview';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { feedApi } from '@/apis/handlers/feed';
 import { css } from '@emotion/react';
@@ -25,6 +24,9 @@ import useToast from '@/hooks/useToast';
 import { replyApi } from '@/apis/handlers/reply';
 import { QuestionDetailBottomSheet } from './components/QuestionDetailBottomSheet';
 import { DetailBottomSheetProvider, useDetailBottomSheetContext } from './components/useDetailBottomSheetContext';
+import { isDrawWebview } from '@/utils/webview';
+
+const isWebview = isDrawWebview();
 
 const QuestionDetailPage = () => {
   const queryClient = useQueryClient();
@@ -37,7 +39,6 @@ const QuestionDetailPage = () => {
     feedApi.getFeedRepies(Number(id))
   );
 
-  const isWebview = isUserAgentWebview(window.navigator.userAgent);
   const { showShareSheet } = useNativeMessage();
 
   const answerFormRef = useRef<HTMLFormElement>(null);
@@ -76,8 +77,8 @@ const QuestionDetailPage = () => {
   const handleClickShareButton = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
 
-    if (!isWebview && feedData) {
-      dynamicLink(`/question-detail/${feedData.id}`);
+    if (!isWebview || !feedData) {
+      dynamicLink(window.location.pathname);
 
       return;
     }
@@ -86,6 +87,12 @@ const QuestionDetailPage = () => {
   };
   const handleSubmitAnswerForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (!isWebview) {
+      dynamicLink(window.location.pathname);
+
+      return;
+    }
 
     relpyMutation.mutate(answer);
     setIsAnswerFormOpen(false);
@@ -102,7 +109,7 @@ const QuestionDetailPage = () => {
   }, [calculateAnswerFormHeight, isAnswerFormOpen]);
 
   return (
-    <Layout backgroundColor={palette.background.white2}>
+    <Layout backgroundColor={palette.background.white2} hasTabBar={false}>
       <Styled.QuestionDetailContainer>
         <Styled.QuestionDetailHeader>
           <TopBar />
@@ -123,8 +130,8 @@ const QuestionDetailPage = () => {
                     onClick={(event) => {
                       event.stopPropagation();
 
-                      if (!isWebview && feedData) {
-                        dynamicLink(`/question-detail/${feedData.id}`);
+                      if (!isWebview || !feedData) {
+                        dynamicLink(window.location.pathname);
 
                         return;
                       }
@@ -140,9 +147,8 @@ const QuestionDetailPage = () => {
                     onClick={(event) => {
                       event.stopPropagation();
 
-                      if (!isWebview && feedData) {
-                        dynamicLink(`/question-detail/${feedData.id}`);
-
+                      if (!isWebview) {
+                        dynamicLink(window.location.pathname);
                         return;
                       }
 
@@ -160,9 +166,8 @@ const QuestionDetailPage = () => {
                   onClick={(event) => {
                     event.stopPropagation();
 
-                    if (!isWebview && feedData) {
-                      dynamicLink(`/question-detail/${feedData.id}`);
-
+                    if (!isWebview) {
+                      dynamicLink(window.location.pathname);
                       return;
                     }
 

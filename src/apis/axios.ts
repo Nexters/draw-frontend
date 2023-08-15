@@ -61,6 +61,9 @@ request.interceptors.response.use(
         }
       }
     }
+    if (code === 40301) {
+      window.location.href = '/new-profile';
+    }
     return Promise.reject(error.response);
   }
 );

@@ -28,10 +28,31 @@ const SettingButton = styled.button`
   padding: 25px 20px;
   border-radius: 16px;
 `;
+const SheetContainer = styled.div`
+  padding: 36px 24px;
+`;
+const SheetTitle = styled.div`
+  ${({ theme }) => theme.typo['heading.1']}
+  color : ${({ theme }) => theme.palette.text.black};
+`;
+const SheetDescription = styled.div`
+  margin-top: 8px;
+  ${({ theme }) => theme.typo['sub.2']}
+  color : ${({ theme }) => theme.palette.text.grey1};
+`;
+const ButtonContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-column-gap: 8px;
+`;
 
 export default {
   Header,
   BackButton,
   SettingList,
   SettingButton,
+  SheetTitle,
+  SheetContainer,
+  SheetDescription,
+  ButtonContainer,
 };

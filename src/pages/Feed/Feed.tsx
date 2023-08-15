@@ -27,15 +27,15 @@ import { PROMOTION_TITLE } from '@/constants/promotion';
 import { useMutation } from '@tanstack/react-query';
 import { promotionApi } from '@/apis/handlers/promotion';
 import { feedApi } from '@/apis/handlers/feed';
-import isUserAgentWebview from 'is-ua-webview';
 import { dynamicLink } from '@/utils/dynamicLink';
 import { replyApi } from '@/apis/handlers/reply';
+import { isDrawWebview } from '@/utils/webview';
+
+const isWebview = isDrawWebview();
 
 const Feed = () => {
   const navigate = useNavigate();
   const toast = useToast();
-
-  const isWebview = isUserAgentWebview(window.navigator.userAgent);
 
   const { showShareSheet } = useNativeMessage();
 
@@ -112,7 +112,7 @@ const Feed = () => {
     event.stopPropagation();
 
     if (!isWebview) {
-      dynamicLink('/feed');
+      dynamicLink(window.location.pathname);
 
       return;
     }
@@ -205,7 +205,7 @@ const Feed = () => {
                             event.stopPropagation();
 
                             if (!isWebview) {
-                              dynamicLink('/feed');
+                              dynamicLink(window.location.pathname);
 
                               return;
                             }
@@ -222,7 +222,7 @@ const Feed = () => {
                             event.stopPropagation();
 
                             if (!isWebview) {
-                              dynamicLink('/feed');
+                              dynamicLink(window.location.pathname);
 
                               return;
                             }
@@ -245,7 +245,7 @@ const Feed = () => {
                           event.stopPropagation();
 
                           if (!isWebview) {
-                            dynamicLink('/feed');
+                            dynamicLink(window.location.pathname);
 
                             return;
                           }
@@ -296,7 +296,7 @@ const Feed = () => {
             type="button"
             onClick={() => {
               if (!isWebview) {
-                dynamicLink('/feed');
+                dynamicLink(window.location.pathname);
 
                 return;
               }

@@ -8,6 +8,11 @@ type QuestionItemOptionButtonProps = {
   isActive?: boolean;
 };
 
+const MyPage = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 const Header = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -84,8 +89,8 @@ const PointValue = styled.span`
 
 const StickyTop = styled.div`
   position: sticky;
-  padding-top: 48px;
-  top: -48px;
+  margin-top: 48px;
+  top: 0;
   background-color: ${({ theme }) => theme.palette.background.white1};
   z-index: 1;
 `;
@@ -245,6 +250,7 @@ const FetchTrigger = styled.div`
 `;
 
 export default {
+  MyPage,
   Header,
   SettingButton,
   MemberIdContainer,
