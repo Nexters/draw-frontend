@@ -44,7 +44,7 @@ const Setting = () => {
         <Styled.SettingButton type="button" onClick={handleClickTerms}>
           이용약관
         </Styled.SettingButton>
-        <Styled.SettingButton type="button" onClick={handleWithdrawUser}>
+        <Styled.SettingButton type="button" onClick={() => setSheetOpen(true)}>
           회원 탈퇴
         </Styled.SettingButton>
       </Styled.SettingList>
