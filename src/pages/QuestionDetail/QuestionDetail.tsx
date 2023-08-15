@@ -31,6 +31,7 @@ const isWebview = isDrawWebview();
 const QuestionDetailPage = () => {
   const queryClient = useQueryClient();
   const toast = useToast();
+
   const { openSheet, setType, setSelectedId } = useDetailBottomSheetContext();
   const { id } = useParams<{ id: string }>();
   const { data: feedData } = useQuery(['feed-detail', id], () => feedApi.getFeedDetail(Number(id)));
@@ -82,7 +83,7 @@ const QuestionDetailPage = () => {
       return;
     }
 
-    showShareSheet(`${window.location.origin}/question-detail/${feedData?.id}`);
+    feedData && showShareSheet(`${window.location.origin}/question-detail/${feedData?.id}`);
   };
   const handleSubmitAnswerForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -207,6 +208,11 @@ const QuestionDetailPage = () => {
             <FeedStyled.FakeAnswerTextAreaButton
               type="button"
               onClick={() => {
+                if (!isWebview && feedData) {
+                  dynamicLink(`/question-detail/${feedData.id}`);
+
+                  return;
+                }
                 setIsAnswerFormOpen(true);
               }}
             >
