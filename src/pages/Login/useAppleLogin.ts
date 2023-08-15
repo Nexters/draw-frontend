@@ -41,7 +41,7 @@ const useAppleLogin = () => {
     window.AppleID.auth.init({
       clientId: 'kr.kro.draw-nexters',
       scope: 'name',
-      redirectURI: 'https://draw-nexters.netlify.app/callback/apple',
+      redirectURI: 'https://drawyourcard.site/callback/apple',
       usePopup: true,
     });
   }, []);
