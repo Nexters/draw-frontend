@@ -33,7 +33,7 @@ const useAppleLogin = () => {
     }
   };
 
-  const { mutate: loginMutate } = useMutation(userApi.login, {
+  const { mutate: loginMutate, status } = useMutation(userApi.login, {
     onSuccess: handleSuccessLogin,
   });
 
@@ -49,12 +49,16 @@ const useAppleLogin = () => {
   const handleClickAppleLogin = async () => {
     try {
       const data = await window.AppleID.auth.signIn();
-      loginMutate({ code: data.authorization.id_token, provider: 'APPLE' });
+      loginMutate({
+        code: data.authorization.id_token,
+        provider: 'APPLE',
+        appleAuthorizationCode: data.authorization.code,
+      });
     } catch (error) {
       console.error(error);
     }
   };
 
-  return { handleClickAppleLogin };
+  return { handleClickAppleLogin, status };
 };
 export default useAppleLogin;

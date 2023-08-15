@@ -8,12 +8,20 @@ import { KAKAO_AUTH_URL } from '@/constants/kakaoAuthUrl';
 import { ReactComponent as DrawYourCardLogo } from '@/assets/draw_your_card.svg';
 import { ReactComponent as DrawLogo } from '@/assets/logo.svg';
 import onboardingGraphicUrl from '@/assets/onboarding.svg';
+import Loading from './components/Loading.tsx/Loading';
 
 const Login = () => {
-  const { handleClickAppleLogin } = useAppleLogin();
+  const { handleClickAppleLogin, status } = useAppleLogin();
   const handleClickKakaoLogin = () => {
     window.location.href = KAKAO_AUTH_URL;
   };
+  if (status === 'loading') {
+    return (
+      <>
+        <Loading />
+      </>
+    );
+  }
 
   return (
     <Layout backgroundColor={palette.background.white1}>
