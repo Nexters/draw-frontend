@@ -16,7 +16,6 @@ import TopBar from '@/components/TopBar/TopBar';
 import { palette } from '@/styles/palette';
 import Layout from '@/components/Layout/Layout';
 import useNativeMessage from '@/hooks/useNativeMessage';
-import isUserAgentWebview from 'is-ua-webview';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { feedApi } from '@/apis/handlers/feed';
 import { css } from '@emotion/react';
@@ -25,6 +24,9 @@ import useToast from '@/hooks/useToast';
 import { replyApi } from '@/apis/handlers/reply';
 import { QuestionDetailBottomSheet } from './components/QuestionDetailBottomSheet';
 import { DetailBottomSheetProvider, useDetailBottomSheetContext } from './components/useDetailBottomSheetContext';
+import { isDrawWebview } from '@/utils/webview';
+
+const isWebview = isDrawWebview();
 
 const QuestionDetailPage = () => {
   const queryClient = useQueryClient();
@@ -36,7 +38,6 @@ const QuestionDetailPage = () => {
     feedApi.getFeedRepies(Number(id))
   );
 
-  const isWebview = isUserAgentWebview(window.navigator.userAgent);
   const { showShareSheet } = useNativeMessage();
 
   const answerFormRef = useRef<HTMLFormElement>(null);
