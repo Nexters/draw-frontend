@@ -25,14 +25,14 @@ export const userApi = {
    */
   postFcm: async (token: string) => {
     const url = `${USERS_BASE_URL}/fcm`;
-    await request.post(url, { fcm_token: token });
+    return await request.post(url, { fcm_token: token });
   },
   /**
    * 회원정보 입력 및 가입 완료
    */
   postRegister: async (payload: RegisterReq) => {
     const url = `${USERS_BASE_URL}/register`;
-    await request.post(url, payload);
+    return await request.post(url, payload);
   },
   /**
    * 리프레쉬
@@ -42,5 +42,12 @@ export const userApi = {
     const response = await request.post<RefreshReq>(url, payload);
 
     return response.data;
+  },
+  /**
+   * 회원탈퇴
+   */
+  deleteUserWithdraw: async () => {
+    const url = `${USERS_BASE_URL}/withdraw`;
+    return await request.delete(url);
   },
 };
