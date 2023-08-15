@@ -170,194 +170,197 @@ const MyPage = () => {
 
   return (
     <Layout backgroundColor={palette.background.white1} hasTabBar>
-      <Styled.Header>
-        <Styled.SettingButton
-          type="button"
-          onClick={() => {
-            navigate('/my-page/setting');
-          }}
-        >
-          <SettingIcon />
-        </Styled.SettingButton>
-      </Styled.Header>
-      <Styled.MemberIdContainer>{myInfo && <Styled.MemberId>@ {myInfo.id}</Styled.MemberId>}</Styled.MemberIdContainer>
-      <Styled.GraphicContainer>
-        {!isLottieLoading && lottie !== null && (
-          <Lottie
-            animationData={lottie}
-            rendererSettings={{
-              preserveAspectRatio: 'xMidYMid meet',
+      <Styled.MyPage>
+        <Styled.Header>
+          <Styled.SettingButton
+            type="button"
+            onClick={() => {
+              navigate('/my-page/setting');
             }}
-            loop
-            autoplay
-            style={{ width: '100%', height: '100%' }}
-          />
+          >
+            <SettingIcon />
+          </Styled.SettingButton>
+        </Styled.Header>
+        <Styled.MemberIdContainer>
+          {myInfo && <Styled.MemberId>@ {myInfo.id}</Styled.MemberId>}
+        </Styled.MemberIdContainer>
+        <Styled.GraphicContainer>
+          {!isLottieLoading && lottie !== null && (
+            <Lottie
+              animationData={lottie}
+              rendererSettings={{
+                preserveAspectRatio: 'xMidYMid meet',
+              }}
+              loop
+              autoplay
+              style={{ width: '100%', height: '100%' }}
+            />
+          )}
+          {isLottieLoading && <Loading width="80px" />}
+        </Styled.GraphicContainer>
+        <Styled.PointContainer>
+          {myInfo && (
+            <Styled.Point>
+              <Styled.PointTitle>드로우</Styled.PointTitle>
+              <Styled.PointValue>{myInfo?.point}D</Styled.PointValue>
+            </Styled.Point>
+          )}
+        </Styled.PointContainer>
+        <Styled.StickyTop id="tab">
+          <Styled.TagList>
+            {myInfo && <Styled.TagItem># {myInfo.mbti}</Styled.TagItem>}
+            {myInfo && <Styled.TagItem># {genderDictionary[myInfo.gender]}</Styled.TagItem>}
+            {myInfo && <Styled.TagItem># {myInfo.age}살</Styled.TagItem>}
+          </Styled.TagList>
+          <Styled.Tab>
+            {tabList.map((item) => (
+              <Styled.TabItem
+                key={item.value}
+                href="#tab"
+                id={item.value}
+                isActive={selectedTab === item.value}
+                onClick={handleClickTabItem}
+              >
+                {item.label}
+              </Styled.TabItem>
+            ))}
+          </Styled.Tab>
+        </Styled.StickyTop>
+        {selectedTab === 'question' && (
+          <Styled.TabPane>
+            <Styled.QuestionList>
+              {myQuestions?.map((question) => (
+                <Styled.QuestionItem key={question.id} onClick={(event) => handleClickQuestionItem(event, question.id)}>
+                  <Styled.QuestionItemTitle>{question.content}</Styled.QuestionItemTitle>
+                  <Styled.QuestionItemLike>좋아요 {question.favoriteCount} 명</Styled.QuestionItemLike>
+                  <Styled.QuestionItemFooter>
+                    <Styled.QuestionItemOptionButtonList>
+                      {question.isFavorite ? (
+                        <Styled.QuestionItemOptionButton
+                          type="button"
+                          isActive
+                          onClick={(event) => {
+                            event.stopPropagation();
+
+                            feedFavoriteCancelMutation.mutate({ feedId: question.id });
+                          }}
+                        >
+                          <HeartActiveIcon />
+                        </Styled.QuestionItemOptionButton>
+                      ) : (
+                        <Styled.QuestionItemOptionButton
+                          type="button"
+                          onClick={(event) => {
+                            event.stopPropagation();
+
+                            feedFavoriteMutation.mutate({ feedId: question.id });
+                          }}
+                        >
+                          <HeartIcon />
+                        </Styled.QuestionItemOptionButton>
+                      )}
+                      <Styled.QuestionItemOptionButton
+                        type="button"
+                        onClick={(event) => {
+                          event.stopPropagation();
+
+                          showShareSheet(`${window.location.origin}/question-detail/${question.id}`);
+                        }}
+                      >
+                        <ShareIcon />
+                      </Styled.QuestionItemOptionButton>
+                    </Styled.QuestionItemOptionButtonList>
+                  </Styled.QuestionItemFooter>
+                </Styled.QuestionItem>
+              ))}
+            </Styled.QuestionList>
+            {myQuestions?.length === 0 && (
+              <Styled.NoContentContainer>
+                아직 보관된 질문이 없어요!
+                <br />
+                질문을 시작해 보세요
+              </Styled.NoContentContainer>
+            )}
+          </Styled.TabPane>
         )}
-        {isLottieLoading && <Loading width="80px" />}
-      </Styled.GraphicContainer>
-      <Styled.PointContainer>
-        {myInfo && (
-          <Styled.Point>
-            <Styled.PointTitle>드로우</Styled.PointTitle>
-            <Styled.PointValue>{myInfo?.point}D</Styled.PointValue>
-          </Styled.Point>
+        {selectedTab === 'answer' && (
+          <Styled.TabPane>
+            <Styled.AnswerList>
+              {myReplies?.map((reply) => (
+                <Styled.AnswerItem key={reply.replyId} onClick={(event) => handleClickAnswerItem(event, reply.feedId)}>
+                  <Styled.AnswerItemAnswer>{reply.replyContent}</Styled.AnswerItemAnswer>
+                  <Styled.AnswerItemQuestion>{reply.feedContent}</Styled.AnswerItemQuestion>
+                </Styled.AnswerItem>
+              ))}
+            </Styled.AnswerList>
+
+            {myReplies?.length === 0 && (
+              <Styled.NoContentContainer>
+                아직 보관된 답변이 없어요!
+                <br />
+                질문을 탐색해 보세요
+              </Styled.NoContentContainer>
+            )}
+          </Styled.TabPane>
         )}
-      </Styled.PointContainer>
-      <Styled.StickyTop id="tab">
-        <Styled.TagList>
-          {myInfo && <Styled.TagItem># {myInfo.mbti}</Styled.TagItem>}
-          {myInfo && <Styled.TagItem># {genderDictionary[myInfo.gender]}</Styled.TagItem>}
-          {myInfo && <Styled.TagItem># {myInfo.age}살</Styled.TagItem>}
-        </Styled.TagList>
-        <Styled.Tab>
-          {tabList.map((item) => (
-            <Styled.TabItem
-              key={item.value}
-              href="#tab"
-              id={item.value}
-              isActive={selectedTab === item.value}
-              onClick={handleClickTabItem}
-            >
-              {item.label}
-            </Styled.TabItem>
-          ))}
-        </Styled.Tab>
-      </Styled.StickyTop>
-      {selectedTab === 'question' && (
-        <Styled.TabPane>
-          <Styled.QuestionList>
-            {myQuestions?.map((question) => (
-              <Styled.QuestionItem key={question.id} onClick={(event) => handleClickQuestionItem(event, question.id)}>
-                <Styled.QuestionItemTitle>{question.content}</Styled.QuestionItemTitle>
-                <Styled.QuestionItemLike>좋아요 {question.favoriteCount} 명</Styled.QuestionItemLike>
-                <Styled.QuestionItemFooter>
-                  <Styled.QuestionItemOptionButtonList>
-                    {question.isFavorite ? (
+        {selectedTab === 'favorite' && (
+          <Styled.TabPane>
+            <Styled.QuestionList>
+              {myFavorites?.map((favorite) => (
+                <Styled.QuestionItem key={favorite.id} onClick={(event) => handleClickFavoriteItem(event, favorite.id)}>
+                  <Styled.QuestionItemTitle>{favorite.content}</Styled.QuestionItemTitle>
+                  <Styled.QuestionItemLike>좋아요 {favorite.favoriteCount} 명</Styled.QuestionItemLike>
+                  <Styled.QuestionItemFooter>
+                    <Styled.QuestionItemOptionButtonList>
                       <Styled.QuestionItemOptionButton
                         type="button"
                         isActive
                         onClick={(event) => {
                           event.stopPropagation();
 
-                          feedFavoriteCancelMutation.mutate({ feedId: question.id });
+                          feedFavoriteCancelMutation.mutate({ feedId: favorite.id });
                         }}
                       >
                         <HeartActiveIcon />
                       </Styled.QuestionItemOptionButton>
-                    ) : (
                       <Styled.QuestionItemOptionButton
                         type="button"
                         onClick={(event) => {
                           event.stopPropagation();
 
-                          feedFavoriteMutation.mutate({ feedId: question.id });
+                          showShareSheet(`${window.location.origin}/question-detail/${favorite.id}`);
                         }}
                       >
-                        <HeartIcon />
+                        <ShareIcon />
                       </Styled.QuestionItemOptionButton>
-                    )}
-                    <Styled.QuestionItemOptionButton
-                      type="button"
-                      onClick={(event) => {
-                        event.stopPropagation();
+                      <Styled.QuestionItemOptionButton
+                        type="button"
+                        onClick={(event) => {
+                          event.stopPropagation();
 
-                        showShareSheet(`${window.location.origin}/question-detail/${question.id}`);
-                      }}
-                    >
-                      <ShareIcon />
-                    </Styled.QuestionItemOptionButton>
-                  </Styled.QuestionItemOptionButtonList>
-                </Styled.QuestionItemFooter>
-              </Styled.QuestionItem>
-            ))}
-          </Styled.QuestionList>
-          {myQuestions?.length === 0 && (
-            <Styled.NoContentContainer>
-              아직 보관된 질문이 없어요!
-              <br />
-              질문을 시작해 보세요
-            </Styled.NoContentContainer>
-          )}
-        </Styled.TabPane>
-      )}
-      {selectedTab === 'answer' && (
-        <Styled.TabPane>
-          <Styled.AnswerList>
-            {myReplies?.map((reply) => (
-              <Styled.AnswerItem key={reply.replyId} onClick={(event) => handleClickAnswerItem(event, reply.feedId)}>
-                <Styled.AnswerItemAnswer>{reply.replyContent}</Styled.AnswerItemAnswer>
-                <Styled.AnswerItemQuestion>{reply.feedContent}</Styled.AnswerItemQuestion>
-              </Styled.AnswerItem>
-            ))}
-          </Styled.AnswerList>
+                          setIsQuestionOptionBottomSheetOpen(true);
+                          setSelectedFeedId(favorite.id);
+                        }}
+                      >
+                        <MoreIcon />
+                      </Styled.QuestionItemOptionButton>
+                    </Styled.QuestionItemOptionButtonList>
+                  </Styled.QuestionItemFooter>
+                </Styled.QuestionItem>
+              ))}
+            </Styled.QuestionList>
+            {myFavorites?.length === 0 && (
+              <Styled.NoContentContainer>
+                좋아요가 없어요!
+                <br />
+                질문을 탐색해 보세요
+              </Styled.NoContentContainer>
+            )}
+          </Styled.TabPane>
+        )}
 
-          {myReplies?.length === 0 && (
-            <Styled.NoContentContainer>
-              아직 보관된 답변이 없어요!
-              <br />
-              질문을 탐색해 보세요
-            </Styled.NoContentContainer>
-          )}
-        </Styled.TabPane>
-      )}
-      {selectedTab === 'favorite' && (
-        <Styled.TabPane>
-          <Styled.QuestionList>
-            {myFavorites?.map((favorite) => (
-              <Styled.QuestionItem key={favorite.id} onClick={(event) => handleClickFavoriteItem(event, favorite.id)}>
-                <Styled.QuestionItemTitle>{favorite.content}</Styled.QuestionItemTitle>
-                <Styled.QuestionItemLike>좋아요 {favorite.favoriteCount} 명</Styled.QuestionItemLike>
-                <Styled.QuestionItemFooter>
-                  <Styled.QuestionItemOptionButtonList>
-                    <Styled.QuestionItemOptionButton
-                      type="button"
-                      isActive
-                      onClick={(event) => {
-                        event.stopPropagation();
-
-                        feedFavoriteCancelMutation.mutate({ feedId: favorite.id });
-                      }}
-                    >
-                      <HeartActiveIcon />
-                    </Styled.QuestionItemOptionButton>
-                    <Styled.QuestionItemOptionButton
-                      type="button"
-                      onClick={(event) => {
-                        event.stopPropagation();
-
-                        showShareSheet(`${window.location.origin}/question-detail/${favorite.id}`);
-                      }}
-                    >
-                      <ShareIcon />
-                    </Styled.QuestionItemOptionButton>
-                    <Styled.QuestionItemOptionButton
-                      type="button"
-                      onClick={(event) => {
-                        event.stopPropagation();
-
-                        setIsQuestionOptionBottomSheetOpen(true);
-                        setSelectedFeedId(favorite.id);
-                      }}
-                    >
-                      <MoreIcon />
-                    </Styled.QuestionItemOptionButton>
-                  </Styled.QuestionItemOptionButtonList>
-                </Styled.QuestionItemFooter>
-              </Styled.QuestionItem>
-            ))}
-          </Styled.QuestionList>
-          {myFavorites?.length === 0 && (
-            <Styled.NoContentContainer>
-              좋아요가 없어요!
-              <br />
-              질문을 탐색해 보세요
-            </Styled.NoContentContainer>
-          )}
-        </Styled.TabPane>
-      )}
-
-      {myQuestions?.length !== 0 && <Styled.FetchTrigger ref={fetchTriggerRef} />}
-
+        {myQuestions?.length !== 0 && <Styled.FetchTrigger ref={fetchTriggerRef} />}
+      </Styled.MyPage>
       <BottomSheet
         open={isQuestionOptionBottomSheetOpen}
         onClose={() => {
