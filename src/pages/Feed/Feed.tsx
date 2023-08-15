@@ -112,7 +112,7 @@ const Feed = () => {
     event.stopPropagation();
 
     if (!isWebview) {
-      dynamicLink('/feed');
+      dynamicLink(window.location.pathname);
 
       return;
     }
@@ -205,7 +205,7 @@ const Feed = () => {
                             event.stopPropagation();
 
                             if (!isWebview) {
-                              dynamicLink('/feed');
+                              dynamicLink(window.location.pathname);
 
                               return;
                             }
@@ -222,7 +222,7 @@ const Feed = () => {
                             event.stopPropagation();
 
                             if (!isWebview) {
-                              dynamicLink('/feed');
+                              dynamicLink(window.location.pathname);
 
                               return;
                             }
@@ -245,7 +245,7 @@ const Feed = () => {
                           event.stopPropagation();
 
                           if (!isWebview) {
-                            dynamicLink('/feed');
+                            dynamicLink(window.location.pathname);
 
                             return;
                           }
@@ -296,7 +296,7 @@ const Feed = () => {
             type="button"
             onClick={() => {
               if (!isWebview) {
-                dynamicLink('/feed');
+                dynamicLink(window.location.pathname);
 
                 return;
               }
