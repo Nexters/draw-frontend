@@ -10,7 +10,7 @@ export const palette = {
     white: '#F9FAFC',
   },
   tag: {
-    text: '#9065DF',
+    text: '#9065D F',
     bg: '#F5F0FF',
   },
   text: {
