@@ -15,7 +15,7 @@ interface FlipBottomSheetProps {
 const FlipBottomSheet = ({ isOpen, onClose, onClickYes }: FlipBottomSheetProps) => {
   const { data: myData } = useMyInfo();
   return (
-    <BottomSheet open={isOpen} onClose={onClose}>
+    <BottomSheet open={isOpen} onClose={onClose} isBottomBarToggleDisabled={true}>
       <Styled.SheetContentContainer>
         <Styled.SheetTitle>필요해요!</Styled.SheetTitle>
         <Styled.NeededPoint>
