@@ -88,14 +88,6 @@ const Feed = () => {
       toast.success(<>차단했어요</>);
     },
   });
-  const relpyMutation = useMutation((content: string) => replyApi.postReply(selectedFeedId!, { content }), {
-    onSuccess: () =>
-      toast.success(
-        <>
-          답변 작성 완료 <FireIcon />
-        </>
-      ),
-  });
 
   const consumePromotionMutation = useMutation(promotionApi.postConsumePromotion);
 
@@ -120,10 +112,18 @@ const Feed = () => {
     showShareSheet(`${window.location.origin}/question-detail/${id}`);
   };
 
+  const replyMutation = useMutation((content: string) => replyApi.postReply(feeds![swiperIndex].id, { content }), {
+    onSuccess: () =>
+      toast.success(
+        <>
+          답변 작성 완료 <FireIcon />
+        </>
+      ),
+  });
   const handleSubmitAnswerForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    relpyMutation.mutate(answer);
+    replyMutation.mutate(answer);
     setIsAnswerFormOpen(false);
     setAnswer('');
   };
@@ -278,11 +278,11 @@ const Feed = () => {
                   setIsTabBarVisible(false);
                 }}
                 onBlur={() => {
-                  setIsAnswerFormOpen(false);
+                  //setIsAnswerFormOpen(false);
                   setIsTabBarVisible(true);
                 }}
               />
-              {answer.length > 0 && <Styled.AnswerSubmit>완료</Styled.AnswerSubmit>}
+              {answer.length > 0 && <Styled.AnswerSubmit type="submit">완료</Styled.AnswerSubmit>}
             </Styled.AnswerTextAreaContainer>
             <Styled.Dimmed
               onClick={() => {

@@ -63,17 +63,6 @@ const QuestionDetailPage = () => {
     onSuccess: async () => await queryClient.invalidateQueries(['feed-detail', id]),
   });
 
-  const relpyMutation = useMutation((content: string) => replyApi.postReply(feedData!.id, { content }), {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(['feed-replies', id]);
-      toast.success(
-        <>
-          답변 작성 완료 <FireIcon />
-        </>
-      );
-    },
-  });
-
   const handleClickShareButton = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
 
@@ -85,6 +74,17 @@ const QuestionDetailPage = () => {
 
     feedData && showShareSheet(`${window.location.origin}/question-detail/${feedData?.id}`);
   };
+
+  const replyMutation = useMutation((content: string) => replyApi.postReply(feedData!.id, { content }), {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(['feed-replies', id]);
+      toast.success(
+        <>
+          답변 작성 완료 <FireIcon />
+        </>
+      );
+    },
+  });
   const handleSubmitAnswerForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -94,7 +94,7 @@ const QuestionDetailPage = () => {
       return;
     }
 
-    relpyMutation.mutate(answer);
+    replyMutation.mutate(answer);
     setIsAnswerFormOpen(false);
     setAnswer('');
   };
