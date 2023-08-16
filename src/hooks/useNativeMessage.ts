@@ -2,6 +2,15 @@ import { useCallback } from 'react';
 
 declare global {
   interface Window {
+    addEventListener<K extends keyof CustomEventMap>(
+      type: K,
+      listener: (this: Document, event: CustomEventMap[K]) => void
+    ): void;
+    removeEventListener<K extends keyof CustomEventMap>(
+      type: K,
+      listener: (this: Document, event: CustomEventMap[K]) => void
+    ): void;
+    dispatchEvent<K extends keyof CustomEventMap>(ev: CustomEventMap[K]): void;
     webkit?: {
       messageHandlers: {
         showBottomBar?: {
@@ -13,8 +22,8 @@ declare global {
         navigate?: {
           postMessage: (fn: string) => void;
         };
-        updateFcmToken?: {
-          postMessage: (value: string) => void;
+        updateFcm?: {
+          postMessage: (fn: string) => void;
         };
       };
     };
@@ -22,7 +31,7 @@ declare global {
       showBottomBar: (value: string) => void;
       showShareSheet: (url: string) => void;
       navigate: (fn: string) => void;
-      updateFcmToken: (value: string) => void;
+      updateFcm: (fn: string) => void;
     };
   }
 }
