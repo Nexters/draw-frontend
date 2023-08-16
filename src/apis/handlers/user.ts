@@ -25,7 +25,7 @@ export const userApi = {
    */
   postFcm: async (token: string) => {
     const url = `${USERS_BASE_URL}/fcm`;
-    return await request.post(url, { fcm_token: token });
+    return await request.post(url, { fcmToken: token });
   },
   /**
    * 회원정보 입력 및 가입 완료
