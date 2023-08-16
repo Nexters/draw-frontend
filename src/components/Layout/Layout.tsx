@@ -1,4 +1,4 @@
-import { useLayoutEffect } from 'react';
+import { useEffect } from 'react';
 import { Global, css } from '@emotion/react';
 import { palette } from '@/styles/palette';
 import Styled from './Layout.styles';
@@ -19,7 +19,7 @@ const Layout = ({ backgroundColor, hasTabBar, hasScrollBouncing = true, children
   const { showBottomBar } = useNativeMessage();
   useNavigateEvent();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     showBottomBar(hasTabBar ?? false);
   }, [hasTabBar, showBottomBar]);
 

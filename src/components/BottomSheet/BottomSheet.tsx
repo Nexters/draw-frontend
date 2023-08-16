@@ -1,4 +1,4 @@
-import { useLayoutEffect } from 'react';
+import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useTransition, config } from '@react-spring/web';
 import Styled from './BottomSheet.styles';
@@ -46,7 +46,7 @@ const BottomSheet = ({ open, children, isBottomBarToggleDisabled = false, onClos
     <>{flag && <Styled.BottomSheet style={style}>{children}</Styled.BottomSheet>}</>
   ));
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (isBottomBarToggleDisabled) return;
 
     showBottomBar(!open);
