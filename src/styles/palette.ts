@@ -1,6 +1,6 @@
 export const palette = {
   main: {
-    purple: '#C5A8FB',
+    purple: '#C388FF',
   },
   sub: {
     green: '#35CA89',
