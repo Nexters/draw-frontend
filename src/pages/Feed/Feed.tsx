@@ -295,11 +295,11 @@ const Feed = () => {
           <Styled.FakeAnswerTextAreaButton
             type="button"
             onClick={() => {
-              /* if (!isWebview) {
+              if (!isWebview) {
                 dynamicLink(window.location.pathname);
 
                 return;
-              } */
+              }
 
               setIsAnswerFormOpen(true);
             }}
