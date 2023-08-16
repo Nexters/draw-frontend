@@ -5,6 +5,7 @@ import Styled from './Layout.styles';
 import useNativeMessage from '@/hooks/useNativeMessage';
 import useNavigateEvent from '@/hooks/useNavigateEvent';
 import { isDrawWebview } from '@/utils/webview';
+import useFcmEvent from '@/hooks/useFcmEvent';
 
 type LayoutProps = {
   backgroundColor: (typeof palette.background)[keyof typeof palette.background];
@@ -18,6 +19,7 @@ const isWebview = isDrawWebview();
 const Layout = ({ backgroundColor, hasTabBar, hasScrollBouncing = true, children }: LayoutProps) => {
   const { showBottomBar } = useNativeMessage();
   useNavigateEvent();
+  useFcmEvent();
 
   useEffect(() => {
     showBottomBar(hasTabBar ?? false);
