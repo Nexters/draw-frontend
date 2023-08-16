@@ -60,7 +60,7 @@ const NewQuestion = () => {
       navigate('/feed');
       toast.success(
         <>
-          답변 작성 완료 <FireIcon />
+          질문 업로드 성공 <FireIcon />
         </>
       );
     },
