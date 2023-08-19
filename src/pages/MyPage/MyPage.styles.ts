@@ -64,7 +64,7 @@ const Graphic = styled.div`
 const PointContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   padding: 0 24px;
 `;
 
@@ -87,17 +87,21 @@ const PointValue = styled.span`
   color: ${({ theme }) => theme.palette.text.black};
 `;
 
+const TabScrollPoint = styled.div`
+  height: 0;
+`;
+
 const StickyTop = styled.div`
   position: sticky;
-  padding-top: 48px;
-  top: -48px;
   background-color: ${({ theme }) => theme.palette.background.white1};
   z-index: 1;
+  top: 0;
 `;
 
 const TagList = styled.div`
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  white-space: nowrap;
   gap: 12px;
   margin-bottom: 36px;
   padding: 2px 24px;
@@ -105,8 +109,8 @@ const TagList = styled.div`
 
 const TagItem = styled.div`
   ${({ theme }) => theme.typo['sub.4.sb']};
-  color: ${({ theme }) => theme.palette.text.black};
-  background-color: ${({ theme }) => theme.palette.sub.white};
+  color: ${({ theme }) => theme.palette.text.white};
+  background-color: ${({ theme }) => theme.palette.sub.grey};
   padding: 5px 12px;
   border-radius: 8px;
 `;
@@ -143,6 +147,8 @@ const QuestionList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
+  min-height: calc(100vh - 113px);
+  min-height: calc(100svh - 113px);
 `;
 
 const QuestionItem = styled.div`
@@ -196,10 +202,11 @@ const NoContentContainer = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: ${({ theme }) => theme.palette.text.grey1};
+  color: ${({ theme }) => theme.palette.text.grey2};
   ${({ theme }) => theme.typo['sub.3']};
   height: calc(100vh - 113px);
   height: calc(100svh - 113px);
+  padding-bottom: 90px;
 `;
 
 const QuestionOptionBottomSheet = styled.div`
@@ -222,6 +229,8 @@ const AnswerList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
+  min-height: calc(100vh - 113px);
+  min-height: calc(100svh - 113px);
 `;
 
 const AnswerItem = styled.div`
@@ -261,6 +270,7 @@ export default {
   Point,
   PointTitle,
   PointValue,
+  TabScrollPoint,
   StickyTop,
   TagList,
   TagItem,
