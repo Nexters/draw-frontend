@@ -23,6 +23,7 @@ const Toast = (props: ToastProps) => {
           fontSize: '16px',
           fontStyle: 'normal',
           fontWeight: '600',
+          boxShadow: 'none',
         },
         error: {
           style: {
