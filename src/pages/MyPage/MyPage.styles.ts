@@ -90,7 +90,7 @@ const PointValue = styled.span`
 const TabScrollPoint = styled.div`
   height: 0;
   position: relative;
-  top: -80px;
+  top: 0;
 `;
 
 const StickyTop = styled.div`
