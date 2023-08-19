@@ -51,7 +51,7 @@ const MyPage = () => {
     threshold: 0,
   });
 
-  const [selectedTab, setSelectedTab] = useState<string>('answer');
+  const [selectedTab, setSelectedTab] = useState<string>('question');
   const [isQuestionOptionBottomSheetOpen, setIsQuestionOptionBottomSheetOpen] = useState(false);
   const [selectedFeedId, setSelectedFeedId] = useState<number | null>(null);
 
