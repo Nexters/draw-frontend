@@ -50,8 +50,8 @@ const GraphicContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 280px);
-  height: calc(100svh - 280px);
+  height: calc(100vh - 389px);
+  height: calc(100svh - 389px);
 `;
 
 const Graphic = styled.div`
