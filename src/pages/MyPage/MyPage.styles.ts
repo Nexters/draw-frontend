@@ -89,13 +89,16 @@ const PointValue = styled.span`
 
 const TabScrollPoint = styled.div`
   height: 0;
+  position: relative;
+  top: -80px;
 `;
 
 const StickyTop = styled.div`
   position: sticky;
   background-color: ${({ theme }) => theme.palette.background.white1};
   z-index: 1;
-  top: 0;
+  top: -48px;
+  padding-top: 80px;
 `;
 
 const TagList = styled.div`
@@ -147,8 +150,8 @@ const QuestionList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
-  min-height: calc(100vh - 113px);
-  min-height: calc(100svh - 113px);
+  min-height: calc(100vh - 79px);
+  min-height: calc(100svh - 79px);
 `;
 
 const QuestionItem = styled.div`
@@ -204,8 +207,8 @@ const NoContentContainer = styled.div`
   text-align: center;
   color: ${({ theme }) => theme.palette.text.grey2};
   ${({ theme }) => theme.typo['sub.3']};
-  height: calc(100vh - 113px);
-  height: calc(100svh - 113px);
+  height: calc(100vh - 79px);
+  height: calc(100svh - 79px);
   padding-bottom: 90px;
 `;
 
@@ -229,8 +232,8 @@ const AnswerList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
-  min-height: calc(100vh - 113px);
-  min-height: calc(100svh - 113px);
+  min-height: calc(100vh - 79px);
+  min-height: calc(100svh - 79px); // 113px
 `;
 
 const AnswerItem = styled.div`

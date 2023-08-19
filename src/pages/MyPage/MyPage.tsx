@@ -207,13 +207,12 @@ const MyPage = () => {
             </Styled.Point>
           )}
         </Styled.PointContainer>
-        <Styled.TabScrollPoint id="tab" />
+        <Styled.TagList>
+          {myInfo && <Styled.TagItem># {myInfo.mbti}</Styled.TagItem>}
+          {myInfo && <Styled.TagItem># {genderDictionary[myInfo.gender]}</Styled.TagItem>}
+          {myInfo && <Styled.TagItem># {myInfo.age}살</Styled.TagItem>}
+        </Styled.TagList>
         <Styled.StickyTop>
-          <Styled.TagList>
-            {myInfo && <Styled.TagItem># {myInfo.mbti}</Styled.TagItem>}
-            {myInfo && <Styled.TagItem># {genderDictionary[myInfo.gender]}</Styled.TagItem>}
-            {myInfo && <Styled.TagItem># {myInfo.age}살</Styled.TagItem>}
-          </Styled.TagList>
           <Styled.Tab>
             {tabList.map((item) => (
               <Styled.TabItem
@@ -227,6 +226,7 @@ const MyPage = () => {
               </Styled.TabItem>
             ))}
           </Styled.Tab>
+          <Styled.TabScrollPoint id="tab" />
         </Styled.StickyTop>
         {selectedTab === 'question' && (
           <Styled.TabPane>
