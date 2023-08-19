@@ -6,6 +6,9 @@ const FlipCard = styled.div<{ isFlipped: boolean }>`
   &:first-of-type {
     margin-left: 24px;
   }
+  &:last-of-type {
+    margin-right: 24px;
+  }
   transform-style: preserve-3d;
   transition: transform 0.3s;
   transform: perspective(800px) rotateY(0deg);

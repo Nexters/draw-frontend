@@ -9,6 +9,7 @@ import { ReactComponent as HeartIcon } from '@/assets/heart.svg';
 import { ReactComponent as HeartActiveIcon } from '@/assets/heart_active.svg';
 import { ReactComponent as ShareIcon } from '@/assets/share.svg';
 import { ReactComponent as MoreIcon } from '@/assets/more.svg';
+import { ReactComponent as NoContentIcon } from '@/assets/no_content.svg';
 import { ReactComponent as Loading } from '@/assets/loading.svg';
 import { palette } from '@/styles/palette';
 import Layout from '@/components/Layout/Layout';
@@ -193,7 +194,7 @@ const MyPage = () => {
               }}
               loop
               autoplay
-              style={{ width: '100%', height: '100%' }}
+              style={{ maxWidth: '320px', width: '100%', height: '100%' }}
             />
           )}
           {isLottieLoading && <Loading width="80px" />}
@@ -206,12 +207,12 @@ const MyPage = () => {
             </Styled.Point>
           )}
         </Styled.PointContainer>
-        <Styled.StickyTop id="tab">
-          <Styled.TagList>
-            {myInfo && <Styled.TagItem># {myInfo.mbti}</Styled.TagItem>}
-            {myInfo && <Styled.TagItem># {genderDictionary[myInfo.gender]}</Styled.TagItem>}
-            {myInfo && <Styled.TagItem># {myInfo.age}살</Styled.TagItem>}
-          </Styled.TagList>
+        <Styled.TagList>
+          {myInfo && <Styled.TagItem># {myInfo.mbti}</Styled.TagItem>}
+          {myInfo && <Styled.TagItem># {genderDictionary[myInfo.gender]}</Styled.TagItem>}
+          {myInfo && <Styled.TagItem># {myInfo.age}살</Styled.TagItem>}
+        </Styled.TagList>
+        <Styled.StickyTop>
           <Styled.Tab>
             {tabList.map((item) => (
               <Styled.TabItem
@@ -225,57 +226,64 @@ const MyPage = () => {
               </Styled.TabItem>
             ))}
           </Styled.Tab>
+          <Styled.TabScrollPoint id="tab" />
         </Styled.StickyTop>
         {selectedTab === 'question' && (
           <Styled.TabPane>
-            <Styled.QuestionList>
-              {myQuestions?.map((question) => (
-                <Styled.QuestionItem key={question.id} onClick={(event) => handleClickQuestionItem(event, question.id)}>
-                  <Styled.QuestionItemTitle>{question.content}</Styled.QuestionItemTitle>
-                  <Styled.QuestionItemLike>좋아요 {question.favoriteCount} 명</Styled.QuestionItemLike>
-                  <Styled.QuestionItemFooter>
-                    <Styled.QuestionItemOptionButtonList>
-                      {question.isFavorite ? (
+            {myQuestions?.length !== 0 && (
+              <Styled.QuestionList>
+                {myQuestions?.map((question) => (
+                  <Styled.QuestionItem
+                    key={question.id}
+                    onClick={(event) => handleClickQuestionItem(event, question.id)}
+                  >
+                    <Styled.QuestionItemTitle>{question.content}</Styled.QuestionItemTitle>
+                    <Styled.QuestionItemLike>좋아요 {question.favoriteCount} 명</Styled.QuestionItemLike>
+                    <Styled.QuestionItemFooter>
+                      <Styled.QuestionItemOptionButtonList>
+                        {question.isFavorite ? (
+                          <Styled.QuestionItemOptionButton
+                            type="button"
+                            isActive
+                            onClick={(event) => {
+                              event.stopPropagation();
+
+                              feedFavoriteCancelMutation.mutate({ feedId: question.id });
+                            }}
+                          >
+                            <HeartActiveIcon />
+                          </Styled.QuestionItemOptionButton>
+                        ) : (
+                          <Styled.QuestionItemOptionButton
+                            type="button"
+                            onClick={(event) => {
+                              event.stopPropagation();
+
+                              feedFavoriteMutation.mutate({ feedId: question.id });
+                            }}
+                          >
+                            <HeartIcon />
+                          </Styled.QuestionItemOptionButton>
+                        )}
                         <Styled.QuestionItemOptionButton
                           type="button"
-                          isActive
                           onClick={(event) => {
                             event.stopPropagation();
 
-                            feedFavoriteCancelMutation.mutate({ feedId: question.id });
+                            showShareSheet(`${window.location.origin}/question-detail/${question.id}`);
                           }}
                         >
-                          <HeartActiveIcon />
+                          <ShareIcon />
                         </Styled.QuestionItemOptionButton>
-                      ) : (
-                        <Styled.QuestionItemOptionButton
-                          type="button"
-                          onClick={(event) => {
-                            event.stopPropagation();
-
-                            feedFavoriteMutation.mutate({ feedId: question.id });
-                          }}
-                        >
-                          <HeartIcon />
-                        </Styled.QuestionItemOptionButton>
-                      )}
-                      <Styled.QuestionItemOptionButton
-                        type="button"
-                        onClick={(event) => {
-                          event.stopPropagation();
-
-                          showShareSheet(`${window.location.origin}/question-detail/${question.id}`);
-                        }}
-                      >
-                        <ShareIcon />
-                      </Styled.QuestionItemOptionButton>
-                    </Styled.QuestionItemOptionButtonList>
-                  </Styled.QuestionItemFooter>
-                </Styled.QuestionItem>
-              ))}
-            </Styled.QuestionList>
+                      </Styled.QuestionItemOptionButtonList>
+                    </Styled.QuestionItemFooter>
+                  </Styled.QuestionItem>
+                ))}
+              </Styled.QuestionList>
+            )}
             {myQuestions?.length === 0 && (
               <Styled.NoContentContainer>
+                <NoContentIcon />
                 아직 보관된 질문이 없어요!
                 <br />
                 질문을 시작해 보세요
@@ -285,17 +293,23 @@ const MyPage = () => {
         )}
         {selectedTab === 'answer' && (
           <Styled.TabPane>
-            <Styled.AnswerList>
-              {myReplies?.map((reply) => (
-                <Styled.AnswerItem key={reply.replyId} onClick={(event) => handleClickAnswerItem(event, reply.feedId)}>
-                  <Styled.AnswerItemAnswer>{reply.replyContent}</Styled.AnswerItemAnswer>
-                  <Styled.AnswerItemQuestion>{reply.feedContent}</Styled.AnswerItemQuestion>
-                </Styled.AnswerItem>
-              ))}
-            </Styled.AnswerList>
+            {myReplies?.length !== 0 && (
+              <Styled.AnswerList>
+                {myReplies?.map((reply) => (
+                  <Styled.AnswerItem
+                    key={reply.replyId}
+                    onClick={(event) => handleClickAnswerItem(event, reply.feedId)}
+                  >
+                    <Styled.AnswerItemAnswer>{reply.replyContent}</Styled.AnswerItemAnswer>
+                    <Styled.AnswerItemQuestion>{reply.feedContent}</Styled.AnswerItemQuestion>
+                  </Styled.AnswerItem>
+                ))}
+              </Styled.AnswerList>
+            )}
 
             {myReplies?.length === 0 && (
               <Styled.NoContentContainer>
+                <NoContentIcon />
                 아직 보관된 답변이 없어요!
                 <br />
                 질문을 탐색해 보세요
@@ -305,52 +319,58 @@ const MyPage = () => {
         )}
         {selectedTab === 'favorite' && (
           <Styled.TabPane>
-            <Styled.QuestionList>
-              {myFavorites?.map((favorite) => (
-                <Styled.QuestionItem key={favorite.id} onClick={(event) => handleClickFavoriteItem(event, favorite.id)}>
-                  <Styled.QuestionItemTitle>{favorite.content}</Styled.QuestionItemTitle>
-                  <Styled.QuestionItemLike>좋아요 {favorite.favoriteCount} 명</Styled.QuestionItemLike>
-                  <Styled.QuestionItemFooter>
-                    <Styled.QuestionItemOptionButtonList>
-                      <Styled.QuestionItemOptionButton
-                        type="button"
-                        isActive
-                        onClick={(event) => {
-                          event.stopPropagation();
+            {myFavorites?.length !== 0 && (
+              <Styled.QuestionList>
+                {myFavorites?.map((favorite) => (
+                  <Styled.QuestionItem
+                    key={favorite.id}
+                    onClick={(event) => handleClickFavoriteItem(event, favorite.id)}
+                  >
+                    <Styled.QuestionItemTitle>{favorite.content}</Styled.QuestionItemTitle>
+                    <Styled.QuestionItemLike>좋아요 {favorite.favoriteCount} 명</Styled.QuestionItemLike>
+                    <Styled.QuestionItemFooter>
+                      <Styled.QuestionItemOptionButtonList>
+                        <Styled.QuestionItemOptionButton
+                          type="button"
+                          isActive
+                          onClick={(event) => {
+                            event.stopPropagation();
 
-                          feedFavoriteCancelMutation.mutate({ feedId: favorite.id });
-                        }}
-                      >
-                        <HeartActiveIcon />
-                      </Styled.QuestionItemOptionButton>
-                      <Styled.QuestionItemOptionButton
-                        type="button"
-                        onClick={(event) => {
-                          event.stopPropagation();
+                            feedFavoriteCancelMutation.mutate({ feedId: favorite.id });
+                          }}
+                        >
+                          <HeartActiveIcon />
+                        </Styled.QuestionItemOptionButton>
+                        <Styled.QuestionItemOptionButton
+                          type="button"
+                          onClick={(event) => {
+                            event.stopPropagation();
 
-                          showShareSheet(`${window.location.origin}/question-detail/${favorite.id}`);
-                        }}
-                      >
-                        <ShareIcon />
-                      </Styled.QuestionItemOptionButton>
-                      <Styled.QuestionItemOptionButton
-                        type="button"
-                        onClick={(event) => {
-                          event.stopPropagation();
+                            showShareSheet(`${window.location.origin}/question-detail/${favorite.id}`);
+                          }}
+                        >
+                          <ShareIcon />
+                        </Styled.QuestionItemOptionButton>
+                        <Styled.QuestionItemOptionButton
+                          type="button"
+                          onClick={(event) => {
+                            event.stopPropagation();
 
-                          setIsQuestionOptionBottomSheetOpen(true);
-                          setSelectedFeedId(favorite.id);
-                        }}
-                      >
-                        <MoreIcon />
-                      </Styled.QuestionItemOptionButton>
-                    </Styled.QuestionItemOptionButtonList>
-                  </Styled.QuestionItemFooter>
-                </Styled.QuestionItem>
-              ))}
-            </Styled.QuestionList>
+                            setIsQuestionOptionBottomSheetOpen(true);
+                            setSelectedFeedId(favorite.id);
+                          }}
+                        >
+                          <MoreIcon />
+                        </Styled.QuestionItemOptionButton>
+                      </Styled.QuestionItemOptionButtonList>
+                    </Styled.QuestionItemFooter>
+                  </Styled.QuestionItem>
+                ))}
+              </Styled.QuestionList>
+            )}
             {myFavorites?.length === 0 && (
               <Styled.NoContentContainer>
+                <NoContentIcon />
                 좋아요가 없어요!
                 <br />
                 질문을 탐색해 보세요

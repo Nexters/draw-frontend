@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 const NewProfile = styled.div`
   height: 100%;
-  padding: 40px 24px 100px;
+  padding: 40px 24px 48px;
   overflow-y: auto;
 `;
 
