@@ -4,10 +4,10 @@ import styled from '@emotion/styled';
 const FlipCard = styled.div<{ isFlipped: boolean }>`
   margin-right: 12px;
   &:first-of-type {
-    margin-left: 24px;
+    padding-left: 24px;
   }
   &:last-of-type {
-    margin-right: 24px;
+    padding-right: 24px;
   }
   transform-style: preserve-3d;
   transition: transform 0.3s;
