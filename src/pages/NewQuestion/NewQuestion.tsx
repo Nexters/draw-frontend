@@ -67,7 +67,7 @@ const NewQuestion = () => {
   });
 
   return (
-    <Layout backgroundColor={palette.background.white2}>
+    <Layout backgroundColor={palette.background.white2} hasScrollBouncing={false}>
       <Styled.PageWrapper height={prevVisualViewport} isTextAreaFocused={isTextAreaFocused}>
         <Styled.PageBody>
           <TopBar

@@ -64,7 +64,7 @@ const NewProfileCardView = () => {
   }, [getLottieJSON]);
 
   return (
-    <Layout backgroundColor={palette.background.white1}>
+    <Layout backgroundColor={palette.background.white1} hasScrollBouncing={false}>
       <Styled.NewProfile>
         <Styled.GraphicContainer>
           {isValidProfile && isLottieLoading && (
