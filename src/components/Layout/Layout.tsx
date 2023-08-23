@@ -29,11 +29,15 @@ const Layout = ({ backgroundColor, hasTabBar, hasScrollBouncing = true, children
     <Styled.Layout hasNotchPadding={isWebview} hasTabBar={isWebview ? hasTabBar : isWebview}>
       <Global
         styles={css`
+          html,
+          body {
+            ${!hasScrollBouncing && 'overscroll-behavior: none;'};
+            ${!hasScrollBouncing && '-webkit-overflow-scrolling: touch;'};
+          }
+
           body {
             background-color: ${backgroundColor};
             user-select: none;
-            ${!hasScrollBouncing && 'overscroll-behavior: none;'};
-            ${!hasScrollBouncing && '-webkit-overflow-scrolling: touch;'};
           }
         `}
       />
