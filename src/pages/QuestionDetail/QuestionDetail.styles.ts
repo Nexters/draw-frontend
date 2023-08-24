@@ -16,6 +16,8 @@ const AnswersContainer = styled.div`
   flex-wrap: nowrap;
   overflow-x: auto;
   margin-top: 16px;
+  padding: 0 24px;
+
   &::-webkit-scrollbar {
     display: none;
   }
