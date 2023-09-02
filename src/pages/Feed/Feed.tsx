@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-
+import { atom, useAtom } from 'jotai';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow } from 'swiper/modules';
 import Styled from './Feed.styles';
@@ -33,6 +33,8 @@ import { isDrawWebview } from '@/utils/webview';
 
 const isWebview = isDrawWebview();
 
+const feedCardIndexAtom = atom<number>(0);
+
 const Feed = () => {
   const navigate = useNavigate();
   const toast = useToast();
@@ -41,6 +43,8 @@ const Feed = () => {
 
   const answerFormRef = useRef<HTMLFormElement>(null);
   const answerTextAreaRef = useRef<HTMLTextAreaElement>(null);
+
+  const [feedCardIndex, setFeedCardIndex] = useAtom(feedCardIndexAtom);
 
   const [isAnswerFormOpen, setIsAnswerFormOpen] = useState(false);
   const [isCardOptionBottomSheetOpen, setIsCardOptionBottomSheetOpen] = useState(false);
@@ -163,6 +167,7 @@ const Feed = () => {
         </Styled.Header>
         <Styled.FeedContent>
           <Swiper
+            initialSlide={feedCardIndex}
             modules={[EffectCoverflow]}
             centeredSlides
             slidesPerView={1}
@@ -177,6 +182,7 @@ const Feed = () => {
             }}
             onRealIndexChange={(swiper) => {
               setSwiperIndex(swiper.realIndex);
+              setFeedCardIndex(swiper.realIndex);
             }}
           >
             {feeds?.map((feed) => (
