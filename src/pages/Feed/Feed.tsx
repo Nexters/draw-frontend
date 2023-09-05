@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { atom, useAtom } from 'jotai';
+import { useAtom } from 'jotai';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow } from 'swiper/modules';
 import Styled from './Feed.styles';
@@ -30,10 +30,9 @@ import { feedApi } from '@/apis/handlers/feed';
 import { dynamicLink } from '@/utils/dynamicLink';
 import { replyApi } from '@/apis/handlers/reply';
 import { isDrawWebview } from '@/utils/webview';
+import { feedCardIndexAtom } from '@/atoms/feed';
 
 const isWebview = isDrawWebview();
-
-const feedCardIndexAtom = atom<number>(0);
 
 const Feed = () => {
   const navigate = useNavigate();
