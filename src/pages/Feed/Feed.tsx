@@ -59,7 +59,7 @@ const Feed = () => {
   const { data: feedsData, fetchNextPage, refetch: refetchFeeds } = useFeeds();
   const feeds = feedsData?.pages.flatMap((page) => page.feeds);
 
-  const { data: promotions } = usePromotions();
+  const { data: promotions, refetch: refetchPromotions } = usePromotions();
   const currentPromotion = promotions?.[promotionIndex];
 
   const feedFavoriteMutation = useMutation(feedApi.postFeedFavorite, {
@@ -93,7 +93,11 @@ const Feed = () => {
     },
   });
 
-  const consumePromotionMutation = useMutation(promotionApi.postConsumePromotion);
+  const consumePromotionMutation = useMutation(promotionApi.postConsumePromotion, {
+    onSuccess: async () => {
+      await refetchPromotions();
+    },
+  });
 
   const calculateAnswerFormHeight = useCallback(() => {
     if (!answerFormRef.current) return;
